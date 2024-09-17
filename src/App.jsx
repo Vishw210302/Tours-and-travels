@@ -1,10 +1,12 @@
 
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import MainLayout from './Pages/MainLayout';
-import Home from './Pages/Home/Home';
-import Aboutus from './Pages/AboutUs/Aboutus';
-import Blog from './Pages/Blog/Blog';
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import DomesticPackages from './Pages/AllPackages/DomesticPackages';
+import InternationalPackages from './Pages/AllPackages/InternationalPackages';
 import ContactUs from './Pages/ContactUs/ContactUs';
+import Home from './Pages/Home/Home';
+import Itenary from './Pages/Itenary/Itenary';
+import ItenaryDetail from './Pages/Itenary/ItenaryDetails/index';
+import MainLayout from './Pages/MainLayout';
 
 
 function App() {
@@ -12,10 +14,13 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<MainLayout />}>
-          <Route index element={<Home />} />    
-          <Route path="about" element={<Aboutus />} />
-          <Route path="blog" element={<Blog />} />
+          <Route index element={<Home />} />
+          <Route path="about" element={<ItenaryDetail />} />
+          <Route path="International" element={<InternationalPackages />} />
+          <Route path="Domestic" element={<DomesticPackages />} />
+          <Route path="itenary/:id" element={<Itenary />} />
           <Route path="contact" element={<ContactUs />} />
+          <Route path="itenary-details" element={<ItenaryDetail />} />
         </Route>
       </Routes>
     </Router>

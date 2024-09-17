@@ -5,12 +5,18 @@ import "slick-carousel/slick/slick-theme.css";
 import { useGetPackagesQuery } from '../../../Api/Api';
 import '../../../assets/custom.css'
 import Skeleton from 'react-loading-skeleton';
+import { useNavigate } from 'react-router-dom';
 
 const Destinations = () => {
 
     const { isError, error, data, isLoading, isSuccess } = useGetPackagesQuery();
     const [pkg, setPkg] = useState('');
     const [err, setErr] = useState('');
+    const navigate = useNavigate();
+
+    const handleItenary = (id) => {
+        navigate(`itenary/${id}`)
+    }
 
     useEffect(() => {
         if (isSuccess) {
@@ -22,7 +28,7 @@ const Destinations = () => {
     }, [error, data, isSuccess, isError]);
 
     const imageUrl = "http://192.168.1.45:7781/uploads/packages-Image/"
- 
+
     const settings = {
         dots: false,
         infinite: true,
@@ -51,6 +57,8 @@ const Destinations = () => {
         ]
     };
 
+   
+
     return (
         <div className='w-full py-10 h-auto bg-[url("https://ajaymodi.com/static/media/discouver-bg.6d953696ca0f26414fd6.jpg")] bg-cover bg-center'>
             <div className='flex flex-row justify-center items-center p-10 w-full font-bold text-[35px]'>Popular Destinations</div>
@@ -74,16 +82,15 @@ const Destinations = () => {
                                 <Slider {...settings} className="w-full flex flex-row justify-center">
                                     {pkg && pkg.length > 0 ? (
                                         pkg?.map((img, index) => (
-                                            <>
-                                                <div key={index} className='relative  w-[300px] h-[400px] overflow-hidden '>
-                                                    <button className='border-none w-full h-full focus:outline-none'>
-                                                        <img src={`${imageUrl}${img.packageImage}`} alt={`destination-${index}`} className='rounded-lg shadow-lg w-full h-full' />
-                                                        <div className='rounded-b-lg tracking-wider text-white text-xl font-bold capitalize w-full bg-black/50 p-5 z-10 absolute bottom-0'>
-                                                            {img.packageName}
-                                                        </div>
-                                                    </button>
-                                                </div>
-                                            </>
+                                            <div key={index} onClick={() => handleItenary(img._id)} className='relative  !w-[300px] !h-[400px] overflow-hidden '>
+                                                <button className='border-none w-full h-full focus:outline-none'>
+                                                    <img src={`${imageUrl}${img.packageImage}`} alt={`destination-${index}`} className='rounded-lg shadow-lg w-full h-full' />
+                                                    <div className='rounded-b-lg tracking-wider text-white text-xl font-bold capitalize w-full bg-black/50 p-5 z-10 absolute bottom-0'>
+                                                        {img.packageName}
+                                                    </div>
+                                                </button>
+                                            </div>
+
                                         ))
                                     ) : (
                                         <div className="flex justify-center items-center w-full h-full">
