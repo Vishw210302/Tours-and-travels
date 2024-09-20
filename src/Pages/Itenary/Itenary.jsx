@@ -26,7 +26,7 @@ const Itenary = () => {
     <>
       <div className='bg-[#f7f7f7]'>
         <div className="w-full h-[500px] flex flex-row justify-center items-center bg-[url('https://webimages.ajaymoditravels.com/amtuploads/websiteimages/631155998855.png')] bg-cover bg-center bg-[#f7f7f7]">
-          <div className='text-2xl text-white font-bold underline'>{response && (response[0]?.packageName).toUpperCase()} TOURS PACKAGES</div>
+          <div className='text-2xl text-white font-bold underline'>{response && (response[0]?.packageName)?.toUpperCase()} TOURS PACKAGES</div>
         </div>
         <div className='p-4'>
           <div className='w-[100%] flex gap-3'>

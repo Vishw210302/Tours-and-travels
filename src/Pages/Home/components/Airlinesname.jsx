@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import Slider from 'react-slick';
 import * as FeatherIcons from 'react-feather';
+import Slider from 'react-slick';
+import "slick-carousel/slick/slick-theme.css";
+import "slick-carousel/slick/slick.css";
 import { useGetBrandLogoQuery } from '../../../Api/Api';
-import Skeleton from 'react-loading-skeleton';
 import SkeletonPage from '../../Partials/SkeletonPage';
-import { div } from 'three/webgpu';
 
 const Airlinesname = () => {
 
@@ -45,16 +43,6 @@ const Airlinesname = () => {
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 1500,
-    // prevArrow: (
-    //   <div className="left-button" style={{ marginRight: '15px' }}>
-    //     {featherIcon('ArrowLeft', "text-black text-xl")}
-    //   </div>
-    // ),
-    // nextArrow: (
-    //   <div className="right-button" style={{ marginRight: '15px' }}>
-    //     {featherIcon('ArrowRight', "text-black text-xl")}
-    //   </div>
-    // )
   };
 
   return (

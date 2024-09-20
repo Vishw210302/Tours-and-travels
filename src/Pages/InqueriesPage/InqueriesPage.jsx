@@ -16,7 +16,7 @@ const InqueriesPage = () => {
 
     return (
         <>
-            <div className='card bg-[#f1f1f1] shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg sticky bottom-0 p-3'>
+            <div className='card bg-[#f1f1f1] shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg sticky z-10 bottom-0 p-3'>
                 <div className='flex justify-between items-center 2xl:container 2xl:mx-auto'>
                     <div>
                         <p className='text-[18px] font-semibold'>From ₹2,999 / person</p>

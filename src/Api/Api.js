@@ -25,9 +25,13 @@ export const myApi = createApi({
 
         getItenries: builder.query({
             query: (id) => `get-particular-itenary/${id}`,
-          }),
+        }),
+
+        getItenariesDetails: builder.query({
+            query: (id) => `get-all-details-itenary/${id}`
+        })
 
     })
 })
 
-export const { useGetSliderQuery, useGetBrandLogoQuery, useGetPackagesQuery, useGetTestimonialQuery, useGetItenriesQuery } = myApi
+export const { useGetSliderQuery, useGetBrandLogoQuery, useGetPackagesQuery, useGetTestimonialQuery, useGetItenriesQuery, useGetItenariesDetailsQuery } = myApi

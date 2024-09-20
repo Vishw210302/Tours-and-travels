@@ -7,6 +7,7 @@ import Home from './Pages/Home/Home';
 import Itenary from './Pages/Itenary/Itenary';
 import ItenaryDetail from './Pages/Itenary/ItenaryDetails/index';
 import MainLayout from './Pages/MainLayout';
+import FlightsPageListing from './Pages/FlightsPagesListing/FlightsPageListing';
 
 
 function App() {
@@ -20,7 +21,8 @@ function App() {
           <Route path="Domestic" element={<DomesticPackages />} />
           <Route path="itenary/:id" element={<Itenary />} />
           <Route path="contact" element={<ContactUs />} />
-          <Route path="itenary-details" element={<ItenaryDetail />} />
+          <Route path="flights" element={<FlightsPageListing />} />
+          <Route path="itenary-details/:id" element={<ItenaryDetail />} />
         </Route>
       </Routes>
     </Router>

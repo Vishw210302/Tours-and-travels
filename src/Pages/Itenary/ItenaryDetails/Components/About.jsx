@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import ApartmentIcon from '@mui/icons-material/Apartment';
 import AvTimerIcon from '@mui/icons-material/AvTimer';
@@ -11,43 +11,52 @@ import PaidIcon from '@mui/icons-material/Paid';
 import PersonIcon from '@mui/icons-material/Person';
 import WarningIcon from '@mui/icons-material/Warning';
 
+// Helper function to format dates
+const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+    const year = String(date.getFullYear()).slice(2); // Get the last two digits of the year
+    return `${day}/${month}/${year}`;
+};
+
 const ReadMoreText = ({ text }) => {
-
     const [isExpanded, setIsExpanded] = useState(false);
-    const words = text.split(' ');
-    const shortText = words.slice(0, 100).join(' ');
-  
+    const words = text?.split(' ');
+    const shortText = words?.slice(0, 100).join(' ');
+
     const toggleReadMore = () => {
-      setIsExpanded(!isExpanded);
+        setIsExpanded(!isExpanded);
     };
-  
+
     return (
-      <div>
-        <p className='text-[15px] text-justify'>
-          {isExpanded ? text : `${shortText}...`}
-        </p>
-        {words.length > 100 && (
-          <button onClick={toggleReadMore} className="text-blue-500">
-            {isExpanded ? 'Read Less' : 'Read More'}
-          </button>
-        )}
-      </div>
+        <div>
+            <p className='text-[15px] text-justify'>
+                {isExpanded ? text : `${shortText}`}
+            </p>
+            {words?.length > 100 && (
+                <button onClick={toggleReadMore} className="text-blue-500">
+                    {isExpanded ? 'Read Less' : 'Read More'}
+                </button>
+            )}
+        </div>
     );
-  };
+};
 
-const About = () => {
+const About = ({ data, allData }) => {
 
-    const longText = `
-    Hampta Pass Trek is considered the easiest and convenient of all treks in Himachal Pradesh.
-    It is the Ingress to the Spiti Valley from Manali Valley. It is a trek that will leave you in awe 
-    of this beautiful place. The variation in the trails is enormous; scenic landscapes, open green 
-    pastures and meadows, glacial valleys, easy access and an exceptional, adventurous and hair raising 
-    crossing of the pass makes this trekking expedition to Hampta pass an exciting one. Chandratal lake located 
-    at 14000 feet approx is the main attraction to visit during the trek. The best months to trek are May and June 
-    and August through October. The reason why Hampta pass is a famous trekking zone is snow; the pass has lump sum 
-    snow even during the summer which draws more trekkers for visit. The expedition consists of approximately 26 kms 
-    of trek.
-  `;
+    const [departureDates, setDepartureDates] = useState([]);
+    const [allItenaryData, setAllItenaryData] = useState()
+    console.log("this is real data", allData?.itenaryData)
+
+    useEffect(() => {
+        if (Array.isArray(allData?.itenaryData?.departureDates)) {
+            setDepartureDates(allData?.itenaryData?.departureDates);
+        }
+        setAllItenaryData(allData?.itenaryData)
+    }, [allData]);
+
+    const longText = data;
 
     return (
         <div className='flex justify-around w-[100%]'>
@@ -55,15 +64,13 @@ const About = () => {
             <div className='w-[60%]'>
 
                 <div className='card bg-white rounded-xl shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg p-3 my-2'>
-
-                    <h1 className='text-[20px] font-semibold text-red-500'>Valley of Flowers Trek</h1>
-                    <p className='text-[15px]'>Feel the Heaven on Earth!</p>
+                    <h1 className='text-[20px] font-semibold text-red-500'>{allItenaryData?.packageTitle}</h1>
                     <div className='flex items-center gap-2 mt-2 border-b-2'>
                         <div className='flex items-center gap-2 mb-2'>
                             <AvTimerIcon fontSize="large" sx={{ color: '#ef4444' }} />
                             <div>
                                 <p> Duration</p>
-                                <p>6 days / 5 nights</p>
+                                <p>{allItenaryData?.days?.length} days /{allItenaryData?.days?.length - 1} nights</p>
                             </div>
                         </div>
                         <div className='flex items-center gap-2'>
@@ -80,19 +87,11 @@ const About = () => {
                                 <p>16-35 years</p>
                             </div>
                         </div>
-                        <div className='flex items-center gap-2'>
-                            <DownhillSkiingIcon fontSize="large" sx={{ color: '#ef4444' }} />
-                            <div>
-                                <p> Max Altitude</p>
-                                <p>14,011 ft</p>
-                            </div>
-                        </div>
                     </div>
                     <div className='p-3'>
                         <div className='card rounded-lg bg-red-200 p-3'>
                             <p className='text-lg font-semibold'>Important Update</p>
                             <p className='text-sm'>If anything goes wrong, please contact us at +91 9173211901</p>
-
                         </div>
                     </div>
                 </div>
@@ -112,10 +111,9 @@ const About = () => {
             <div className='w-[25%] h-[100%]'>
 
                 <div className='card bg-white rounded-xl shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] p-3 transition-all duration-300 hover:shadow-lg'>
-
                     <div>
-                        <span className='text-lg font-bold'>₹9,350</span>
-                        <span className='text-md font-semibold'> /person</span>
+                        <span className='text-lg font-bold text-red-500'>₹{allItenaryData?.perPersonCost}</span>
+                        <span className='text-md font-semibold text-red-500'> / person</span>
                     </div>
 
                     <div>
@@ -136,19 +134,21 @@ const About = () => {
                             Book Now
                         </button>
                     </div>
-
                 </div>
 
                 <div className='card bg-white rounded-xl shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg p-3 my-2 flex flex-wrap'>
-                    <p className='font-medium text-[15px] mr-1'>Dates:-</p>
-                    <p className='text-[15px]'>
-                        21/03/2002 , 23/10/2003 , 21/02/2003 , 21/02/2003 , 21/02/2003 , 21/02/2003 , 21/02/2003
-                    </p>
+                    <p className='font-medium text-[15px] text-red-500 mr-1'>Dates:-</p>
+                    {departureDates && departureDates.map((departureDate, index) => (
+                        <p key={index} className='text-[15px] font-semibold'>
+                            {formatDate(departureDate)}
+                            {index < departureDates.length - 1 && ' ,  '}
+                        </p>
+                    ))}
                 </div>
 
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default About
+export default About;

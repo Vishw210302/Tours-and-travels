@@ -26,7 +26,7 @@ const NavBar = () => {
 
   const togglePackagesDropdown = () => {
     setIsPackagesOpen(!isPackagesOpen);
-    setActiveLink('holidays'); 
+    setActiveLink('holidays');
   };
 
   return (
@@ -75,7 +75,13 @@ const NavBar = () => {
                   </div>
                 )}
               </div>
-              
+
+              <button
+                className={` ${getActiveClass('flights')}`}
+                onClick={() => handleLinkClick('flights')}
+              >
+                <div className='font-semibold text-lg text-white'>flights Details</div>
+              </button>
               <button
                 className={` ${getActiveClass('contact')}`}
                 onClick={() => handleLinkClick('contact')}
