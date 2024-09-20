@@ -1,55 +1,22 @@
 import React, { useEffect, useState } from 'react';
+import { useGetCitiesListingQuery } from '../../Api/Api';
 import Airlinesname from '../Home/components/Airlinesname';
 import TopSearchFlights from './TopSearchFlights';
 
 const FlightsPageListing = () => {
-    const [countries, setCountries] = useState([]);
-    const [cities, setCities] = useState([]);
-    const [selectedCountry, setSelectedCountry] = useState('');
-    const [loadingCities, setLoadingCities] = useState(false);
-
-    const geoNamesUsername = 'YOUR_GEONAMES_USERNAME';
-
-    const fetchCountries = async () => {
-        try {
-            const response = await fetch('https://restcountries.com/v3.1/all');
-            const data = await response.json();
-            const countryList = data.map(country => ({
-                name: country.name.common,
-                code: country.cca2
-            }));
-            setCountries(countryList);
-        } catch (error) {
-            console.error("Error fetching countries:", error);
-        }
-    };
-
-    const fetchCities = async (countryCode) => {
-        setLoadingCities(true);
-        try {
-            const response = await fetch(`http://api.geonames.org/searchJSON?country=${countryCode}&maxRows=100&username=${geoNamesUsername}`);
-            const data = await response.json();
-            const cityList = data.geonames.map(city => ({
-                name: city.name,
-                country: city.countryCode
-            }));
-            setCities(cityList);
-        } catch (error) {
-            console.error("Error fetching cities:", error);
-        } finally {
-            setLoadingCities(false);
-        }
-    };
+    const { isError, error, data, isLoading, isSuccess } = useGetCitiesListingQuery();
+    const [citiesListing, setCitiesListing] = useState()
 
     useEffect(() => {
-        fetchCountries();
-    }, []);
+        if (isSuccess) {
+            setCitiesListing(data?.data)
+        } else if (isError) {
+            console.log("error", isError);
+        }
+    }, [error, data, isSuccess, isError]);
 
-    const handleCountryChange = (e) => {
-        const countryCode = e.target.value;
-        setSelectedCountry(countryCode);
-        fetchCities(countryCode);
-    };
+    console.log("citiesListingcitiesListing", citiesListing)
+
 
     return (
         <>
@@ -80,14 +47,13 @@ const FlightsPageListing = () => {
                                         id="from"
                                         name="from"
                                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                        onChange={handleCountryChange}
+                                        onChange=""
                                     >
                                         <option value="" disabled selected>Select Country</option>
-                                        {countries.map((country) => (
-                                            <option key={country.code} value={country.code}>
-                                                {country.name}
-                                            </option>
-                                        ))}
+
+                                        <option>
+                                            Vishw
+                                        </option>
                                     </select>
                                 </div>
 
@@ -101,15 +67,11 @@ const FlightsPageListing = () => {
                                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     >
                                         <option value="" disabled selected>Select Country</option>
-                                        {loadingCities ? (
-                                            <option>Loading...</option>
-                                        ) : (
-                                            countries.map((country, index) => (
-                                                <option key={country.code} value={country.code}>
-                                                    {country.name}
-                                                </option>
-                                            ))
-                                        )}
+
+                                        <option>
+                                            Prajapati
+                                        </option>
+
                                     </select>
                                 </div>
 
