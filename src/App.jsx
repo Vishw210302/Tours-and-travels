@@ -9,6 +9,7 @@ import Home from './Pages/Home/Home';
 import Itenary from './Pages/Itenary/Itenary';
 import ItenaryDetail from './Pages/Itenary/ItenaryDetails/index';
 import MainLayout from './Pages/MainLayout';
+import BlogDetailsPage from './Pages/Blogs/BlogDetailsPage';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path="contact" element={<ContactUs />} />
           <Route path="flights" element={<FlightsPageListing />} />
           <Route path="itenary-details/:id" element={<ItenaryDetail />} />
+          <Route path="blog-details/:id" element={<BlogDetailsPage />} />
         </Route>
       </Routes>
     </Router>

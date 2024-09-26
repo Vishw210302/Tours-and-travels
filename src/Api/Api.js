@@ -34,7 +34,6 @@ export const myApi = createApi({
             query: (city) => `get-all-cities?city=${city}`,
         }),
 
-        // Adding the POST mutation
         contactUsPost: builder.mutation({
             query: (contactData) => ({
                 url: "contact-us-post",
@@ -42,10 +41,33 @@ export const myApi = createApi({
                 body: contactData,
             }),
         }),
-        getLocationListing: builder.query({
-            query: () => "get-branch-listing",
+
+        getBranches: builder.query({
+            query: () => "get-branch-location"
         }),
+
+        getSubBranches: builder.query({
+            query: (id) => `get-branch-listing/${id}`
+        }),
+
+        getFlightDetails: builder.mutation({
+            query: (searchFlight) => ({
+                url: "search-flights-details",
+                method: "POST",
+                body: searchFlight,
+            }),
+        }),
+
+        getSpecialFlights: builder.query({
+            query: () => "get-special-flight-data_V_P_D"
+        }),
+
+        getBlogListing: builder.query({
+            query: () => "get-blog-listing"
+        }),
+        
+
     }),
 });
 
-export const { useGetSliderQuery, useGetBrandLogoQuery, useGetPackagesQuery, useGetTestimonialQuery, useGetItenriesQuery, useGetItenariesDetailsQuery, useGetCitiesListingQuery, useContactUsPostMutation, useGetLocationListingQuery} = myApi;
+export const { useGetSliderQuery, useGetBrandLogoQuery, useGetPackagesQuery, useGetTestimonialQuery, useGetItenriesQuery, useGetItenariesDetailsQuery, useLazyGetCitiesListingQuery, useContactUsPostMutation, useGetBranchesQuery, useLazyGetSubBranchesQuery, useGetFlightDetailsMutation, useGetBlogListingQuery, useGetSpecialFlightsQuery } = myApi;

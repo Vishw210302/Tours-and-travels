@@ -1,86 +1,190 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useGetCitiesListingQuery } from '../../Api/Api';
+import React, { useEffect, useRef, useState } from 'react';
+import { useGetFlightDetailsMutation, useGetSpecialFlightsQuery, useLazyGetCitiesListingQuery } from '../../Api/Api';
 import Airlinesname from '../Home/components/Airlinesname';
 import TopSearchFlights from './TopSearchFlights';
 
 const FlightsPageListing = () => {
-    const { data, isError } = useGetCitiesListingQuery();
-    console.log("datadatadatadatadata", data)
+    const [fetchCitiedListing, { data, error, isSuccess, isError }] = useLazyGetCitiesListingQuery();
+    const [searchFlight, { data: flightData, error: flightErr, isSuccess: flightSuccess, isError: flightIsErr, isLoading }] = useGetFlightDetailsMutation();
+    const {data: specialFlghtData, isSuccess: specialFlghtSucess, isError: specialFlghtIsErr, error: specialFlghtErr } = useGetSpecialFlightsQuery()
     const [fromCitiesListing, setFromCitiesListing] = useState([]);
     const [toCitiesListing, setToCitiesListing] = useState([]);
     const [searchValueFrom, setSearchValueFrom] = useState('');
+    const [directChecked, setDirectChecked] = useState(false);
     const [searchValueTo, setSearchValueTo] = useState('');
+    const [isFrom, setIsForm] = useState(true);
+    const [selectedCityFrom, setSelectedCityFrom] = useState(false)
+    const [selectedCityTo, setSelectedCityTo] = useState(false)
+    const [selectedClass, setSelectedClass] = useState('economy');
+    const [departuredDate, setDeparturedDate] = useState('');
+    const [adlutValue, setAdlutValue] = useState('1');
+    const [childrenValue, setChildrenValue] = useState('0');
+    const [infantValue, setInfantValue] = useState('0');
+    const [flightsData, setFlightsData] = useState([]);
+    const [searchErr, setSearchErr] = useState(false)
+
     const timeoutRef = useRef(null);
 
-    const searchCities = useCallback((value, isFrom) => {
-        if (value) {
-            fetch(`http://192.168.1.45:7781/api/get-all-cities?city=${value}`)
-                .then((res) => res.json())
-                .then((data) => {
-                    if (data.status) {
-                        if (isFrom) {
-                            setFromCitiesListing(data.data || []);
-                        } else {
-                            setToCitiesListing(data.data || []);
-                        }
-                    } else {
-                        if (isFrom) {
-                            setFromCitiesListing([]);
-                        } else {
-                            setToCitiesListing([]);
-                        }
-                    }
-                })
-                .catch((error) => console.error('Error fetching cities:', error));
-        } else {
-            if (isFrom) {
-                setFromCitiesListing([]);
-            } else {
-                setToCitiesListing([]);
-            }
+    useEffect(() => {
+        if (specialFlghtSucess) {
+            setFlightsData(specialFlghtData?.data || []);
+        } else if (specialFlghtIsErr) {
+            console.error("Special Flights API Error:", specialFlghtErr);
         }
-    }, []);
+    }, [specialFlghtData, specialFlghtSucess, specialFlghtIsErr, specialFlghtErr]);
+
+    useEffect(() => {
+        if (isSuccess) {
+            if (data) {
+                if (isFrom) {
+                    setFromCitiesListing(data?.data || []);
+                } else {
+                    setToCitiesListing(data?.data || []);
+                }
+            } else {
+                if (isFrom) {
+                    setFromCitiesListing([]);
+                } else {
+                    setToCitiesListing([]);
+                }
+            }
+
+        } else if (isError) {
+            console.log("isLocationError", error);
+        }
+    }, [data, error, isSuccess, isError, isFrom]);
 
     const handleInputChangeFrom = (event) => {
+        setSelectedCityFrom(false)
         const value = event.target.value;
-        console.log(value,"value")
         setSearchValueFrom(value);
         if (timeoutRef.current) {
             clearTimeout(timeoutRef.current);
         }
         timeoutRef.current = setTimeout(() => {
-            searchCities(value, true);
+            setIsForm(true)
+            fetchCitiedListing(value)
         }, 500);
     };
 
     const handleInputChangeTo = (event) => {
+        setSelectedCityTo(false)
         const value = event.target.value;
         setSearchValueTo(value);
         if (timeoutRef.current) {
             clearTimeout(timeoutRef.current);
         }
         timeoutRef.current = setTimeout(() => {
-            searchCities(value, false);
+            setIsForm(false)
+            fetchCitiedListing(value)
         }, 500);
     };
 
     const handleCitySelectFrom = (city) => {
-        setSearchValueFrom(city.name);
+        const newSearchValueFrom = city.city;
+        setSearchValueFrom(newSearchValueFrom);
         setFromCitiesListing([]);
+        if (newSearchValueFrom === searchValueTo) {
+            setSelectedCityFrom(true);
+            setSearchValueFrom('')
+        }
     };
 
     const handleCitySelectTo = (city) => {
-        setSearchValueTo(city.name);
+        const newSearchValueTo = city.city;
+        setSearchValueTo(newSearchValueTo);
         setToCitiesListing([]);
+        if (searchValueFrom === newSearchValueTo) {
+            setSelectedCityTo(true);
+            setSearchValueTo('')
+        }
     };
 
-    useEffect(() => {
-        if (data) {
-            setFromCitiesListing(data.data || []);
-        } else if (isError) {
-            console.error("Error fetching cities:", isError);
+    const handleChangeClass = (event) => {
+        setSelectedClass(event.target.value);
+    };
+
+    const handleChangeDate = (event) => {
+        const date = event.target.value
+        setDeparturedDate(date);
+    };
+
+    function convertDateFormat(dateString) {
+        const [year, month, day] = dateString.split('-');
+        return `${month}/${day}/${year}`;
+    }
+
+    const handleAdultValue = (event) => {
+        const data = event.target.value
+        setAdlutValue(data);
+    };
+
+    const handleChildrenValue = (event) => {
+        const data = event.target.value
+        setChildrenValue(data);
+    };
+
+    const handleInfantValue = (event) => {
+        const data = event.target.value
+        setInfantValue(data);
+    };
+
+    const handleCheckedValue = (event) => {
+        setDirectChecked(event.target.checked);
+    };
+
+    const handleSearchFlight = async (e) => {
+        e.preventDefault();
+        try {
+            const formattedDate = convertDateFormat(departuredDate);
+
+            // const payload = {
+            //     from: searchValueFrom,
+            //     to: searchValueTo,
+            //     flightClass: selectedClass,
+            //     departure_Date: formattedDate,
+            //     adlut: adlutValue,
+            //     children: childrenValue,
+            //     infant: infantValue
+            // }
+
+            const payload = {
+                from: 'Hyderabad',
+                to: 'Ahmedabad',
+                flightClass: 'economy',
+                departure_Date: '10/20/2024',
+                adlut: '1',
+                children: '0',
+                infant: '0',
+                oneWay: directChecked
+            }
+
+            // console.log(payload, 'payload')
+            await searchFlight(payload);
+
+        } catch (err) {
+            console.log("fetching in flights", err)
         }
-    }, [data, isError]);
+    }
+
+    useEffect(() => {
+        if (flightSuccess) {
+            if (flightData) {
+                setSearchValueFrom('');
+                setSearchValueTo('')
+                setSelectedClass('')
+                setDeparturedDate('')
+                setAdlutValue('')
+                setChildrenValue('')
+                setInfantValue('')
+                setDirectChecked(false)
+                setFlightsData(flightData?.flights)
+            }
+        } else if (flightIsErr) {
+            setSearchErr(true)
+            console.log("isLocationError", flightErr);
+        }
+    }, [flightData, flightErr, flightSuccess, flightIsErr]);
 
     return (
         <>
@@ -89,23 +193,17 @@ const FlightsPageListing = () => {
                     <div className="bg-[#1f2746] p-6 rounded-lg shadow-lg w-auto">
                         <h1 className="text-2xl text-white mb-4 font-semibold text-center">Search Flights</h1>
 
-                        <div className="flex flex-row items-center gap-3 mb-4">
-                            <label className="text-white flex items-center">
-                                <input type="radio" name="tripType" defaultValue="roundTrip" className="mr-2" />
-                                Round Trip
-                            </label>
-
-                            <label className="text-white flex items-center">
-                                <input type="radio" name="tripType" defaultValue="oneWay" className="mr-2" />
-                                One Way
-                            </label>
-                        </div>
-
-                        <form className="p-4">
+                        <form className="p-2" onSubmit={handleSearchFlight}>
+                            <div className='mb-2'>
+                                <label className="inline-flex items-center">
+                                    <input type="checkbox" checked={directChecked} onChange={handleCheckedValue} className="form-checkbox h-5 w-5 text-blue-600" />
+                                    <span className="ml-2 text-white">Direct Flight</span>
+                                </label>
+                            </div>
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 <div className="mb-4 relative">
-                                    <label className="block text-white text-sm font-bold mb-2" htmlFor="fromCity">
-                                        From
+                                    <label className="text-white text-sm flex gap-3 font-bold mb-2" htmlFor="fromCity">
+                                        From {selectedCityFrom ? (<p className='text-red-500 text-[12.5px]'>Please select another city</p>) : (<></>)}
                                     </label>
                                     <input
                                         type="text"
@@ -114,6 +212,7 @@ const FlightsPageListing = () => {
                                         placeholder="Search City"
                                         onChange={handleInputChangeFrom}
                                         value={searchValueFrom}
+                                        autoComplete="off"
                                     />
                                     {fromCitiesListing.length > 0 && (
                                         <ul className="absolute z-10 bg-white border border-gray-300 rounded-md mt-1 w-full max-h-60 overflow-auto">
@@ -123,7 +222,7 @@ const FlightsPageListing = () => {
                                                     className="px-4 py-2 hover:bg-blue-500 hover:text-white cursor-pointer"
                                                     onClick={() => handleCitySelectFrom(city)}
                                                 >
-                                                    {city.name}
+                                                    {city.city}
                                                 </li>
                                             ))}
                                         </ul>
@@ -131,8 +230,8 @@ const FlightsPageListing = () => {
                                 </div>
 
                                 <div className="mb-4 relative">
-                                    <label className="block text-white text-sm font-bold mb-2" htmlFor="toCity">
-                                        To
+                                    <label className="text-white text-sm flex gap-3 font-bold mb-2" htmlFor="toCity">
+                                        To {selectedCityTo ? (<p className='text-red-500 text-[12.5px]'>Please select another city</p>) : (<></>)}
                                     </label>
                                     <input
                                         type="text"
@@ -141,6 +240,7 @@ const FlightsPageListing = () => {
                                         placeholder="Search City"
                                         onChange={handleInputChangeTo}
                                         value={searchValueTo}
+                                        autoComplete="off"
                                     />
                                     {toCitiesListing.length > 0 && (
                                         <ul className="absolute z-10 bg-white border border-gray-300 rounded-md mt-1 w-full max-h-60 overflow-auto">
@@ -150,7 +250,7 @@ const FlightsPageListing = () => {
                                                     className="px-4 py-2 hover:bg-blue-500 hover:text-white cursor-pointer"
                                                     onClick={() => handleCitySelectTo(city)}
                                                 >
-                                                    {city.name}
+                                                    {city.city}
                                                 </li>
                                             ))}
                                         </ul>
@@ -164,6 +264,8 @@ const FlightsPageListing = () => {
                                     <select
                                         id="className"
                                         name="className"
+                                        value={selectedClass}
+                                        onChange={handleChangeClass}
                                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     >
                                         <option defaultValue="" disabled>Select Class</option>
@@ -174,7 +276,7 @@ const FlightsPageListing = () => {
                                 </div>
                             </div>
 
-                            <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+                            <div className="grid grid-cols-1 md:grid-cols-5 gap-4 items-center">
                                 <div className="mb-4">
                                     <label className="block text-white text-sm font-bold mb-2" htmlFor="departureDate">
                                         Departure Date
@@ -183,18 +285,8 @@ const FlightsPageListing = () => {
                                         type="date"
                                         id="departureDate"
                                         name="departureDate"
-                                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    />
-                                </div>
-
-                                <div className="mb-4">
-                                    <label className="block text-white text-sm font-bold mb-2" htmlFor="returnDate">
-                                        Return Date
-                                    </label>
-                                    <input
-                                        type="date"
-                                        id="returnDate"
-                                        name="returnDate"
+                                        value={departuredDate}
+                                        onChange={handleChangeDate}
                                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     />
                                 </div>
@@ -206,6 +298,8 @@ const FlightsPageListing = () => {
                                     <select
                                         id="adult"
                                         name="adult"
+                                        value={adlutValue}
+                                        onChange={handleAdultValue}
                                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     >
                                         <option defaultValue="" disabled>Select Number of Adults</option>
@@ -223,6 +317,27 @@ const FlightsPageListing = () => {
                                     <select
                                         id="children"
                                         name="children"
+                                        value={childrenValue}
+                                        onChange={handleChildrenValue}
+                                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    >
+                                        <option defaultValue="" disabled>Select Number of Children</option>
+                                        <option value="0">0 Children</option>
+                                        <option value="1">1 Child</option>
+                                        <option value="2">2 Children</option>
+                                        <option value="3">3 Children</option>
+                                        <option value="4">4 Children</option>
+                                    </select>
+                                </div>
+                                <div className="mb-4">
+                                    <label className="block text-white text-sm font-bold mb-2" htmlFor="children">
+                                        Infant (below 12)
+                                    </label>
+                                    <select
+                                        id="children"
+                                        name="children"
+                                        value={infantValue}
+                                        onChange={handleInfantValue}
                                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     >
                                         <option defaultValue="" disabled>Select Number of Children</option>
@@ -234,10 +349,10 @@ const FlightsPageListing = () => {
                                     </select>
                                 </div>
 
-                                <div className="mt-6">
+                                <div className="mt-4">
                                     <button
                                         type="submit"
-                                        className="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition-all duration-300"
+                                        className="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition-all duration-300 w-[100%]"
                                     >
                                         Search Flights
                                     </button>
@@ -247,8 +362,14 @@ const FlightsPageListing = () => {
                     </div>
                 </div>
             </div>
-            <Airlinesname />
-            <TopSearchFlights />
+
+            <Airlinesname flightsData={flightsData} />
+
+            {isLoading ? (
+                <div>Loading...</div>
+            ) : (
+                <TopSearchFlights flightsData={flightsData} error={searchErr}/>
+            )}
         </>
     );
 };

@@ -1,8 +1,9 @@
 import React from 'react'
-import Herosection from './components/Herosection'
 import Airlinesname from './components/Airlinesname'
 import Destinations from './components/Destinations'
+import Herosection from './components/Herosection'
 import Testimonials from './components/Testimonials'
+import YoutubeVideos from './components/YoutubeVideos'
 
 const Home = () => {
   return (
@@ -10,6 +11,7 @@ const Home = () => {
       <Herosection />
       <Airlinesname />
       <Destinations />
+      <YoutubeVideos />
       <Testimonials />
     </>
   )

@@ -21,7 +21,7 @@ const Testimonials = () => {
     const settings = {
         dots: true,
         infinite: true,
-        speed: 500,
+        speed: 1500,
         slidesToShow: 3,
         slidesToScroll: 1,
         autoplay: true,
@@ -65,15 +65,12 @@ const Testimonials = () => {
                                             <span className='text-lg'>{items?.reviewPersonName}</span>
                                         </div>
                                         <div className='text-center'>
-                                            <StarIcon sx={{ color: '#f9d41e' }} />
-                                            <StarIcon sx={{ color: '#f9d41e' }} />
-                                            <StarIcon sx={{ color: '#f9d41e' }} />
-                                            <StarIcon sx={{ color: '#f9d41e' }} />
+                                            {Array.from({ length: Number(items?.numberOfReview) }).map((_, i) => (
+                                                <StarIcon key={i} sx={{ color: '#f9d41e' }} />
+                                            ))}
                                         </div>
                                         <div className='text-center pb-2'>
-                                            <span>
-                                                {items?.reviewDescription}
-                                            </span>
+                                            <span>{items?.reviewDescription}</span>
                                         </div>
                                     </div>
                                 </div>

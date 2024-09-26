@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import Slider from 'react-slick';
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import { useGetPackagesQuery } from '../../../Api/Api';
-import '../../../assets/custom.css'
 import Skeleton from 'react-loading-skeleton';
 import { useNavigate } from 'react-router-dom';
+import Slider from 'react-slick';
+import "slick-carousel/slick/slick-theme.css";
+import "slick-carousel/slick/slick.css";
+import { useGetPackagesQuery } from '../../../Api/Api';
+import '../../../assets/custom.css';
 
 const Destinations = () => {
 
@@ -56,8 +56,6 @@ const Destinations = () => {
             }
         ]
     };
-
-   
 
     return (
         <div className='w-full py-10 h-auto bg-[url("https://ajaymodi.com/static/media/discouver-bg.6d953696ca0f26414fd6.jpg")] bg-cover bg-center'>

@@ -47,7 +47,6 @@ const About = ({ data, allData }) => {
 
     const [departureDates, setDepartureDates] = useState([]);
     const [allItenaryData, setAllItenaryData] = useState()
-    console.log("this is real data", allData?.itenaryData)
 
     useEffect(() => {
         if (Array.isArray(allData?.itenaryData?.departureDates)) {

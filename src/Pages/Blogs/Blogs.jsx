@@ -1,8 +1,31 @@
-import React from 'react'
-import blogImage from "../../assets/image.jpg"
-import EventIcon from '@mui/icons-material/Event';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useGetBlogListingQuery } from '../../Api/Api';
 
 const Blogs = () => {
+    const { data, isLoading, isSuccess, isError, error } = useGetBlogListingQuery();
+    const [blogListing, setBlogListing] = useState([]);
+    const vlogBannerImage = "http://192.168.1.45:7781/uploads/blogs-image/";
+
+    useEffect(() => {
+        if (isSuccess) {
+            setBlogListing(data?.data);
+        } else if (isError) {
+            console.log("isLocationError", isError);
+        }
+    }, [error, data, isSuccess, isError]);
+
+    const navigate = useNavigate();
+
+    const truncateText = (text, wordLimit) => {
+        return text.split(' ').slice(0, wordLimit).join(' ') + '...';
+    };
+
+    // Update the function to accept an id parameter
+    const handleDetailsBlogPage = (id) => {
+        navigate(`/blog-details/${id}`); // Pass the ID in the URL
+    };
+
     return (
         <>
             <div className="w-full h-[500px] flex flex-col justify-center items-center bg-[url('https://webimages.ajaymoditravels.com/amtuploads/websiteimages/631155998855.png')] bg-cover bg-center relative">
@@ -20,58 +43,51 @@ const Blogs = () => {
                     </div>
                 </div>
             </div>
-            <div className='2xl:container 2xl:mx-auto px-5'>
-                <div className='grid grid-cols-3 gap-4 mt-5'>
-
-                    <div className='w-[85%] card bg-white shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg p-1 relative rounded-xl'>
-                        <img src={blogImage} alt='Blog_Image' className='rounded-xl' />
-                        <div className='px-5 my-3 flex flex-row gap-2'>
-                            <EventIcon sx={{ color: '#ef4444' }} />
-                            <p className='text-base text-red-500 font-semibold'>21/03/2002 <span className='text-black'>| Travelling</span></p>
-                        </div>
-                        <div className='my-1 px-5'>
-                            <p className='text-2xl text-black font-semibold'>Dubai Vlog</p>
-                            <p className='text-base text-black font-semibold tracking-tight'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam cumque iste animi sapiente quae est nobis, nihil consequatur amet sed?</p>
-                        </div>
-                    </div>
-                    <div className='w-[85%] card bg-white shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg p-1 relative rounded-xl'>
-                        <img src={blogImage} alt='Blog_Image' className='rounded-xl' />
-                        <div className='px-5 my-3 flex flex-row gap-2'>
-                            <EventIcon sx={{ color: '#ef4444' }} />
-                            <p className='text-base text-red-500 font-semibold'>21/03/2002 <span className='text-black'>| Travelling</span></p>
-                        </div>
-                        <div className='my-1 px-5'>
-                            <p className='text-2xl text-black font-semibold'>Dubai Vlog</p>
-                            <p className='text-base text-black font-semibold tracking-tight'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam cumque iste animi sapiente quae est nobis, nihil consequatur amet sed?</p>
-                        </div>
-                    </div>
-                    <div className='w-[85%] card bg-white shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg p-1 relative rounded-xl'>
-                        <img src={blogImage} alt='Blog_Image' className='rounded-xl' />
-                        <div className='px-5 my-3 flex flex-row gap-2'>
-                            <EventIcon sx={{ color: '#ef4444' }} />
-                            <p className='text-base text-red-500 font-semibold'>21/03/2002 <span className='text-black'>| Travelling</span></p>
-                        </div>
-                        <div className='my-1 px-5'>
-                            <p className='text-2xl text-black font-semibold'>Dubai Vlog</p>
-                            <p className='text-base text-black font-semibold tracking-tight'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam cumque iste animi sapiente quae est nobis, nihil consequatur amet sed?</p>
-                        </div>
-                    </div>
-                    <div className='w-[85%] card bg-white shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg p-1 relative rounded-xl'>
-                        <img src={blogImage} alt='Blog_Image' className='rounded-xl' />
-                        <div className='px-5 my-3 flex flex-row gap-2'>
-                            <EventIcon sx={{ color: '#ef4444' }} />
-                            <p className='text-base text-red-500 font-semibold'>21/03/2002 <span className='text-black'>| Travelling</span></p>
-                        </div>
-                        <div className='my-1 px-5'>
-                            <p className='text-2xl text-black font-semibold'>Dubai Vlog</p>
-                            <p className='text-base text-black font-semibold tracking-tight'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam cumque iste animi sapiente quae est nobis, nihil consequatur amet sed?</p>
+            {blogListing && blogListing.map((items, index) => {
+                return (
+                    <div key={index + "key"} className='2xl:container 2xl:mx-auto px-5'>
+                        <div className='grid grid-cols-3 gap-4 my-5'>
+                            <div
+                                className='card bg-white shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg relative rounded-xl'
+                                onClick={() => handleDetailsBlogPage(items._id)}
+                            >
+                                <img src={items?.blogImage ? `${vlogBannerImage}${items?.blogImage}` : `${vlogBannerImage}${items?.blogImage}`} alt='Blog_Image' width={570} height={400} className='rounded-tl-xl rounded-tr-xl relative' />
+                                <div className='absolute top-0 left-0'>
+                                    <div className='bg-[#1f2746] p-2 rounded-tl-xl'>
+                                        {items?.createdAt && (
+                                            <>
+                                                <p className='text-2xl flex flex-row justify-center text-white'>
+                                                    {new Date(items.createdAt).toLocaleDateString('en-US', { day: 'numeric' })}
+                                                </p>
+                                                <p className='text-white text-xl'>
+                                                    {new Date(items.createdAt).toLocaleDateString('en-US', { month: 'long' })}
+                                                </p>
+                                            </>
+                                        )}
+                                    </div>
+                                </div>
+                                <div className='p-5 mb-1'>
+                                    <p className='text-2xl text-red-500'>
+                                        {items?.blogsName ? items.blogsName : 'Blog Name Unavailable'}
+                                    </p>
+                                    <p className='text-justify'>
+                                        {items?.blogsDescription ? truncateText(items.blogsDescription, 25) : 'No description available'}
+                                    </p>
+                                </div>
+                                <div className='bg-[#1f2746] p-2 flex flex-row justify-between rounded-bl-xl rounded-br-xl'>
+                                    <p className='text-white text-lg font-semibold'>{items?.blogType}</p>
+                                    <div className='flex flex-row gap-2'>
+                                        <p className='text-white text-lg font-semibold'>Post By:-</p>
+                                        <p className='text-white text-lg font-semibold'>{items?.blogAuthor}</p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-
-            </div>
+                );
+            })}
         </>
-    )
-}
+    );
+};
 
-export default Blogs
+export default Blogs;

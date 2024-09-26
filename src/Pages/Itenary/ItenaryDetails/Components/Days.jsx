@@ -5,7 +5,6 @@ import 'swiper/css';
 import 'swiper/css/autoplay';
 import { Autoplay } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import siteSeenImage from "../../../../assets/image.jpg"
 
 const Description = ({ description }) => {
 
@@ -86,9 +85,11 @@ const Days = ({ data }) => {
     const [selectedSiteSeen, setSelectedSiteSeen] = useState(null);
 
     const siteSeenImage = "http://192.168.1.45:7781/uploads/siteseen-image/"
+    const defultImage = "http://192.168.1.45:7781/uploads/itenary-package/";
 
     useEffect(() => {
         if (data) {
+            console.log(data, 'adta')
             setAllDaysViseItenary(data)
         } else {
             console.error("Expected data to be an array, but got:", data);
@@ -123,11 +124,27 @@ const Days = ({ data }) => {
                                         disableOnInteraction: false,
                                     }}
                                 >
-                                    {daysItenary?.siteseens && daysItenary.siteseens.map((siteseen, index) => (
-                                        <SwiperSlide key={index}>
-                                            <img src={`${siteSeenImage}${siteseen.siteseen}`} alt='' className='w-[90%] h-48 rounded-lg' />
-                                        </SwiperSlide>
-                                    ))}
+                                    {daysItenary?.siteseens?.length > 0 ? (
+                                        daysItenary.siteseens.map((siteseen, index) => {
+                                            
+                                            return (
+                                                <SwiperSlide key={index}>
+                                                    <img
+                                                        src={`${siteSeenImage}${siteseen.siteseen}`}
+                                                        alt={siteseen.siteseen}
+                                                        className="w-[90%] h-48 rounded-lg"
+                                                    />
+                                                </SwiperSlide>
+                                            )
+                                        })
+                                    ) : (
+                                        <img
+                                            src={`${defultImage}${daysItenary?.deFaultImage}`}
+                                            alt={daysItenary?.deFaultImage}
+                                            className="w-[90%] h-48 rounded-lg"
+                                        />
+                                    )}
+
                                 </Swiper>
                             </div>
 

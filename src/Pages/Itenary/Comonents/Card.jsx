@@ -65,7 +65,7 @@ const Card = ({ isLoading, data }) => {
                                             {value.days.length - 1} Nights
                                         </div>
                                     </div>
-                                    <div className='w-[45%] py-1'>
+                                    <div className='w-[50%] py-1'>
                                         <div className='flex items-center gap-1 mb-1'>
                                             <div className='font-bold text-base text-red-500'>Categories :-</div>
                                             <div className='text-gray-700 text-base font-semibold'>{value.categories}</div>

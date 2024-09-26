@@ -2,3 +2,9 @@
     display: flex !important;
     justify-content: center;
 }
+
+.background-image {
+    background-repeat: no-repeat !important;
+    background-size: cover !important;
+    background-position: center !important;
+  }
