@@ -28,7 +28,6 @@ const InternationalPackages = () => {
                     <h1 className='text-5xl font-extrabold text-center mb-12 text-gray-800'>Discover Your Dream Vacation</h1>
                     <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10'>
                         {internationalPackagesListing.map((item, index) => {
-                            console.log("itemitemitemitemitemitem", item)
                             return (
                                 <div key={index + "key"} className='relative group bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300'>
                                     <img src={`${imageUrl}${item.packageImage}`} alt={item.packageName} className='w-full h-64 object-cover transform group-hover:scale-105 transition-transform duration-300' />

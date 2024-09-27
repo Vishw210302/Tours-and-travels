@@ -138,7 +138,6 @@ const FlightsPageListing = () => {
         try {
             const formattedDate = convertDateFormat(departuredDate);
 
-
             const payload = {
                 from: searchValueFrom,
                 to: searchValueTo,
@@ -149,7 +148,7 @@ const FlightsPageListing = () => {
                 infant: infantValue,
                 oneWay: directChecked
             }
-
+            
             await searchFlight(payload);
 
         } catch (err) {
@@ -159,14 +158,15 @@ const FlightsPageListing = () => {
 
     useEffect(() => {
         if (flightSuccess) {
+            setSearchErr(false)
             if (flightData) {
                 setSearchValueFrom('');
                 setSearchValueTo('')
-                setSelectedClass('')
+                setSelectedClass('economy')
                 setDeparturedDate('')
-                setAdlutValue('')
-                setChildrenValue('')
-                setInfantValue('')
+                setAdlutValue('1')
+                setChildrenValue('0')
+                setInfantValue('0')
                 setDirectChecked(false)
                 setFlightsData(flightData?.flights)
             }
