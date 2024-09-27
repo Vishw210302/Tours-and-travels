@@ -45,12 +45,22 @@ const NavBar = () => {
           </div>
           <div className='col-span-2'>
             <div className='grid grid-cols-6 gap-4 items-center h-full'>
+
               <button
                 className={`flex justify-center items-center h-full ${getActiveClass('')}`}
                 onClick={() => handleLinkClick('')}
               >
                 <div className='font-semibold text-lg text-white'>HOME</div>
               </button>
+
+              <button
+                className={`flex justify-center items-center h-full ${getActiveClass('aboutUs')}`}
+                onClick={() => handleLinkClick('aboutUs')}
+              >
+                <div className='font-semibold text-lg text-white'>About Us</div>
+              </button>
+
+
               <div className="relative h-full">
                 <button
                   className={`flex justify-center items-center h-full w-full ${getActiveClass('holidays')}`}
@@ -76,6 +86,7 @@ const NavBar = () => {
                   </div>
                 )}
               </div>
+
               <button
                 className={`flex justify-center items-center h-full ${getActiveClass('flights')}`}
                 onClick={() => handleLinkClick('flights')}

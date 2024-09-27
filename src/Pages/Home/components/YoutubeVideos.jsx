@@ -1,27 +1,21 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick-theme.css';
 import 'slick-carousel/slick/slick.css';
+import { useGetYoutubeVideosQuery } from '../../../Api/Api';
 
 const YoutubeVideos = () => {
-    const videos = [
-        {
-            id: 1,
-            src: "https://www.youtube.com/embed/48ACN_PxXQY?si=LpSuY8ZkaDYx4jXd",
-        },
-        {
-            id: 2,
-            src: "https://www.youtube.com/embed/IdejM6wCkxA?si=TCxYlLISBI1LK0_Q",
-        },
-        {
-            id: 3,
-            src: "https://www.youtube.com/embed/Ln38av8gLng?si=KYZbaA0TV5eBzO2q",
-        },
-        {
-            id: 4,
-            src: "https://www.youtube.com/embed/auxsSV1rSrk?si=eblZOWXqFcmdG2Rh",
-        },
-    ];
+
+    const { isError, error, data, isLoading, isSuccess } = useGetYoutubeVideosQuery();
+    const [youtubeVideosListing, setYoutubeVideosListing] = useState([])
+
+    useEffect(() => {
+        if (isSuccess) {
+            setYoutubeVideosListing(data?.data);
+        } else if (isError) {
+            console.log("error", isError);
+        }
+    }, [error, data, isSuccess, isError]);
 
     const settings = {
         dots: true,
@@ -59,12 +53,12 @@ const YoutubeVideos = () => {
             </div>
             <div className='p-3'>
                 <Slider {...settings}>
-                    {videos.map((video, index) => (
-                        <div className='rounded-xl' key={index}>
+                    {youtubeVideosListing && youtubeVideosListing.map((video, index) => (
+                        <div className='rounded-xl' key={index + "key"}>
                             <iframe
                                 width="350"
                                 height="180"
-                                src={video.src}
+                                src={video?.youtubeURL}
                                 title={`YouTube video ${index + 1}`}
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                 allowFullScreen
