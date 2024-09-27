@@ -173,7 +173,6 @@ const TopSearchFlights = ({ flightsData, error }) => {
                     </div>
                     {index !== flightsData.length - 1 && <div className='border m-2'></div>}
                   </div>
-                   </div>
                 ))
               )}
             </div>
