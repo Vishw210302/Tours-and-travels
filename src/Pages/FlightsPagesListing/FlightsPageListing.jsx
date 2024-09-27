@@ -4,9 +4,10 @@ import Airlinesname from '../Home/components/Airlinesname';
 import TopSearchFlights from './TopSearchFlights';
 
 const FlightsPageListing = () => {
+
     const [fetchCitiedListing, { data, error, isSuccess, isError }] = useLazyGetCitiesListingQuery();
     const [searchFlight, { data: flightData, error: flightErr, isSuccess: flightSuccess, isError: flightIsErr, isLoading }] = useGetFlightDetailsMutation();
-    const {data: specialFlghtData, isSuccess: specialFlghtSucess, isError: specialFlghtIsErr, error: specialFlghtErr } = useGetSpecialFlightsQuery()
+    const { data: specialFlghtData, isSuccess: specialFlghtSucess, isError: specialFlghtIsErr, error: specialFlghtErr } = useGetSpecialFlightsQuery()
     const [fromCitiesListing, setFromCitiesListing] = useState([]);
     const [toCitiesListing, setToCitiesListing] = useState([]);
     const [searchValueFrom, setSearchValueFrom] = useState('');
@@ -22,7 +23,6 @@ const FlightsPageListing = () => {
     const [infantValue, setInfantValue] = useState('0');
     const [flightsData, setFlightsData] = useState([]);
     const [searchErr, setSearchErr] = useState(false)
-
     const timeoutRef = useRef(null);
 
     useEffect(() => {
@@ -138,28 +138,17 @@ const FlightsPageListing = () => {
         try {
             const formattedDate = convertDateFormat(departuredDate);
 
-            // const payload = {
-            //     from: searchValueFrom,
-            //     to: searchValueTo,
-            //     flightClass: selectedClass,
-            //     departure_Date: formattedDate,
-            //     adlut: adlutValue,
-            //     children: childrenValue,
-            //     infant: infantValue
-            // }
-
             const payload = {
-                from: 'Hyderabad',
-                to: 'Ahmedabad',
-                flightClass: 'economy',
-                departure_Date: '10/20/2024',
-                adlut: '1',
-                children: '0',
-                infant: '0',
+                from: searchValueFrom,
+                to: searchValueTo,
+                flightClass: selectedClass,
+                departure_Date: formattedDate,
+                adlut: adlutValue,
+                children: childrenValue,
+                infant: infantValue,
                 oneWay: directChecked
             }
 
-            // console.log(payload, 'payload')
             await searchFlight(payload);
 
         } catch (err) {
@@ -368,7 +357,7 @@ const FlightsPageListing = () => {
             {isLoading ? (
                 <div>Loading...</div>
             ) : (
-                <TopSearchFlights flightsData={flightsData} error={searchErr}/>
+                <TopSearchFlights flightsData={flightsData} error={searchErr} />
             )}
         </>
     );

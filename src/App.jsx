@@ -10,6 +10,7 @@ import Itenary from './Pages/Itenary/Itenary';
 import ItenaryDetail from './Pages/Itenary/ItenaryDetails/index';
 import MainLayout from './Pages/MainLayout';
 import BlogDetailsPage from './Pages/Blogs/BlogDetailsPage';
+import Aboutus from './Pages/AboutUs/Aboutus';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
       <Routes>
         <Route path="/" element={<MainLayout />}>
           <Route index element={<Home />} />
+          <Route path="aboutUs" element={<Aboutus />} />
           <Route path="Blogs" element={<Blogs />} />
           <Route path="International" element={<InternationalPackages />} />
           <Route path="Domestic" element={<DomesticPackages />} />

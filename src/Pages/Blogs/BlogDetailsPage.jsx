@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
-import blogImage from "../../assets/image.jpg";
+import { useLocation } from 'react-router-dom';
 
 const BlogDetailsPage = () => {
 
     const [selectedImage, setSelectedImage] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const location = useLocation();
+    const { blog } = location.state || {};
+    const vlogBannerImage = "http://192.168.1.45:7781/uploads/blogs-image/";
+    const galleryImagePath = "http://192.168.1.45:7781/uploads/blogs-image/";
 
     const openModal = (image) => {
         setSelectedImage(image);
@@ -20,40 +24,35 @@ const BlogDetailsPage = () => {
         <>
             <div className='2xl:container 2xl:mx-auto p-5'>
                 <div className='flex flex-row justify-center'>
-                    <p className='text-[24px] text-red-500 my-3 border-b-2 border-red-700'>9 Ways to Become a Successful Travel Blogger</p>
+                    <p className='text-[24px] text-red-500 my-3 border-b-2 border-red-700'>{blog?.blogsName}</p>
                 </div>
 
                 <div className='w-[100%] h-[80vh]'>
-                    <img src={blogImage} alt='blogImage' className='w-full h-full object-cover' />
+                    <img src={blog?.blogImage ? `${vlogBannerImage}${blog?.blogImage}` : `${vlogBannerImage}${blog?.blogImage}`} alt='blogImage' className='w-full h-full object-cover' />
                 </div>
 
                 <div>
-                    <p className='mt-2 text-md text-gray-500 font-medium'>
-                        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Consequatur doloribus laboriosam vel ullam quam distinctio repudiandae, eaque voluptatibus autem, esse quidem libero dolor debitis ipsam molestias ut illo vitae veniam quis sequi hic. Voluptatem minus magnam quaerat? Doloribus, aspernatur necessitatibus! Repellendus iste corrupti vero ipsam officiis. Molestias obcaecati cupiditate nihil?
-                    </p>
-                    <p className='mt-2 text-md text-gray-500 font-medium'>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi asperiores ex, quasi recusandae iure suscipit? Ex odio dolorem unde quidem suscipit consectetur aliquam debitis excepturi aspernatur? Accusantium incidunt reprehenderit suscipit doloribus minus asperiores quia aperiam culpa nobis aut magnam excepturi exercitationem consequatur aliquam vero nulla est, obcaecati rerum voluptatum porro!
-                    </p>
-                    <p className='mt-2 text-md text-gray-500 font-medium'>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi asperiores ex, quasi recusandae iure suscipit? Ex odio dolorem unde quidem suscipit consectetur aliquam debitis excepturi aspernatur? Accusantium incidunt reprehenderit suscipit doloribus minus asperiores quia aperiam culpa nobis aut magnam excepturi exercitationem consequatur aliquam vero nulla est, obcaecati rerum voluptatum porro!
-                    </p>
-                    <p className='mt-2 text-md text-gray-500 font-medium'>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi asperiores ex, quasi recusandae iure suscipit? Ex odio dolorem unde quidem suscipit consectetur aliquam debitis excepturi aspernatur? Accusantium incidunt reprehenderit suscipit doloribus minus asperiores quia aperiam culpa nobis aut magnam excepturi exercitationem consequatur aliquam vero nulla est, obcaecati rerum voluptatum porro!
-                    </p>
+                    <p>{blog?.blogsDescription}</p>
                 </div>
 
-                <div className='2xl:container 2xl:mx-auto p-5'>
-                    <div className='flex flex-row justify-center'>
-                        <p className='text-[24px] text-red-500 my-3 border-b-2 border-red-700'>Gallery Image</p>
+                {blog?.blogGallery && blog.blogGallery.length > 0 && (
+                    <div className='2xl:container 2xl:mx-auto p-5'>
+                        <div className='flex flex-row justify-center'>
+                            <p className='text-[24px] text-red-500 my-3 border-b-2 border-red-700'>Gallery Images</p>
+                        </div>
+                        <div className='grid grid-cols-3 gap-2 w-full h-full'>
+                            {blog.blogGallery.map((galleryImage, index) => (
+                                <div key={index} onClick={() => openModal(`${galleryImagePath}${galleryImage}`)}>
+                                    <img
+                                        src={`${galleryImagePath}${galleryImage}`}
+                                        alt={`gallery-${index}`}
+                                        className='w-full h-full cursor-pointer object-cover'
+                                    />
+                                </div>
+                            ))}
+                        </div>
                     </div>
-                    <div className='grid grid-cols-3 gap-2 w-full h-full'>
-                        {[...Array(6)].map((_, index) => (
-                            <div key={index} onClick={() => openModal(blogImage)}>
-                                <img src={blogImage} alt='gallery' className='w-full h-full cursor-pointer' />
-                            </div>
-                        ))}
-                    </div>
-                </div>
+                )}
             </div>
 
             {isModalOpen && (

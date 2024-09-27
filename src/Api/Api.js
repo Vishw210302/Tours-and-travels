@@ -65,9 +65,16 @@ export const myApi = createApi({
         getBlogListing: builder.query({
             query: () => "get-blog-listing"
         }),
-        
+
+        getYoutubeVideos: builder.query({
+            query: () => "get-youtube-videos"
+        }),
+
+        getTeamMemberDetails: builder.query({
+            query: () => "get-all-members-details"
+        }),
 
     }),
 });
 
-export const { useGetSliderQuery, useGetBrandLogoQuery, useGetPackagesQuery, useGetTestimonialQuery, useGetItenriesQuery, useGetItenariesDetailsQuery, useLazyGetCitiesListingQuery, useContactUsPostMutation, useGetBranchesQuery, useLazyGetSubBranchesQuery, useGetFlightDetailsMutation, useGetBlogListingQuery, useGetSpecialFlightsQuery } = myApi;
+export const { useGetSliderQuery, useGetBrandLogoQuery, useGetPackagesQuery, useGetTestimonialQuery, useGetItenriesQuery, useGetItenariesDetailsQuery, useLazyGetCitiesListingQuery, useContactUsPostMutation, useGetBranchesQuery, useLazyGetSubBranchesQuery, useGetFlightDetailsMutation, useGetBlogListingQuery, useGetSpecialFlightsQuery, useGetYoutubeVideosQuery, useGetTeamMemberDetailsQuery } = myApi;

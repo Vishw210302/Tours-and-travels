@@ -126,7 +126,7 @@ const Days = ({ data }) => {
                                 >
                                     {daysItenary?.siteseens?.length > 0 ? (
                                         daysItenary.siteseens.map((siteseen, index) => {
-                                            
+
                                             return (
                                                 <SwiperSlide key={index}>
                                                     <img
