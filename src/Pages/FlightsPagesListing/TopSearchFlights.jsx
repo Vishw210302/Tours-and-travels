@@ -103,7 +103,6 @@ const TopSearchFlights = ({ flightsData, error }) => {
               </>
             )}
 
-
             <div className=' card bg-white rounded-xl shadow-[rgba(0,_0,_0,_0.25)_0px_14px_28px,_rgba(0,_0,_0,_0.22)_0px_10px_10px] transition-all duration-300  hover:shadow-lg'>
               {error ? (
                 <div className='h-28 flex justify-center items-center text-2xl font-bold'> No Flight Found </div>
@@ -171,10 +170,10 @@ const TopSearchFlights = ({ flightsData, error }) => {
                           <p className="font-bold">{flight?.flightsTo ? flight?.flightsTo : flight?.arrival?.city} {flight?.toAirportCode ? `(${flight?.toAirportCode})` : `(${flight?.arrival?.airport})`}</p>
                         </div>
                       </div>
-
                     </div>
                     {index !== flightsData.length - 1 && <div className='border m-2'></div>}
                   </div>
+                   </div>
                 ))
               )}
             </div>

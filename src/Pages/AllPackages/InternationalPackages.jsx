@@ -21,6 +21,18 @@ const InternationalPackages = () => {
         <div className='bg-[#f7f7f7]'>
             <div className="w-full h-[500px] flex flex-col justify-center items-center bg-[url('https://webimages.ajaymoditravels.com/amtuploads/websiteimages/631155998855.png')] bg-cover bg-center relative">
                 <h1 className='text-white text-4xl font-extrabold mb-6 drop-shadow-md'>Explore Our International Packages</h1>
+                <div className='w-full max-w-lg'>
+                    <div className='flex'>
+                        <input
+                            type="text"
+                            placeholder="Search International packages..."
+                            className="w-full p-[8px] rounded-l-md bg-white text-gray-800 placeholder-gray-400 shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                        <button className='bg-blue-600 text-white p-[8px] rounded-r-md font-semibold shadow-lg hover:bg-blue-700 transition duration-200'>
+                            Search
+                        </button>
+                    </div>
+                </div>
             </div>
 
             <div className='bg-gradient-to-b from-blue-100 to-white py-10'>

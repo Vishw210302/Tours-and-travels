@@ -31,7 +31,7 @@ const BlogDetailsPage = () => {
                     <img src={blog?.blogImage ? `${vlogBannerImage}${blog?.blogImage}` : `${vlogBannerImage}${blog?.blogImage}`} alt='blogImage' className='w-full h-full object-cover' />
                 </div>
 
-                <div>
+                <div className='mt-5 text-justify'>
                     <p>{blog?.blogsDescription}</p>
                 </div>
 
