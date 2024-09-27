@@ -65,11 +65,14 @@ const TopSearchFlights = ({ flightsData, error }) => {
                         {flight?.totalTime ? flight?.totalTime : convertTime(flight?.duration)}
                       </div>
 
-                      {/* Dots positioned above the line */}
+
                       <div className='absolute w-full flex justify-around items-center top-1/1.5 left-1/2 transform -translate-x-1/2 -translate-y-[70%]'>
-                        <p className='text-[70px] cursor-pointer'>.</p>
-                        <p className='text-[70px] cursor-pointer'>.</p> 
-                        
+                        {flight?.hold_details && flight.hold_details.length > 0 && (
+                          flight.hold_details.map((detail, index) => (
+                            <p key={index} className='text-[70px] cursor-pointer'>.</p>
+                          ))
+                        )}
+
                       </div>
 
                       <div className="relative h-px my-1 bg-gray-800 after:content-[''] after:absolute after:right-0 after:top-[-4px] after:w-0 after:h-0 after:border-solid after:border-[4px_0_4.4px_8px] after:border-r-transparent after:border-b-transparent w-full after:border-l-[#3e3f40]"></div>
@@ -80,7 +83,7 @@ const TopSearchFlights = ({ flightsData, error }) => {
 
                       <div className='w-[10%] relative left-[100%] bottom-14 ms-1'>
                         <p>{flight?.arrivalTime ? flight?.arrivalTime : extractTimeFromTimestamp(flight?.arrival?.time)}</p>
-                        <p className='flex justify-start'>{flight?.fromAirportCode ? `(${flight?.fromAirportCode})` : `(${flight?.departure?.airport})`}</p>
+                        <p className='flex justify-start'>{flight?.toAirportCode ? `(${flight?.toAirportCode})` : `(${flight?.arrival?.airport})`}</p>
                       </div>
                     </div>
 

@@ -6,7 +6,7 @@ import TopSearchFlights from './TopSearchFlights';
 const FlightsPageListing = () => {
     const [fetchCitiedListing, { data, error, isSuccess, isError }] = useLazyGetCitiesListingQuery();
     const [searchFlight, { data: flightData, error: flightErr, isSuccess: flightSuccess, isError: flightIsErr, isLoading }] = useGetFlightDetailsMutation();
-    const {data: specialFlghtData, isSuccess: specialFlghtSucess, isError: specialFlghtIsErr, error: specialFlghtErr } = useGetSpecialFlightsQuery()
+    const { data: specialFlghtData, isSuccess: specialFlghtSucess, isError: specialFlghtIsErr, error: specialFlghtErr } = useGetSpecialFlightsQuery()
     const [fromCitiesListing, setFromCitiesListing] = useState([]);
     const [toCitiesListing, setToCitiesListing] = useState([]);
     const [searchValueFrom, setSearchValueFrom] = useState('');
@@ -145,21 +145,22 @@ const FlightsPageListing = () => {
             //     departure_Date: formattedDate,
             //     adlut: adlutValue,
             //     children: childrenValue,
-            //     infant: infantValue
+            //     infant: infantValue,
+            //     oneWay: directChecked
             // }
 
             const payload = {
-                from: 'Hyderabad',
-                to: 'Ahmedabad',
+                from: 'Ahmedabad',
+                to: 'Pune',
                 flightClass: 'economy',
-                departure_Date: '10/20/2024',
+                departure_Date: '10/22/2024',
                 adlut: '1',
                 children: '0',
                 infant: '0',
                 oneWay: directChecked
             }
 
-            // console.log(payload, 'payload')
+            console.log(payload, 'payload')
             await searchFlight(payload);
 
         } catch (err) {
@@ -368,7 +369,7 @@ const FlightsPageListing = () => {
             {isLoading ? (
                 <div>Loading...</div>
             ) : (
-                <TopSearchFlights flightsData={flightsData} error={searchErr}/>
+                <TopSearchFlights flightsData={flightsData} error={searchErr} />
             )}
         </>
     );
