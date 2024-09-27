@@ -138,6 +138,7 @@ const FlightsPageListing = () => {
         try {
             const formattedDate = convertDateFormat(departuredDate);
 
+
             const payload = {
                 from: searchValueFrom,
                 to: searchValueTo,
