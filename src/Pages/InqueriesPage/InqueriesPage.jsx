@@ -1,10 +1,21 @@
+import CloseIcon from '@mui/icons-material/Close';
 import Modal from '@mui/material/Modal';
 import { Box } from '@mui/system';
 import React, { useState } from 'react';
-import CloseIcon from '@mui/icons-material/Close';
+import { useInqueriesPostMutation } from '../../Api/Api';
 
-const InqueriesPage = () => {
+const InqueriesPage = ({ itenaryPriceData, itenatyDataListing }) => {
+
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [mobile, setMobile] = useState('');
+    const [priceDetails, setPriceDetails] = useState(null);
+    const [numberOfAdults, setNumberOfAdults] = useState(1);
     const [openInqueryModal, setOpenInqueryModal] = useState(false);
+    const [numberOfChildrenWithBed, setNumberOfChildrenWithBed] = useState(0);
+    const [numberOfChildrenWithoutBed, setNumberOfChildrenWithoutBed] = useState(0);
+    const [departureDate, setDepartureDate] = useState('');
+    const [inqueriesPost, { isLoading, isSuccess, isError }] = useInqueriesPostMutation();
 
     const handleInqueryModalOpen = () => {
         setOpenInqueryModal(true);
@@ -12,6 +23,70 @@ const InqueriesPage = () => {
 
     const handleInqueryModalClose = () => {
         setOpenInqueryModal(false);
+        setPriceDetails(null);
+    };
+
+    const calculatePriceDetails = () => {
+        const pricePerAdult = itenaryPriceData?.perPersonPrice;
+        const pricePerChildWithBed = itenaryPriceData?.childWithBed;
+        const pricePerChildWithoutBed = itenaryPriceData?.childWithoutBed;
+        const adultTotal = numberOfAdults * pricePerAdult;
+        const childrenWithBedTotal = numberOfChildrenWithBed * pricePerChildWithBed;
+        const childrenWithoutBedTotal = numberOfChildrenWithoutBed * pricePerChildWithoutBed;
+        const subtotal = adultTotal + childrenWithBedTotal + childrenWithoutBedTotal;
+        const gst = subtotal * 0.05;
+        const tcs = subtotal * 0.05;
+        const total = subtotal + gst + tcs;
+
+        setPriceDetails({
+            subtotal,
+            gst,
+            tcs,
+            total,
+        });
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        calculatePriceDetails();
+        const formData = {
+            customerName: name,
+            mobileNumber: mobile,
+            customerEmail: email,
+            travelDate: [departureDate],
+            numberOfAdult: [numberOfAdults.toString()],
+            numberOfChildWithBed: [numberOfChildrenWithBed.toString()],
+            numberOfChildWithoutBed: [numberOfChildrenWithoutBed.toString()],
+        };
+
+        try {
+            const result = await inqueriesPost(formData).unwrap();
+            if (isSuccess) {
+                setName('');
+                setEmail('');
+                setMobile('');
+                setNumberOfAdults(1);
+                setNumberOfChildrenWithBed(0);
+                setNumberOfChildrenWithoutBed(0);
+                setDepartureDate('');
+                console.log('Form submitted successfully:', result);
+            }
+        } catch (error) {
+            console.error('Failed to submit form:', error);
+        }
+    };
+
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const year = date.getFullYear();
+        return `${day}/${month}/${year}`;
+    };
+
+    const handleDateSelect = (selectedDate) => {
+        setDepartureDate(selectedDate); // Set selected date
+        console.log("Selected date to send:", selectedDate);
     };
 
     return (
@@ -19,10 +94,10 @@ const InqueriesPage = () => {
             <div className='card bg-[#f1f1f1] shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg sticky z-10 bottom-0 p-3'>
                 <div className='flex justify-between items-center 2xl:container 2xl:mx-auto'>
                     <div>
-                        <p className='text-[18px] font-semibold'>From ₹2,999 / person</p>
+                        <p className='text-[18px] font-semibold'>From {itenaryPriceData?.perPersonPrice} ₹ / person</p>
                     </div>
-                    <button className=' bg-red-300 hover:bg-red-500 text-white font-bold py-2 px-4 rounded-md shadow-lg transition-all duration-300' onClick={handleInqueryModalOpen}>
-                        Send Inquery
+                    <button className='bg-red-400 hover:bg-red-500 text-white font-bold py-2 px-4 rounded-md shadow-lg transition-all duration-300' onClick={handleInqueryModalOpen}>
+                        Send Inquiry
                     </button>
                 </div>
             </div>
@@ -56,107 +131,161 @@ const InqueriesPage = () => {
                             }}
                         />
                         <div className='border rounded-lg shadow-md p-4 bg-white'>
-                            <div className='p-3 border-b-2'>
-                                <p className='font-semibold text-lg text-gray-800'>Dubai Tour Pricing Inquiry</p>
+                            <div className='p-3 border-b-2 flex flex-1 items-center gap-2'>
+                                <p className='font-semibold text-lg text-gray-800'>{itenatyDataListing?.packageTitle}</p>
+                                <p>Tour Pricing Inquiry</p>
                             </div>
                             <div className='p-4'>
-                                <div className='mb-4'>
-                                    <label className='block text-sm font-medium text-gray-700' htmlFor='name'>
-                                        Full Name
-                                    </label>
-                                    <input
-                                        type='text'
-                                        id='name'
-                                        className='w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#ef4444]'
-                                        placeholder='Enter your full name'
-                                    />
-                                </div>
+                                <form onSubmit={handleSubmit}>
+                                    <div className='mb-4'>
+                                        <label className='block text-sm font-medium text-gray-700' htmlFor='name'>
+                                            Full Name
+                                        </label>
+                                        <input
+                                            type='text'
+                                            id='name'
+                                            value={name}
+                                            onChange={(e) => setName(e.target.value)}
+                                            className='w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#ef4444]'
+                                            placeholder='Enter your full name'
+                                            required
+                                        />
+                                    </div>
 
-                                <div className='mb-4'>
-                                    <label className='block text-sm font-medium text-gray-700' htmlFor='email'>
-                                        Email Address
-                                    </label>
-                                    <input
-                                        type='email'
-                                        id='email'
-                                        className='w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#ef4444]'
-                                        placeholder='Enter your email address'
-                                    />
-                                </div>
+                                    <div className='mb-4'>
+                                        <label className='block text-sm font-medium text-gray-700' htmlFor='mobile'>
+                                            Mobile Number
+                                        </label>
+                                        <input
+                                            type='tel'
+                                            id='mobile'
+                                            value={mobile}
+                                            onChange={(e) => setMobile(e.target.value)}
+                                            className='w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#ef4444]'
+                                            placeholder='Enter your mobile number'
+                                            pattern='[0-9]*'
+                                            inputMode='numeric'
+                                            required
+                                        />
+                                    </div>
 
-                                <div className='mb-4'>
-                                    <label className='block text-sm font-medium text-gray-700' htmlFor='dates'>
-                                        Travel Dates
-                                    </label>
-                                    <input
-                                        type='date'
-                                        id='dates'
-                                        className='w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#ef4444]'
-                                    />
-                                </div>
+                                    <div className='mb-4'>
+                                        <label className='block text-sm font-medium text-gray-700' htmlFor='email'>
+                                            Email Address
+                                        </label>
+                                        <input
+                                            type='email'
+                                            id='email'
+                                            value={email}
+                                            onChange={(e) => setEmail(e.target.value)}
+                                            className='w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#ef4444]'
+                                            placeholder='Enter your email address'
+                                            required
+                                        />
+                                    </div>
 
-                                <div className='mb-4'>
-                                    <label className='block text-sm font-medium text-gray-700' htmlFor='adults'>
-                                        Number of Adults (Price per person: $500)
-                                    </label>
-                                    <select
-                                        id='adults'
-                                        className='w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#ef4444]'
-                                    >
-                                        <option value='1'>1 Adult</option>
-                                        <option value='2'>2 Adults</option>
-                                        <option value='3'>3 Adults</option>
-                                        <option value='4'>4 Adults</option>
-                                        <option value='5'>5 Adults</option>
-                                    </select>
-                                </div>
+                                    <div className='mb-4'>
+                                        <label className='block text-sm font-medium text-gray-700'>
+                                            Departure Dates
+                                        </label>
+                                        <select
+                                            id='departureDates'
+                                            className='w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#ef4444]'
+                                            onChange={(e) => handleDateSelect(e.target.value)}
+                                        >
+                                            <option disabled value="">Select a date</option>
+                                            {itenatyDataListing?.departureDates && itenatyDataListing.departureDates.map((departureDate, index) => {
+                                                const formattedDate = formatDate(departureDate);
+                                                return (
+                                                    <option key={index} value={departureDate}>
+                                                        {formattedDate}
+                                                    </option>
+                                                );
+                                            })}
+                                        </select>
+                                    </div>
 
-                                <div className='mb-4'>
-                                    <label className='block text-sm font-medium text-gray-700' htmlFor='children-with-bed'>
-                                        Number of Children (With Bed) (Price per child: $300)
-                                    </label>
-                                    <select
-                                        id='children-with-bed'
-                                        className='w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#ef4444]'
-                                    >
-                                        <option value='0'>0 Children</option>
-                                        <option value='1'>1 Child</option>
-                                        <option value='2'>2 Children</option>
-                                        <option value='3'>3 Children</option>
-                                    </select>
-                                </div>
+                                    <div className='mb-4'>
+                                        <label className='block text-sm font-medium text-gray-700' htmlFor='adults'>
+                                            Number of Adults
+                                        </label>
+                                        <input
+                                            type='number'
+                                            id='adults'
+                                            value={numberOfAdults}
+                                            min={1}
+                                            onChange={(e) => setNumberOfAdults(e.target.value)}
+                                            className='w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#ef4444]'
+                                            required
+                                        />
+                                    </div>
 
-                                <div className='mb-4'>
-                                    <label className='block text-sm font-medium text-gray-700' htmlFor='children-without-bed'>
-                                        Number of Children (Without Bed) (Price per child: $200)
-                                    </label>
-                                    <select
-                                        id='children-without-bed'
-                                        className='w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#ef4444]'
-                                    >
-                                        <option value='0'>0 Children</option>
-                                        <option value='1'>1 Child</option>
-                                        <option value='2'>2 Children</option>
-                                        <option value='3'>3 Children</option>
-                                    </select>
-                                </div>
+                                    <div className='mb-4'>
+                                        <label className='block text-sm font-medium text-gray-700' htmlFor='childrenWithBed'>
+                                            Number of Children with Bed
+                                        </label>
+                                        <input
+                                            type='number'
+                                            id='childrenWithBed'
+                                            value={numberOfChildrenWithBed}
+                                            min={0}
+                                            onChange={(e) => setNumberOfChildrenWithBed(e.target.value)}
+                                            className='w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#ef4444]'
+                                            required
+                                        />
+                                    </div>
 
-                                <div className='text-right'>
+                                    <div className='mb-4'>
+                                        <label className='block text-sm font-medium text-gray-700' htmlFor='childrenWithoutBed'>
+                                            Number of Children without Bed
+                                        </label>
+                                        <input
+                                            type='number'
+                                            id='childrenWithoutBed'
+                                            value={numberOfChildrenWithoutBed}
+                                            min={0}
+                                            onChange={(e) => setNumberOfChildrenWithoutBed(e.target.value)}
+                                            className='w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#ef4444]'
+                                            required
+                                        />
+                                    </div>
+
+                                    {priceDetails && (
+                                        <div className='grid grid-cols-4 gap-4 my-4'>
+                                            <div className='flex flex-col items-start'>
+                                                <p className='text-red-400 font-semibold text-[16px]'>Total Price :-</p>
+                                                <p className='text-black font-semibold text-[15px]'>₹{priceDetails?.subtotal.toFixed(2)}</p>
+                                            </div>
+                                            <div className='flex flex-col items-start'>
+                                                <p className='text-red-400 font-semibold text-[16px]'>GST (5%):-</p>
+                                                <p className='text-black font-semibold text-[15px]'>₹{priceDetails?.gst.toFixed(2)}</p>
+                                            </div>
+                                            <div className='flex flex-col items-start'>
+                                                <p className='text-red-400 font-semibold text-[16px]'>TCS (5%):-</p>
+                                                <p className='text-black font-semibold text-[15px]'>₹{priceDetails?.tcs.toFixed(2)}</p>
+                                            </div>
+                                            <div className='flex flex-col items-start'>
+                                                <p className='text-red-400 font-semibold text-[16px]'>Final Price :-</p>
+                                                <p className='text-black font-semibold text-[15px]'>₹{priceDetails?.total.toFixed(2)}</p>
+                                            </div>
+                                        </div>
+                                    )}
+
                                     <button
                                         type='submit'
-                                        className='bg-[#ef4444] text-white py-2 px-4 rounded-md hover:bg-[#dc2626] transition duration-300'
+                                        className='bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-md shadow-lg transition-all duration-300'
+                                        disabled={isLoading}
                                     >
-                                        Submit Inquiry
+                                        {isLoading ? 'Submitting...' : 'Submit Inquiry'}
                                     </button>
-                                </div>
+                                </form>
                             </div>
                         </div>
-
                     </Box>
                 </Box>
-            </Modal >
+            </Modal>
         </>
-    )
-}
+    );
+};
 
-export default InqueriesPage
+export default InqueriesPage;

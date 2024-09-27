@@ -64,7 +64,6 @@ const TopSearchFlights = ({ flightsData, error }) => {
                       </div>
 
 
-
                       <div className='absolute w-full flex justify-around items-center top-1/1.5 left-1/2 transform -translate-x-1/2 -translate-y-[70%]'>
                         {flight?.hold_details && flight.hold_details.length > 0 && (
                           flight.hold_details.map((detail, index) => (
@@ -82,10 +81,10 @@ const TopSearchFlights = ({ flightsData, error }) => {
 
                       <div className='w-[10%] relative left-[100%] bottom-14 ms-1'>
                         <p>{flight?.arrivalTime ? flight?.arrivalTime : extractTimeFromTimestamp(flight?.arrival?.time)}</p>
-
                         <p className='flex justify-start'>{flight?.toAirportCode ? `(${flight?.toAirportCode})` : `(${flight?.arrival?.airport})`}</p>
                       </div>
                     </div>
+
 
                     <div className='flex flex-col items-center'>
                       <span>

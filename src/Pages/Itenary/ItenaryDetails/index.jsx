@@ -12,12 +12,15 @@ import SimilarPackage from './Components/SimilarPackage';
 const Index = () => {
   const { id } = useParams();
   const { isLoading, isSuccess, isError, data, error } = useGetItenariesDetailsQuery(id);
-  const [itenatyDataListing, setItenaryDataListing] = useState(null);
+  const [itenatyDataListing, setItenaryDataListing] = useState({});
+  console.log("itenatyDataListingitenatyDataListing", itenatyDataListing)
+  const [itenaryPriceData, setItenaryPriceData] = useState({});
   const imageUrl = "http://192.168.1.45:7781/uploads/itenary-package/";
-  
+
   useEffect(() => {
     if (isSuccess && data?.itenaryData) {
-      setItenaryDataListing(data.itenaryData);
+      setItenaryDataListing(data?.itenaryData);
+      setItenaryPriceData(data?.itenaryData?.price)
     }
   }, [isSuccess, isError, data, error]);
 
@@ -46,7 +49,7 @@ const Index = () => {
           </div>
           <TermAndCondition />
         </div >
-        <InqueriesPage />
+        <InqueriesPage itenaryPriceData={itenaryPriceData} itenatyDataListing={itenatyDataListing} />
       </div >
     </>
   );

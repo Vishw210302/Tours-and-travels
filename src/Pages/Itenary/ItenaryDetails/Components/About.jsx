@@ -129,7 +129,7 @@ const About = ({ data, allData }) => {
                     </div>
 
                     <div>
-                        <button className='w-full bg-red-300 hover:bg-red-500 text-white font-bold py-2 px-4 rounded-md shadow-lg transition-all duration-300 mt-2'>
+                        <button className='w-full bg-red-400 hover:bg-red-500 text-white font-bold py-2 px-4 rounded-md shadow-lg transition-all duration-300 mt-2'>
                             Book Now
                         </button>
                     </div>

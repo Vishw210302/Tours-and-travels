@@ -26,7 +26,7 @@ const DomesticPackages = () => {
                         <div className='flex'>
                             <input
                                 type="text"
-                                placeholder="Search packages..."
+                                placeholder="Search Domestic packages..."
                                 className="w-full p-[8px] rounded-l-md bg-white text-gray-800 placeholder-gray-400 shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
                             <button className='bg-blue-600 text-white p-[8px] rounded-r-md font-semibold shadow-lg hover:bg-blue-700 transition duration-200'>
