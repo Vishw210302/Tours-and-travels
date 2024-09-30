@@ -15,7 +15,7 @@ const Index = () => {
   const [itenatyDataListing, setItenaryDataListing] = useState({});
   console.log("itenatyDataListingitenatyDataListing", itenatyDataListing)
   const [itenaryPriceData, setItenaryPriceData] = useState({});
-  const imageUrl = "http://192.168.1.45:7781/uploads/itenary-package/";
+  const imageUrl = `${import.meta.env.VITE_REACT_APP_IMAGE_URL}/itenary-package/`;
 
   useEffect(() => {
     if (isSuccess && data?.itenaryData) {

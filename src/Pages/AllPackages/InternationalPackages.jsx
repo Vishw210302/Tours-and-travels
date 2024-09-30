@@ -5,7 +5,7 @@ const InternationalPackages = () => {
 
     const { isError, error, data, isSuccess } = useGetPackagesQuery();
     const [internationalPackagesListing, setInternationalPackagesListing] = useState([]);
-    const imageUrl = "http://192.168.1.45:7781/uploads/packages-Image/";
+    const imageUrl = `${import.meta.env.VITE_REACT_APP_IMAGE_URL}/packages-Image/`;
 
     useEffect(() => {
         if (isSuccess) {

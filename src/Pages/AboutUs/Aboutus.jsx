@@ -9,7 +9,7 @@ import AboutUsPeople from './AboutUsPeople';
 const Aboutus = () => {
   const { isError, error, data, isLoading, isSuccess } = useGetAboutUsContentQuery();
   const [allAboutUsContentDetails, setAllAboutUsContentDetails] = useState([])
-  const aboutUsImage = "http://192.168.1.45:7781";
+  const aboutUsImage =import.meta.env.VITE_REACT_APP_DEFULT_IMAGE_URL;
 
   useEffect(() => {
     if (isSuccess) {

@@ -8,7 +8,7 @@ import SkeletonPage from '../../Partials/SkeletonPage';
 const Airlinesname = () => {
 
   const { isError, data, isLoading, isSuccess, error } = useGetBrandLogoQuery()
-  const imageUrl = 'http://192.168.1.45:7781/uploads/brands-logo/';
+  const imageUrl = `${import.meta.env.VITE_REACT_APP_IMAGE_URL}/brands-logo/`;
   const [brandData, setBrandData] = useState('');
   const [err, setErr] = useState('');
   let skeletonItems = [];

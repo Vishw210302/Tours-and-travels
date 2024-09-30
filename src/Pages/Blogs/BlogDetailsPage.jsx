@@ -7,8 +7,8 @@ const BlogDetailsPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const location = useLocation();
     const { blog } = location.state || {};
-    const vlogBannerImage = "http://192.168.1.45:7781/uploads/blogs-image/";
-    const galleryImagePath = "http://192.168.1.45:7781/uploads/blogs-image/";
+    const vlogBannerImage = `${import.meta.env.VITE_REACT_APP_IMAGE_URL}/blogs-image/`;
+    const galleryImagePath = `${import.meta.env.VITE_REACT_APP_IMAGE_URL}/blogs-image/`;
 
     const openModal = (image) => {
         setSelectedImage(image);

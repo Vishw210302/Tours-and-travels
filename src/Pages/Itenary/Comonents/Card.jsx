@@ -4,7 +4,7 @@ import noDataFound from "../../../assets/noDataFound.png"
 import { useNavigate } from 'react-router-dom';
 
 const Card = ({ isLoading, data }) => {
-    const imageUrl = "http://192.168.1.45:7781/uploads/itenary-package/";
+    const imageUrl = `${import.meta.env.VITE_REACT_APP_IMAGE_URL}/itenary-package/`;
     const navigate = useNavigate();
 
     const handleItenatyDetails = (itenatyId) => {

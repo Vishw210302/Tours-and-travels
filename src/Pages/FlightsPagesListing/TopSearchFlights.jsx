@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 const TopSearchFlights = ({ flightsData, error }) => {
 
-  const spechialFlightImage = "http://192.168.1.45:7781/uploads/special-flight-image/"
+  const spechialFlightImage = `${import.meta.env.VITE_REACT_APP_IMAGE_URL}/special-flight-image/`
   const [flightsDetails, setFlightsData] = useState()
 
   useEffect(() => {

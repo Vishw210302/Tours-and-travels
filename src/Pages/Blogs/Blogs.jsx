@@ -5,7 +5,7 @@ import { useGetBlogListingQuery } from '../../Api/Api';
 const Blogs = () => {
     const { data, isLoading, isSuccess, isError, error } = useGetBlogListingQuery();
     const [blogListing, setBlogListing] = useState([]);
-    const vlogBannerImage = "http://192.168.1.45:7781/uploads/blogs-image/";
+    const vlogBannerImage = `${import.meta.env.VITE_REACT_APP_IMAGE_URL}/blogs-image/`;
 
     useEffect(() => {
         if (isSuccess) {

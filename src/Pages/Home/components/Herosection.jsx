@@ -10,7 +10,7 @@ const Herosection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [err, setErr] = useState(null);
 
-  const imageUrl = 'http://192.168.1.45:7781/uploads/Slider-Image/';
+  const imageUrl = `${import.meta.env.VITE_REACT_APP_IMAGE_URL}/Slider-Image/`;
  
   useEffect(() => {
     if (isSuccess) {
