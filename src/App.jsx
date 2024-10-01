@@ -11,6 +11,8 @@ import ItenaryDetail from './Pages/Itenary/ItenaryDetails/index';
 import MainLayout from './Pages/MainLayout';
 import BlogDetailsPage from './Pages/Blogs/BlogDetailsPage';
 import Aboutus from './Pages/AboutUs/Aboutus';
+import FlightBook from './Pages/FlightBook/FlightBook';
+import PassengerDetails from './Pages/FlightBook/Components/PassengerDetails';
 
 function App() {
   return (
@@ -27,6 +29,8 @@ function App() {
           <Route path="flights" element={<FlightsPageListing />} />
           <Route path="itenary-details/:id" element={<ItenaryDetail />} />
           <Route path="blog-details/:id" element={<BlogDetailsPage />} />
+          <Route path="flight-book/:id" element={<FlightBook />} />
+          <Route path="passenger-details" element={<PassengerDetails />} />
         </Route>
       </Routes>
     </Router>

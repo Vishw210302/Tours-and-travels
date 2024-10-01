@@ -22,7 +22,8 @@ const FlightsPageListing = () => {
     const [childrenValue, setChildrenValue] = useState('0');
     const [infantValue, setInfantValue] = useState('0');
     const [flightsData, setFlightsData] = useState([]);
-    const [searchErr, setSearchErr] = useState(false)
+    const [searchErr, setSearchErr] = useState(false);
+    const [classMatch, setClassMatch] = useState('economy');
     const timeoutRef = useRef(null);
 
     useEffect(() => {
@@ -102,6 +103,7 @@ const FlightsPageListing = () => {
 
     const handleChangeClass = (event) => {
         setSelectedClass(event.target.value);
+        setClassMatch(event.target.value)
     };
 
     const handleChangeDate = (event) => {
@@ -358,7 +360,7 @@ const FlightsPageListing = () => {
             {isLoading ? (
                 <div>Loading...</div>
             ) : (
-                <TopSearchFlights flightsData={flightsData} error={searchErr} />
+                <TopSearchFlights flightsData={flightsData} error={searchErr} classDetail={classMatch} />
             )}
         </>
     );

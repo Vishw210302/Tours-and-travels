@@ -1,22 +1,29 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const TopSearchFlights = ({ flightsData, error }) => {
+const TopSearchFlights = ({ flightsData, error, classDetail }) => {
 
   const spechialFlightImage = `${import.meta.env.VITE_REACT_APP_IMAGE_URL}/special-flight-image/`
-  const [flightsDetails, setFlightsData] = useState()
+  const [flightsDetails, setFlightsData] = useState();
+  const navigate = useNavigate()
+
+  const handleBookPage = (flightId) => {
+    navigate(`/flight-book/${flightId}`)
+  }
 
   useEffect(() => {
     setFlightsData(flightsData)
   }, [flightsData])
 
 
-  // useEffect(() => {
-  //   if (flightsDetails?.length > 0) {
-  //     if (flightsDetails[0]?.departure) {
-  //       console.log(flightsDetails, 'flightsDataflightsData')
-  //     }
-  //   }
-  // }, [flightsDetails])
+  useEffect(() => {
+    // console.log(flightsDetails, 'flightsDataflightsData')
+    if (flightsDetails?.length > 0) {
+      if (flightsDetails[0]?.departure) {
+        console.log(flightsDetails, 'flightsDataflightsData')
+      }
+    }
+  }, [flightsDetails])
 
   const convertTime = (timeString) => {
     const [hours, minutes] = timeString.split(':');
@@ -94,7 +101,7 @@ const TopSearchFlights = ({ flightsData, error }) => {
               </>
             ) : (
               <>
-              <div className='absolute right-[10.75rem] top-2 -z-10 bg-red-500 w-[5%] p-7 rotate-[35deg]'></div>
+                <div className='absolute right-[10.75rem] top-2 -z-10 bg-red-500 w-[5%] p-7 rotate-[35deg]'></div>
                 <div className='w-[13%] absolute right-[29px] top-[-9px] z-20 shadow-[rgba(0,_0,_0,_0.20)_0px_14px_28px,_rgba(0,_0,_0,_0.20)_0px_10px_10px]'>
                   <div className='bg-red-600 w-auto p-3 '>
                     <p className='text-white font-bold text-xl'>Special Memories</p>
@@ -109,7 +116,7 @@ const TopSearchFlights = ({ flightsData, error }) => {
               ) : (
                 flightsDetails && flightsDetails.map((flight, index) => (
                   <div className='mt-2' key={index}>
-                    <div className='grid grid-cols-3 items-center gap-4'>
+                    <div className='grid grid-cols-3 items-center gap-'>
 
                       <div className='flex flex-col items-center'>
                         <span>
@@ -170,6 +177,19 @@ const TopSearchFlights = ({ flightsData, error }) => {
                           <p className="font-bold">{flight?.flightsTo ? flight?.flightsTo : flight?.arrival?.city} {flight?.toAirportCode ? `(${flight?.toAirportCode})` : `(${flight?.arrival?.airport})`}</p>
                         </div>
                       </div>
+
+
+
+                    </div>
+                    <div className=" flex items-center flex-row-reverse pr-6 pb-6 gap-5 ">
+                      <p className='w-auto bg-blue-600 text-white text-sm p-3 rounded-lg cursor-pointer' onClick={() => handleBookPage(flight?._id)}> BOOK NOW </p>
+                      <p className='font-bold text-lg'>
+                        {flight?.departure && flight?.class_details?.[classDetail] ? (
+                          <span>₹{flight?.class_details?.[classDetail]?.prices?.adult}</span>
+                        ) : (
+                          <div>₹2000</div>
+                        )}
+                      </p>
                     </div>
                     {index !== flightsData.length - 1 && <div className='border m-2'></div>}
                   </div>

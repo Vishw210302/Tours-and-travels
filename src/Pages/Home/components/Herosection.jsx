@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useGetSliderQuery } from '../../../Api/Api';
 import Loader from '../../Partials/Loader';
-import SkeletonPage from '../../Partials/SkeletonPage';
 
 const Herosection = () => {
+
 
   const { isError, isLoading, isSuccess, data, error } = useGetSliderQuery();
   const [sliderListing, setSliderListing] = useState([]);
