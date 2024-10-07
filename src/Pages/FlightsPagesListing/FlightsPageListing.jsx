@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useGetFlightDetailsMutation, useGetSpecialFlightsQuery, useLazyGetCitiesListingQuery } from '../../Api/Api';
 import Airlinesname from '../Home/components/Airlinesname';
 import TopSearchFlights from './TopSearchFlights';
+import { usePassenger } from '../../Context/PassengerCountContext';
 
 const FlightsPageListing = () => {
 
@@ -25,6 +26,7 @@ const FlightsPageListing = () => {
     const [searchErr, setSearchErr] = useState(false);
     const [classMatch, setClassMatch] = useState('economy');
     const timeoutRef = useRef(null);
+    const { setPassengerCount } = usePassenger(); 
 
     useEffect(() => {
         if (specialFlghtSucess) {
@@ -140,16 +142,31 @@ const FlightsPageListing = () => {
         try {
             const formattedDate = convertDateFormat(departuredDate);
 
+            // const payload = {
+            //     from: searchValueFrom,
+            //     to: searchValueTo,
+            //     flightClass: selectedClass,
+            //     departure_Date: formattedDate,
+            //     adlut: adlutValue,
+            //     children: childrenValue,
+            //     infant: infantValue,
+            //     oneWay: directChecked
+            // }
+
             const payload = {
-                from: searchValueFrom,
-                to: searchValueTo,
-                flightClass: selectedClass,
-                departure_Date: formattedDate,
+                from: 'Ahmedabad',
+                to: 'Patna',
+                flightClass: 'economy',
+                departure_Date: '10/15/2024',
                 adlut: adlutValue,
                 children: childrenValue,
                 infant: infantValue,
                 oneWay: directChecked
             }
+
+            const totalPassengerCount = parseInt('2') + parseInt('2');
+
+            setPassengerCount(totalPassengerCount)
             
             await searchFlight(payload);
 
@@ -304,7 +321,7 @@ const FlightsPageListing = () => {
 
                                 <div className="mb-4">
                                     <label className="block text-white text-sm font-bold mb-2" htmlFor="children">
-                                        Children (0-15)
+                                        Children (2-11)
                                     </label>
                                     <select
                                         id="children"
@@ -323,7 +340,7 @@ const FlightsPageListing = () => {
                                 </div>
                                 <div className="mb-4">
                                     <label className="block text-white text-sm font-bold mb-2" htmlFor="children">
-                                        Infant (below 12)
+                                        Infant (below 2 years)
                                     </label>
                                     <select
                                         id="children"

@@ -7,23 +7,23 @@ const TopSearchFlights = ({ flightsData, error, classDetail }) => {
   const [flightsDetails, setFlightsData] = useState();
   const navigate = useNavigate()
 
-  const handleBookPage = (flightId) => {
-    navigate(`/flight-book/${flightId}`)
-  }
+  const handleBookPage = (flightId, key) => {
+    console.log(key, 'key')
+    navigate(`/flight-book/${key}/${flightId}`);
+  };
 
   useEffect(() => {
     setFlightsData(flightsData)
   }, [flightsData])
 
 
-  useEffect(() => {
-    // console.log(flightsDetails, 'flightsDataflightsData')
-    if (flightsDetails?.length > 0) {
-      if (flightsDetails[0]?.departure) {
-        console.log(flightsDetails, 'flightsDataflightsData')
-      }
-    }
-  }, [flightsDetails])
+  // useEffect(() => {
+  //   if (flightsDetails?.length > 0) {
+  //     if (flightsDetails[0]?.departure) {
+  //       console.log(flightsDetails, 'flightsDataflightsData')
+  //     }
+  //   }
+  // }, [flightsDetails])
 
   const convertTime = (timeString) => {
     const [hours, minutes] = timeString.split(':');
@@ -32,9 +32,7 @@ const TopSearchFlights = ({ flightsData, error, classDetail }) => {
 
   const extractTimeFromTimestamp = (timestamp, key) => {
     const date = new Date(timestamp);
-
     if (key == '1') {
-
       const options = {
         hour: '2-digit',
         minute: '2-digit',
@@ -42,16 +40,12 @@ const TopSearchFlights = ({ flightsData, error, classDetail }) => {
       };
       const localTimeString = date.toLocaleTimeString(undefined, options);
       return localTimeString
-
     } else {
-
       const hours = key == '1' ? date.getUTCHours() : date.getHours();
       const minutes = key == '1' ? date.getUTCMinutes() : date.getMinutes();
       const formattedTime = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
       return formattedTime;
-
     }
-
   }
 
   const layoverTime = (arrivalTime, departureTime) => {
@@ -115,7 +109,7 @@ const TopSearchFlights = ({ flightsData, error, classDetail }) => {
                 <div className='h-28 flex justify-center items-center text-2xl font-bold'> No Flight Found </div>
               ) : (
                 flightsDetails && flightsDetails.map((flight, index) => (
-                  <div className='mt-2' key={index}>
+                  <div className='mt-2' key={index + 1}>
                     <div className='grid grid-cols-3 items-center gap-'>
 
                       <div className='flex flex-col items-center'>
@@ -182,7 +176,11 @@ const TopSearchFlights = ({ flightsData, error, classDetail }) => {
 
                     </div>
                     <div className=" flex items-center flex-row-reverse pr-6 pb-6 gap-5 ">
-                      <p className='w-auto bg-blue-600 text-white text-sm p-3 rounded-lg cursor-pointer' onClick={() => handleBookPage(flight?._id)}> BOOK NOW </p>
+                      <p
+                        className='w-auto bg-red-400 hover:bg-red-500 text-white font-semibold text-sm p-3 rounded-lg cursor-pointer'
+                        onClick={() => handleBookPage(flight?._id, flight?.arrival ? 1 : 0)}
+                      > BOOK NOW
+                      </p>
                       <p className='font-bold text-lg'>
                         {flight?.departure && flight?.class_details?.[classDetail] ? (
                           <span>₹{flight?.class_details?.[classDetail]?.prices?.adult}</span>
@@ -191,7 +189,9 @@ const TopSearchFlights = ({ flightsData, error, classDetail }) => {
                         )}
                       </p>
                     </div>
-                    {index !== flightsData.length - 1 && <div className='border m-2'></div>}
+                    {index !== flightsData.length - 1 &&
+                      <div className='border m-2'></div>
+                    }
                   </div>
                 ))
               )}

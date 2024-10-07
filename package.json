@@ -28,6 +28,7 @@
     "react-router-dom": "^6.26.1",
     "react-slick": "^0.30.2",
     "react-swipeable": "^7.0.1",
+    "react-tooltip": "^5.28.0",
     "sheryjs": "^1.0.0-beta.0.1.8",
     "slick-carousel": "^1.8.1",
     "swiper": "^11.1.14",

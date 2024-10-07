@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useLazyGetParticularFlightQuery } from '../../Api/Api';
 
 const ClockIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -23,102 +25,197 @@ const LuggageIcon = () => (
 );
 
 const FlightBook = () => {
+    const { id, key } = useParams();
+    const navigate = useNavigate();
+    const location = useLocation();
+    const [flight, setFlight] = useState();
+    const [fetchFlight, { data, isSuccess, isError, error }] = useLazyGetParticularFlightQuery();
+
+    const spechialFlightImage = `${import.meta.env.VITE_REACT_APP_IMAGE_URL}/special-flight-image/`;
+
+    const handleCheckoutFlightBooking = () => {
+        navigate(`/passenger-details/${id}`);
+    };
+
+    useEffect(() => {
+        if (key && id) {
+             console.log() 
+            fetchFlight({ key, id });
+        }
+    }, [fetchFlight, key, id]);
+
+    useEffect(() => {
+        if(isSuccess){
+            console.log(data, 'datatatatatatatat')
+            setFlight(data?.data)
+        }
+        
+    }, [data, isSuccess, isError, error])
+
+
+    const convertTime = (timeString) => {
+        const [hours, minutes] = timeString.split(':');
+        return `${parseInt(hours)}h ${parseInt(minutes)}m`;
+    };
+
+    const dataTime = () => {
+        const holdDetailsArray = flight.hold_details.map((details) => {
+            const arrivalTime = new Date(details.arrival_time);
+            const departureTime = new Date(details.departure_time);
+            const timeDiff = departureTime - arrivalTime;
+            const totalSeconds = Math.floor(timeDiff / 1000);
+            const hours = Math.floor(totalSeconds / 3600);
+            const minutes = Math.floor((totalSeconds % 3600) / 60);
+
+            return {
+                airport: details.airport,
+                city: details.city,
+                arrivalTime: arrivalTime.toLocaleTimeString(),
+                departureTime: departureTime.toLocaleTimeString(),
+                duration: `${hours}h ${minutes}m`,
+            };
+        });
+
+        return holdDetailsArray;
+    };
+
+    const getTodayDate = () => {
+        const today = new Date();
+        const month = today.getMonth() + 1;
+        const day = today.getDate();
+        const year = today.getFullYear();
+
+        return `${month}/${day}/${year}`;
+    };
+
+    const holdDetails = flight?.hold_details ? dataTime() : null;
+
 
     return (
         <>
             <div className='bg-[#f7f7f7]'>
-                <div className="w-full h-[500px] flex flex-col justify-center items-center bg-[url('https://webimages.ajaymoditravels.com/amtuploads/websiteimages/631155998855.png')] bg-cover bg-center relative"></div>
+                <div className="relative h-[400px] w-full bg-[url('https://assets.gqindia.com/photos/6540e2ba4622f7146b12b76b/16:9/w_2560%2Cc_limit/best-time-to-book-flights.jpg')] bg-cover bg-center flex justify-center items-center">
+                    <div
+                        className="absolute top-0 bottom-0 left-0 right-0"
+                        style={{
+                            background: 'linear-gradient(0deg, rgba(0, 0, 0, 0.6) 0%, transparent 100%)',
+                            zIndex: 0
+                        }}
+                    />
+                    <h1 className="relative text-white text-3xl font-bold z-10">Flight Details</h1>
+                </div>
                 <div className="container mx-auto px-4 py-8">
-
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                         <div className="lg:col-span-2 card bg-white rounded-xl shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg p-10 my-2 h-fit">
-                            <h2 className="text-2xl font-semibold mb-4">Trip Summary</h2>
                             <div className="space-y-6">
                                 <div>
                                     <h3 className="text-lg font-medium mb-2">Selected Departure Flight</h3>
-                                    <p className="text-xl font-semibold">New Delhi (DEL) → Ahmedabad (AMD)</p>
-                                    <p className="text-sm text-gray-600">Thu, 3 Oct 2024 | 04:45 - 06:15 | Direct</p>
+                                    <p className="font-bold">
+                                        {flight?.departure ? (
+                                            `${flight?.departure?.city} (${flight?.departure?.airport}) → ${flight?.arrival?.city} (${flight?.arrival?.airport})`
+                                        ) : (
+                                            `${flight?.flightsFrom} (${flight?.fromAirportCode}) → ${flight?.flightsTo} (${flight?.toAirportCode})`
+                                        )}
+                                    </p>
+                                    <p className="text-sm text-gray-600 mt-2">
+                                        {flight?.departure ? (
+                                            <>
+                                                {new Date(flight?.departure?.time).toLocaleDateString()} |
+                                                {new Date(flight?.departure?.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} -
+                                                {new Date(flight?.arrival?.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                            </>
+                                        ) :
+                                            <>
+                                                {getTodayDate()} |  {flight?.departureTime} - {flight?.arrivalTime}
+                                            </>
+                                        }
+                                    </p>
                                 </div>
 
-                                <div className="flex items-start space-x-4">
-                                    <img className="w-16 h-16" src="/api/placeholder/64/64" alt="IndiGo logo" />
-                                    <div>
-                                        <p className="font-medium">IndiGo</p>
-                                        <p className="text-sm text-gray-600">6E5119 | Economy</p>
-                                    </div>
-                                </div>
-
-                                <div style={{ margin: 0, }}>
-                                    <div className='grid grid-cols-3 items-center gap-'>
-
+                                <div>
+                                    <div className='grid grid-cols-3 items-center gap-2'>
                                         <div className='flex flex-col items-center'>
                                             <span>
-                                                <img src='err' alt='arrival-flight' className="w-32 h-auto" />
+                                                <img src={flight?.airlineLogo ? `${spechialFlightImage}${flight?.airlineLogo}` : `${spechialFlightImage}${flight?.flightsImage}`} alt='airline-logo' className="w-32 h-auto" />
                                             </span>
                                             <div className='mt-2'>
-                                                <p className="font-bold">Ahmedabad</p>
+                                                <p className="font-bold">
+                                                    {flight?.departure ?
+                                                        (`${flight?.departure?.city}(${flight?.departure?.airport})`)
+                                                        :
+                                                        (`${flight?.flightsFrom} (${flight?.fromAirportCode})`)
+                                                    }
+                                                </p>
                                             </div>
                                         </div>
 
                                         <div className='relative'>
-                                            <div className='w-[10%] relative right-14 top-14'>
-                                                <p>05:55</p>
-                                                <p className='flex justify-end'>AMD</p>
-                                            </div>
 
                                             <div className='flex justify-center text-gray-500 font-bold text-lg'>
-                                                5 Hours
+                                                {flight?.duration ? convertTime(flight?.duration) : flight?.totalTime}
                                             </div>
 
                                             <div className='absolute w-full flex justify-around items-center top-1/1.5 left-1/2 transform -translate-x-1/2 -translate-y-[70%]'>
+                                                {flight?.hold_details && flight.hold_details.length > 0 && (
+                                                    flight.hold_details.map((detail, index) => {
+                                                        const arrivalTime = new Date(detail?.arrival_time).toLocaleTimeString([], {
+                                                            hour: '2-digit',
+                                                            minute: '2-digit',
+                                                        });
+                                                        const departureTime = new Date(detail?.departure_time).toLocaleTimeString([], {
+                                                            hour: '2-digit',
+                                                            minute: '2-digit',
+                                                        });
 
+                                                        return (
+                                                            <div key={index + "index"} className='relative group'>
+                                                                <p className='text-[70px] cursor-pointer'>.</p>
 
-                                                <div className='relative group'>
-                                                    <p className='text-[70px] cursor-pointer'>.</p>
-
-                                                    <div className='absolute hidden w-[200px] h-[auto] shadow-[rgba(0,_0,_0,_0.25)_0px_14px_28px,_rgba(0,_0,_0,_0.22)_0px_10px_10px] group-hover:block bg-white border border-gray-300 p-2 -right-28 rounded-md -top-14'>
-                                                        <div className='font-bold mb-1'>Vishhwew</div>
-                                                        <div className='w-full bg-gray-200 h-1'></div>
-                                                        <div className='w-full'>Arrival time:- 122</div>
-                                                        <div className='w-full'>Departure time:- 122</div>
-                                                        <div className='w-full'>Layover</div>
-                                                    </div>
-                                                </div>
-
+                                                                <div className='absolute hidden w-[200px] h-[auto] shadow-[rgba(0,_0,_0,_0.25)_0px_14px_28px,_rgba(0,_0,_0,_0.22)_0px_10px_10px] group-hover:block bg-white border border-gray-300 p-2 -right-28 rounded-md -top-14'>
+                                                                    <div className='font-bold mb-1'>{detail?.city} {`(${detail?.airport})`}</div>
+                                                                    <div className='w-full bg-gray-200 h-1'></div>
+                                                                    <div className='w-full'>Arrival time: {arrivalTime}</div>
+                                                                    <div className='w-full'>Departure time: {departureTime}</div>
+                                                                </div>
+                                                            </div>
+                                                        );
+                                                    })
+                                                )}
                                             </div>
-
-                                            <div className="relative h-px my-1 bg-gray-800 after:content-[''] after:absolute after:right-0 after:top-[-4px] after:w-0 after:h-0 after:border-solid after:border-[4px_0_4.4px_8px] after:border-r-transparent after:border-b-transparent w-full after:border-l-[#3e3f40]"></div>
-
+                                            <div className="relative h-px my-1 bg-gray-800"></div>
                                             <div className='flex justify-center font-mono text-lg text-blue-500'>
-                                                Direct
-                                            </div>
-
-                                            <div className='w-[10%] relative left-[100%] bottom-14 ms-1'>
-                                                <p>08:55</p>
-                                                <p className='flex justify-start'>DEL</p>
+                                                {flight?.hold ? flight?.hold : 'One-hold'}
                                             </div>
                                         </div>
 
                                         <div className='flex flex-col items-center'>
                                             <span>
-                                                <img src='Err' alt='arrival-flight' className="w-32 h-auto" />
+                                                <img src={flight?.airlineLogo ?
+                                                    `${spechialFlightImage}${flight?.airlineLogo}`
+                                                    :
+                                                    `${spechialFlightImage}${flight?.flightsImage}`
+                                                } alt='arrival-flight' className="w-32 h-auto" />
                                             </span>
                                             <div className='mt-2'>
-                                                <p className="font-bold">DEL</p>
+                                                <p className="font-bold">{flight?.arrival ? `${flight?.arrival?.city} (${flight?.arrival?.airport})` : `${flight?.flightsTo} (${flight?.toAirportCode})`}</p>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div className="flex items-center space-x-2 text-gray-600">
-                                    <ClockIcon />
-                                    <span>Duration: 1h 25m</span>
-                                </div>
+                                {flight?.hold !== "Direct" && flight?.hold_details?.length > 0 && (
+                                    <div className="bg-[#f7f7f7] rounded-lg p-4">
+                                        {holdDetails?.length > 0 && holdDetails.map((detail, index) => (
+                                            <div key={index} className="flex items-center space-x-2">
+                                                <ClockIcon />
+                                                <span className="text-sm">
+                                                    Layover: {detail.duration} in {detail.city} ({detail.airport})
+                                                </span>
+                                            </div>
+                                        ))}
 
-                                <div className="bg-[#f7f7f7] rounded-lg p-4 flex items-center space-x-2">
-                                    <ClockIcon />
-                                    <span className="text-sm">Layover: 0h 35m in Udaipur (UDR) Udaipur Airport</span>
-                                </div>
+                                    </div>
+                                )}
 
                                 <div className="flex space-x-8">
                                     <div className="flex items-center space-x-2">
@@ -133,24 +230,17 @@ const FlightBook = () => {
                             </div>
                         </div>
 
-                        <div className="card bg-white rounded-xl shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg p-10 my-2 h-fit">
-                            <h2 className="text-2xl font-semibold mb-4">Price Details</h2>
-                            <div className="space-y-4">
-                                <div className="flex justify-between items-center">
-                                    <div>
-                                        <p className="font-medium">Adult</p>
-                                        <p className="text-sm text-gray-600">per person</p>
-                                    </div>
-                                    <p className="text-lg font-semibold">₹2000</p>
-                                </div>
-                                <div className="border-t pt-4">
-                                    <div className="flex justify-between items-center">
-                                        <p className="font-medium">Total Price</p>
-                                        <p className="text-xl font-bold text-blue-600">₹2000</p>
-                                    </div>
-                                </div>
+                        <div className="card bg-white rounded-xl shadow-lg transition-all duration-300 p-8 my-4 h-fit">
+                            <h2 className="text-xl font-bold mb-6 text-gray-800">Flight Price Summary</h2>
+                            <div className='flex flex-row gap-2'>
+                                <h3 className='font-semibold text-md text-red-600'>Per person price:-</h3>
+                                <h3 className='font-semibold text-md'>₹{flight?.price ? flight?.price : "2400"}</h3>
                             </div>
-                            <button className="mt-6 w-full bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300">
+
+                            <button
+                                className="mt-8 w-full bg-red-400 text-white font-semibold py-3 rounded-lg hover:bg-red-500 transition duration-300 shadow-md hover:shadow-lg"
+                                onClick={handleCheckoutFlightBooking}
+                            >
                                 Proceed to Checkout
                             </button>
                         </div>

@@ -34,8 +34,6 @@ const Braches = () => {
         fetchSubBranches(city);
     };
 
-
-
     return (
         <div className='2xl:container 2xl:mx-auto p-5'>
             <div>
