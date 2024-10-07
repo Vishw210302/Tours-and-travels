@@ -1,15 +1,15 @@
 import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 import React, { useEffect, useState } from 'react';
-import mealImage from "../../../assets/cofeeImage.jpg"
-import mealImage1 from "../../../assets/sandwichImage.jpg"
 import { useNavigate, useParams } from 'react-router-dom';
 import { useGetMealTypeQuery, useLazyGetMealByIdQuery } from '../../../Api/Api';
+import { useFlightTicketsDetailsContext } from '../../../Context/FlightTicketsDetailsContext';
+
 
 const MealAndSelect = () => {
-    
-    const { id } = useParams();
 
+    const { id, className } = useParams();
+    const { selectedMealData, setSelectedMealData } = useFlightTicketsDetailsContext();
     const { data, isLoading, isSuccess, isError, error } = useGetMealTypeQuery();
 
     const [fetchMealByParticularId, {
@@ -22,9 +22,11 @@ const MealAndSelect = () => {
     }] = useLazyGetMealByIdQuery();
 
     const [selectedMeal, setSelectedMeal] = useState(null);
-    const [selectedMeals, setSelectedMeals] = useState([]);
+    const [selecteParticularMeals, setSelectetParticularMeals] = useState([]);
     const [mealTypes, setMealTypes] = useState();
     const [particularMeal, setParticularMeal] = useState([]);
+    const [mealCounts, setMealCounts] = useState({});
+
     const navigate = useNavigate();
 
     const mealUrl = `${import.meta.env.VITE_REACT_APP_IMAGE_URL}/meal-items-image/`;
@@ -49,56 +51,68 @@ const MealAndSelect = () => {
         }
     }, [errorPasricularMeal, ParticularMealData, isSuccessPasricularMeal, isErrorPasricularMeal]);
 
+    // const getSelectedMealData = (id) => {
+    //     return selectedMealData.some(value => value.meal_id === id);
+    // }
+    // console.log(getSelectedMealData(), 'getSelectedMealData')
+
+    // useEffect(() => {
+
+    //     console.log(selectedMealData, 'selectedMealData')
+    // }, [selectedMealData])
+
+
 
     const handlePasengerDetailsPage = () => {
-        navigate(`/passenger-details/${id}`)
+
+        navigate(`/passenger-details/${className}/${id}`)
     }
 
     const handleSelectFlightSeat = () => {
-        navigate(`/flight-seat-booking/${id}`)
-    }
+
+        const selecteMealData = selecteParticularMeals.map((meal) => {
+            return {
+                meal_id: meal?._id,
+                meal_name: meal.mealItems,
+                count: mealCounts[meal?._id] || 1,
+                price: meal?.mealPrice
+            };
+        });
+
+        console.log(selecteMealData, 'selecteMealDataselecteMealData');
+        setSelectedMealData(selecteMealData);
+        navigate(`/flight-seat-booking/${className}/${id}`);
+    };
 
     const handleSelectMeal = (id) => {
         setSelectedMeal(id)
         fetchMealByParticularId(id)
     }
-    const mealOptions = [
-        'Vegetarian Meal',
-        'Non-Vegetarian Meal',
-        'Vegan Meal',
-        'Special Meal (Gluten-Free, etc.)',
-    ];
-
-    const mealdetails = [
-        {
-            id: 1,
-            name: 'Cold Coffee',
-            price: '500₹',
-            imgSrc: mealImage,
-        },
-        {
-            id: 2,
-            name: 'Sandwich',
-            price: '300₹',
-            imgSrc: mealImage1,
-        },
-        {
-            id: 3,
-            name: 'Burger',
-            price: '250₹',
-            imgSrc: mealImage,
-        },
-    ];
-
 
     const handleSelectMeals = (mealId) => {
-        setSelectedMeals((prev) => {
+        setSelectetParticularMeals((prev) => {
             if (prev.includes(mealId)) {
                 return prev.filter((id) => id !== mealId);
             }
             return [...prev, mealId];
         });
     };
+
+    const increaseCount = (id) => {
+        setMealCounts((prevCounts) => ({
+            ...prevCounts,
+            [id]: (prevCounts[id] || 1) + 1,
+        }));
+    };
+
+    const decreaseCount = (id) => {
+        setMealCounts((prevCounts) => ({
+            ...prevCounts,
+            [id]: prevCounts[id] > 0 ? prevCounts[id] - 1 : 0,
+        }));
+    };
+
+
 
     return (
         <>
@@ -151,12 +165,29 @@ const MealAndSelect = () => {
                                             <label className='flex items-center mt-2'>
                                                 <input
                                                     type='checkbox'
-                                                    checked={selectedMeals.includes(meal._id)}
-                                                    onChange={() => handleSelectMeals(meal._id)}
+                                                    checked={selecteParticularMeals.includes(meal)}
+                                                    onChange={() => handleSelectMeals(meal)}
                                                     className='mr-2'
                                                 />
                                                 <span>Select</span>
                                             </label>
+                                            {selecteParticularMeals.includes(meal) && (
+                                                <div className='flex flex-row-reverse items-center  mt-3'>
+                                                    <button
+                                                        onClick={() => increaseCount(meal._id)}
+                                                        className='bg-red-300 hover:bg-red-400 px-3 py-1 rounded-lg font-bold text-xl'
+                                                    >
+                                                        +
+                                                    </button>
+                                                    <span className='mx-2 text-lg'>{mealCounts[meal._id] || 1}</span>
+                                                    <button
+                                                        onClick={() => decreaseCount(meal._id)}
+                                                        className='bg-red-300 hover:bg-red-400 px-3 py-1 rounded-lg font-bold text-xl'
+                                                    >
+                                                        -
+                                                    </button>
+                                                </div>
+                                            )}
                                         </div>
                                     </div>
                                 ))

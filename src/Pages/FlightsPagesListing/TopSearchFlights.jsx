@@ -6,10 +6,8 @@ const TopSearchFlights = ({ flightsData, error, classDetail }) => {
   const spechialFlightImage = `${import.meta.env.VITE_REACT_APP_IMAGE_URL}/special-flight-image/`
   const [flightsDetails, setFlightsData] = useState();
   const navigate = useNavigate()
-
   const handleBookPage = (flightId, key) => {
-    console.log(key, 'key')
-    navigate(`/flight-book/${key}/${flightId}`);
+    navigate(`/flight-book/${classDetail}/${key}/${flightId}`);
   };
 
   useEffect(() => {

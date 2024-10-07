@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useGetFlightDetailsMutation, useGetSpecialFlightsQuery, useLazyGetCitiesListingQuery } from '../../Api/Api';
+import { usePassenger } from '../../Context/PassengerCountContext';
 import Airlinesname from '../Home/components/Airlinesname';
 import TopSearchFlights from './TopSearchFlights';
-import { usePassenger } from '../../Context/PassengerCountContext';
+import {  useFlightTicketsDetailsContext } from '../../Context/FlightTicketsDetailsContext';
 
 const FlightsPageListing = () => {
 
@@ -27,6 +28,7 @@ const FlightsPageListing = () => {
     const [classMatch, setClassMatch] = useState('economy');
     const timeoutRef = useRef(null);
     const { setPassengerCount } = usePassenger(); 
+    const { setPassengerPersonalDetails } = useFlightTicketsDetailsContext();
 
     useEffect(() => {
         if (specialFlghtSucess) {
@@ -164,9 +166,11 @@ const FlightsPageListing = () => {
                 oneWay: directChecked
             }
 
-            const totalPassengerCount = parseInt('2') + parseInt('2');
-
+            const totalPassengerCount = parseInt(adlutValue) + parseInt(childrenValue);
+            
             setPassengerCount(totalPassengerCount)
+
+            setPassengerPersonalDetails();
             
             await searchFlight(payload);
 

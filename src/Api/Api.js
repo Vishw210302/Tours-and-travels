@@ -96,13 +96,24 @@ export const myApi = createApi({
 
         getParticularFlight: builder.query({
             query: ({key, id}) => {
-                console.log(`Fetching flight details for key:${key} ${id}`); 
                 return `get-particular-flight/${key}/${id}`;
             },
 
+        }),
+
+        getFlightSeat: builder.query({
+            query : (id) => `get-flights-seats/${id}`
+        }),
+
+        makePayMent: builder.mutation({
+            query : (payLoad) => ({
+                url: "createOrder",
+                method: "POST",
+                body: payLoad,
+            })
         })
 
     }),
 });
 
-export const { useGetSliderQuery, useGetBrandLogoQuery, useGetPackagesQuery, useGetTestimonialQuery, useGetItenriesQuery, useGetItenariesDetailsQuery, useLazyGetCitiesListingQuery, useContactUsPostMutation, useGetBranchesQuery, useLazyGetSubBranchesQuery, useGetFlightDetailsMutation, useGetBlogListingQuery, useGetSpecialFlightsQuery, useGetYoutubeVideosQuery, useGetTeamMemberDetailsQuery, useGetAboutUsContentQuery, useInqueriesPostMutation, useGetMealTypeQuery, useLazyGetMealByIdQuery, useLazyGetParticularFlightQuery } = myApi;
+export const { useGetSliderQuery, useGetBrandLogoQuery, useGetPackagesQuery, useGetTestimonialQuery, useGetItenriesQuery, useGetItenariesDetailsQuery, useLazyGetCitiesListingQuery, useContactUsPostMutation, useGetBranchesQuery, useLazyGetSubBranchesQuery, useGetFlightDetailsMutation, useGetBlogListingQuery, useGetSpecialFlightsQuery, useGetYoutubeVideosQuery, useGetTeamMemberDetailsQuery, useGetAboutUsContentQuery, useInqueriesPostMutation, useGetMealTypeQuery, useLazyGetMealByIdQuery, useLazyGetParticularFlightQuery, useGetFlightSeatQuery, useMakePayMentMutation } = myApi;

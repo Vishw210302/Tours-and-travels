@@ -25,7 +25,7 @@ const LuggageIcon = () => (
 );
 
 const FlightBook = () => {
-    const { id, key } = useParams();
+    const { id, key, className } = useParams();
     const navigate = useNavigate();
     const location = useLocation();
     const [flight, setFlight] = useState();
@@ -34,19 +34,17 @@ const FlightBook = () => {
     const spechialFlightImage = `${import.meta.env.VITE_REACT_APP_IMAGE_URL}/special-flight-image/`;
 
     const handleCheckoutFlightBooking = () => {
-        navigate(`/passenger-details/${id}`);
+        navigate(`/passenger-details/${className}/${id}`);
     };
 
     useEffect(() => {
         if (key && id) {
-             console.log() 
             fetchFlight({ key, id });
         }
     }, [fetchFlight, key, id]);
 
     useEffect(() => {
         if(isSuccess){
-            console.log(data, 'datatatatatatatat')
             setFlight(data?.data)
         }
         

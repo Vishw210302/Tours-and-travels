@@ -1,10 +1,18 @@
 
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 
 const PassengerCountContext = createContext();
 
 export const PassengerCountProvider = ({ children }) => {
-    const [passengerCount, setPassengerCount] = useState(0);
+
+    const [passengerCount, setPassengerCount] = useState(() => {
+        const storedCount = localStorage.getItem('passengerCount');
+        return storedCount ? JSON.parse(storedCount) : 0;
+    });
+
+    useEffect(() => {
+        localStorage.setItem('passengerCount', JSON.stringify(passengerCount));
+    }, [passengerCount]);
 
     return (
         <PassengerCountContext.Provider value={{ passengerCount, setPassengerCount }}>

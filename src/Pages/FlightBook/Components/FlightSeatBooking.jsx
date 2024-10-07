@@ -1,38 +1,69 @@
 import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useGetFlightSeatQuery } from '../../../Api/Api';
+import { usePassenger } from '../../../Context/PassengerCountContext';
+import { useFlightTicketsDetailsContext } from '../../../Context/FlightTicketsDetailsContext';
 
 const FlightSeatBooking = () => {
 
-    const { id } = useParams();
-
+    const { id, className } = useParams();
+    const { passengerCount } = usePassenger();
+    const { setFlightSeatData } = useFlightTicketsDetailsContext();
+    const { data, isError, isSuccess, error } = useGetFlightSeatQuery(id)
     const [selectedSeats, setSelectedSeats] = useState([]);
     const [hoveredSeat, setHoveredSeat] = useState(null);
+    const [seats, setSeats] = useState()
+    const [selectSeat, setSelectSeat] = useState(false);
     const navigate = useNavigate();
 
     const handleSeatClick = (seat) => {
         if (selectedSeats.includes(seat)) {
             setSelectedSeats(selectedSeats.filter((selectedSeat) => selectedSeat !== seat));
         } else {
-            setSelectedSeats([...selectedSeats, seat]);
+            if (selectedSeats.length < passengerCount) {
+                setSelectedSeats([...selectedSeats, seat]);
+            } else {
+                setSelectSeat(true)
+            }
         }
+
     };
 
-    const seats = [
-        [{ name: '1A', price: 150 }, { name: '1B', price: 150 }, { name: '1C', price: 150 }, { name: '1D', price: 150 }, { name: '1E', price: 150 }, { name: '1F', price: 150 }],
-        [{ name: '2A', price: 130 }, { name: '2B', price: 130 }, { name: '2C', price: 130 }, { name: '2D', price: 130 }, { name: '2E', price: 130 }, { name: '2F', price: 130 }],
-        [{ name: '3A', price: 120 }, { name: '3B', price: 120 }, { name: '3C', price: 120 }, { name: '3D', price: 120 }, { name: '3E', price: 120 }, { name: '3F', price: 120 }],
-        [{ name: '4A', price: 100 }, { name: '4B', price: 100 }, { name: '4C', price: 100 }, { name: '4D', price: 100 }, { name: '4E', price: 100 }, { name: '4F', price: 100 }],
-        [{ name: '5A', price: 90 }, { name: '5B', price: 90 }, { name: '5C', price: 90 }, { name: '5D', price: 90 }, { name: '5E', price: 90 }, { name: '5F', price: 90 }]
-    ];
+    useEffect(() => {
+
+        if (isSuccess) {
+
+            const businessSeats = data?.data?.business || [];
+            const economySeats = data?.data?.economy || [];
+            const firstClassSeats = data?.data?.first_class || [];
+
+            setSeats([...firstClassSeats, ...businessSeats, ...economySeats,]);
+            setSelectSeat(false)
+        } else if (isError) {
+            console.log(error, 'fetching seat')
+        }
+
+    }, [data, isError, isSuccess, error])
 
     const handleGoToMealPage = () => {
-        navigate(`/meal-booking/${id}`)
+        navigate(`/meal-booking/${className}/${id}`)
     }
 
     const handlePaymentPage = () => {
-        navigate(`/tickets-payment/${id}`)
+
+        const selectedSeatData = selectedSeats.map(seatNumber => {
+            const seat = seats.find(s => s.seat_number === seatNumber);
+            return {
+                seat_id: seat._id,
+                seat_name: seat.seat_number,
+                seat_price: seat.price,
+            };
+        });
+
+        setFlightSeatData(selectedSeatData)
+        navigate(`/tickets-payment/${className}/${id}`)
     }
 
     return (
@@ -54,51 +85,65 @@ const FlightSeatBooking = () => {
                             <h3 className='mt-[53px] text-lg text-black font-semibold'>Please Select a Seat</h3>
                         </div>
 
+                        {selectSeat ? (
+                            <div className='flex justify-center'>
+                                <p className='text-red-600 font-semibold'>Not select more seat</p>
+                            </div>
+                        ) : (
+                            <></>
+                        )}
+
                         <div className="relative flex flex-row justify-between p-5">
                             <p className='text-white font-semibold text-sm bg-green-500 p-2 rounded-lg m-0 text-center'>Exit</p>
                             <p className='text-white font-semibold text-sm bg-green-500 p-2 rounded-lg m-0 text-center'>Exit</p>
                         </div>
 
-                        {seats.map((row, rowIndex) => (
-                            <div key={rowIndex} className='p-3 flex flex-row justify-between'>
-                                <div className='flex flex-row justify-between gap-2'>
-                                    {row.slice(0, 3).map((seat) => (
-                                        <div
-                                            key={seat.name}
-                                            className={`border border-blue-300 rounded-lg p-2 cursor-pointer ${selectedSeats.includes(seat.name) ? 'border-blue-600 border-2' : 'border-blue-300'} bg-blue-300 hover:bg-blue-400 relative`}
-                                            onClick={() => handleSeatClick(seat.name)}
-                                            onMouseEnter={() => setHoveredSeat(seat)}
-                                            onMouseLeave={() => setHoveredSeat(null)}
-                                        >
-                                            <p>{seat.name}</p>
-                                            {hoveredSeat && hoveredSeat.name === seat.name && (
-                                                <div className='absolute top-[-20px] left-[-10px] text-white bg-black p-1 rounded-md'>
-                                                    ₹{seat.price}
-                                                </div>
-                                            )}
-                                        </div>
-                                    ))}
+
+                        {Array.from({ length: Math.ceil(seats?.length / 6) }, (_, rowIndex) => {
+                            const rowSeats = seats.slice(rowIndex * 6, rowIndex * 6 + 6);
+                            return (
+                                <div key={rowIndex} className='p-3 flex flex-row justify-between'>
+                                    <div className='flex flex-row justify-between gap-2'>
+
+                                        {rowSeats.slice(0, 3).map((seat) => (
+                                            <div
+                                                key={seat.seat_number}
+                                                className={`border border-blue-300 rounded-lg p-2 cursor-pointer ${selectedSeats.includes(seat.seat_number) ? 'border-blue-600 border-2' : 'border-blue-300'} bg-blue-300 hover:bg-blue-400 relative`}
+                                                onClick={() => handleSeatClick(seat.seat_number)}
+                                                onMouseEnter={() => setHoveredSeat(seat)}
+                                                onMouseLeave={() => setHoveredSeat(null)}
+                                            >
+                                                <p>{seat.seat_number}</p>
+                                                {hoveredSeat && hoveredSeat.seat_number === seat.seat_number && (
+                                                    <div className='absolute top-[-20px] left-[-10px] text-white bg-black p-1 rounded-md'>
+                                                        ₹{seat.price}
+                                                    </div>
+                                                )}
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <div className='flex flex-row justify-between gap-2'>
+
+                                        {rowSeats.slice(3).map((seat) => (
+                                            <div
+                                                key={seat.seat_number}
+                                                className={`border rounded-lg p-2 cursor-pointer ${selectedSeats.includes(seat.seat_number) ? 'border-blue-600 border-2' : 'border-blue-300'} bg-blue-300 hover:bg-blue-400 relative`}
+                                                onClick={() => handleSeatClick(seat.seat_number)}
+                                                onMouseEnter={() => setHoveredSeat(seat)}
+                                                onMouseLeave={() => setHoveredSeat(null)}
+                                            >
+                                                <p>{seat.seat_number}</p>
+                                                {hoveredSeat && hoveredSeat.seat_number === seat.seat_number && (
+                                                    <div className='absolute top-[-20px] left-[-10px] text-white bg-black p-1 rounded-md'>
+                                                        ₹{seat.price}
+                                                    </div>
+                                                )}
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
-                                <div className='flex flex-row justify-between gap-2'>
-                                    {row.slice(3).map((seat) => (
-                                        <div
-                                            key={seat.name}
-                                            className={`border rounded-lg p-2 cursor-pointer ${selectedSeats.includes(seat.name) ? 'border-blue-600 border-2' : 'border-blue-300'} bg-blue-300 hover:bg-blue-400 relative`}
-                                            onClick={() => handleSeatClick(seat.name)}
-                                            onMouseEnter={() => setHoveredSeat(seat)}
-                                            onMouseLeave={() => setHoveredSeat(null)}
-                                        >
-                                            <p>{seat.name}</p>
-                                            {hoveredSeat && hoveredSeat.name === seat.name && (
-                                                <div className='absolute top-[-20px] left-[-10px] text-white bg-black p-1 rounded-md'>
-                                                    ₹{seat.price}
-                                                </div>
-                                            )}
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        ))}
+                            );
+                        })}
 
                         <div className="relative flex flex-row justify-between p-5">
                             <p className='text-white font-semibold text-sm bg-green-500 p-2 rounded-lg m-0 text-center'>Exit</p>
@@ -136,6 +181,7 @@ const FlightSeatBooking = () => {
                     </button>
                 </div>
             </div>
+
         </>
     );
 };
