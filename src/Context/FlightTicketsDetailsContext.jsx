@@ -6,7 +6,7 @@ export const FlightTicketsDetailsProvider = ({ children }) => {
     const [selectedMealData, setSelectedMealData] = useState([]);
     const [passengerPersonalDetails, setPassengerPersonalDetails] = useState();
     const [flightSeatData, setFlightSeatData] = useState([]);
-
+    const [totalTicketPrice, setotalTicketPrice] = useState(0);
     
     return (
         <FlightTicketsDetailsContext.Provider value={{ 
@@ -16,7 +16,8 @@ export const FlightTicketsDetailsProvider = ({ children }) => {
             setPassengerPersonalDetails,
             flightSeatData,
             setFlightSeatData,
-             
+            totalTicketPrice,
+            setotalTicketPrice
         }}>
             {children}
         </FlightTicketsDetailsContext.Provider>

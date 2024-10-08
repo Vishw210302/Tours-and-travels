@@ -2,15 +2,19 @@ import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useFlightTicketsDetailsContext } from '../../../Context/FlightTicketsDetailsContext';
-import { useLazyGetParticularFlightQuery } from '../../../Api/Api';
+import { useLazyGetParticularFlightQuery, useSubmitFlightTicketDataMutation } from '../../../Api/Api';
+import PaymentForm from '../../Payment/PaymentForm';
+import StripePayment from '../../Payment/PaymentForm';
 
 const FlightsTicketsPaymentPage = () => {
 
     const navigate = useNavigate();
     const { id, className } = useParams();
-    
+
     const [fetchFlight, { data, isSuccess, isError, error }] = useLazyGetParticularFlightQuery();
     const [flight, setFlight] = useState();
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [submitFlightTicketData] = useSubmitFlightTicketDataMutation();
 
     const {
         selectedMealData,
@@ -19,23 +23,23 @@ const FlightsTicketsPaymentPage = () => {
         setPassengerPersonalDetails,
         flightSeatData,
         setFlightSeatData,
+        totalTicketPrice,
+        setotalTicketPrice
     } = useFlightTicketsDetailsContext();
-    console.log(flightSeatData, 'flightSeatData')
+
     useEffect(() => {
         if (id) {
-            fetchFlight({ key: '1' , id });
+            fetchFlight({ key: '1', id });
         }
     }, [fetchFlight, id]);
-    
+
     useEffect(() => {
-        if(isSuccess){
-            console.log(data?.data, 'dagtauiai')
+        if (isSuccess) {
             setFlight(data?.data)
         }
-        
+
     }, [data, isSuccess, isError, error])
-    
-    console.log(flight?.flightCode, 'selectedMealData')
+
     const handleSeatBookingPage = () => {
         navigate(`/flight-seat-booking/${className}/${id}`)
     }
@@ -51,21 +55,21 @@ const FlightsTicketsPaymentPage = () => {
             minute: 'numeric',
             hour12: true,
         };
-        
+
         const formattedDate = date.toLocaleString('en-US', options);
-    
+
         const day = date.getDate();
         const suffix = (day) => {
-            if (day > 3 && day < 21) return 'th'; 
+            if (day > 3 && day < 21) return 'th';
             return ['st', 'nd', 'rd'][((day % 10) - 1)] || 'th';
         };
-    
+
         return formattedDate.replace(/(\d{1,2})(?=,)/, `${day}${suffix(day)}`);
     }
-    
+
 
     function capitalizeFirstLetter(string) {
-        if (!string) return ''; 
+        if (!string) return '';
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
 
@@ -73,6 +77,44 @@ const FlightsTicketsPaymentPage = () => {
     const totalMealPrice = selectedMealData?.reduce((acc, meal) => acc + (meal?.count * meal?.price), 0)
     const ticketPrice = flight?.class_details?.[className]?.prices?.adult
     const totalPrice = ticketPrice + totalSeatPrice + totalMealPrice
+
+    useEffect(() => {
+        setotalTicketPrice(totalPrice)
+    }, [totalPrice])
+
+    //payment 
+    const Modal = ({ isOpen, onClose, children }) => {
+        if (!isOpen) return null;
+
+        return (
+            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+                <div className="bg-white rounded-lg p-5 w-96 relative">
+                    <button onClick={onClose} className="absolute top-2 right-2 text-gray-600 hover:text-gray-900">
+                        &times;
+                    </button>
+                    {children}
+                </div>
+            </div>
+        );
+    };
+
+
+    const handlePaymentSuccess = async () => {
+        // console.log('Payment successful:', paymentData);
+
+        const payload = {
+
+            flightId:id,
+            passengerPersonalDetails,
+            selectedMealData,
+            flightSeatData,
+            paymentId : 'sfsdfdnsfndfnsdf'
+
+        }
+
+       const response = await submitFlightTicketData(payload).unwrap()
+
+    };
 
     return (
         <>
@@ -148,7 +190,7 @@ const FlightsTicketsPaymentPage = () => {
 
                         <div className="bg-white rounded-xl shadow-md p-6 transition-all duration-300 hover:shadow-lg">
                             <h2 className="text-lg font-bold mb-3">Seat Details</h2>
-                            <p className="text-sm text-gray-600 mb-2">Selected Seats: 
+                            <p className="text-sm text-gray-600 mb-2">Selected Seats:
                                 {flightSeatData?.map((seat, index) => (
                                     <span className="font-semibold">{seat?.seat_name}  {index < flightSeatData.length - 1 && ', '} </span>
 
@@ -192,7 +234,7 @@ const FlightsTicketsPaymentPage = () => {
                         <button
                             className="mt-8 w-1/7 bg-blue-400 text-white font-semibold py-3 rounded-lg hover:bg-blue-500 transition duration-300 shadow-md hover:shadow-lg p-2"
                             onClick={() => {
-                                handleSeatBookingPage()
+                                setIsModalOpen(true)
                             }}
                         >
                             <p className='text-sm flex flex-1 gap-2 items-center'>
@@ -202,14 +244,19 @@ const FlightsTicketsPaymentPage = () => {
                         </button>
                         <button
                             className="mt-8 w-1/7 bg-red-400 text-white font-semibold py-3 rounded-lg hover:bg-red-500 transition duration-300 shadow-md hover:shadow-lg p-2"
-                        /*  onClick={() => {
-                             handlePaymentPage()
-                         }} */
+                            // onClick={() => setIsModalOpen(true)}
+                         onClick={() => {
+                            handlePaymentSuccess()
+                         }} 
                         >
                             <p className='text-sm flex flex-1 gap-2 items-center'>
-                                Total Payment (₹{ totalPrice })
+                                Total Payment (₹{totalPrice})
                             </p>
                         </button>
+
+                        <Modal  isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+                            <StripePayment onPaymentSuccess={handlePaymentSuccess} />
+                        </Modal>
                     </div>
 
 

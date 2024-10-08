@@ -7,9 +7,10 @@ import { useGetAboutUsContentQuery } from '../../Api/Api';
 import AboutUsPeople from './AboutUsPeople';
 
 const Aboutus = () => {
+
   const { isError, error, data, isLoading, isSuccess } = useGetAboutUsContentQuery();
   const [allAboutUsContentDetails, setAllAboutUsContentDetails] = useState([])
-  const aboutUsImage =import.meta.env.VITE_REACT_APP_DEFULT_IMAGE_URL;
+  const aboutUsImage = import.meta.env.VITE_REACT_APP_DEFULT_IMAGE_URL;
 
   useEffect(() => {
     if (isSuccess) {

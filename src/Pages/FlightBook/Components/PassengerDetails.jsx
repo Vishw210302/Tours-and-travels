@@ -12,8 +12,8 @@ const PassengerDetails = ({ flightId }) => {
   const { passengerPersonalDetails, setPassengerPersonalDetails } = useFlightTicketsDetailsContext();
 
   const [details, setDetails] = useState({
-    passengerDetails: passengerPersonalDetails?.passengerDetails?.length > 0
-      ? passengerPersonalDetails.passengerDetails
+    passengerDetailsData: passengerPersonalDetails?.passengerDetailsData?.length > 0
+      ? passengerPersonalDetails.passengerDetailsData
       : Array(passengerCount).fill().map(() => ({
         fullName: '',
         age: '',
@@ -27,12 +27,12 @@ const PassengerDetails = ({ flightId }) => {
   });
 
   const handleInputChange = (index, field, value) => {
-    const updatedPassengerDetails = details.passengerDetails.map((passenger, i) =>
+    const updatedPassengerDetails = details.passengerDetailsData.map((passenger, i) =>
       i === index ? { ...passenger, [field]: value } : passenger
     );
     setDetails((prevDetails) => ({
       ...prevDetails,
-      passengerDetails: updatedPassengerDetails,
+      passengerDetailsData: updatedPassengerDetails,
     }));
   };
 
@@ -51,7 +51,7 @@ const PassengerDetails = ({ flightId }) => {
   };
 
   const handleMealAndFlightSeatPage = () => {
-    setPassengerPersonalDetails(details); 
+    setPassengerPersonalDetails(details);
     navigate(`/meal-booking/${className}/${id}`);
   };
 
@@ -74,7 +74,7 @@ const PassengerDetails = ({ flightId }) => {
             <div className='flex flex-row justify-around gap-3'>
               <div className='w-[70%]'>
                 <p className='px-2 font-bold text-xl'>Passenger Detail</p>
-                {details.passengerDetails.map((passenger, index) => (
+                {details.passengerDetailsData.map((passenger, index) => (
                   <div key={index + 1} className='card bg-white rounded-xl shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg p-5 my-2 h-fit'>
                     <div>
                       <p className='font-medium mb-4'>Passenger {index + 1}</p>
