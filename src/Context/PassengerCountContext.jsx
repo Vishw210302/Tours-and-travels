@@ -7,7 +7,9 @@ export const PassengerCountProvider = ({ children }) => {
 
     const [passengerCount, setPassengerCount] = useState(() => {
         const storedCount = localStorage.getItem('passengerCount');
-        return storedCount ? JSON.parse(storedCount) : 0;
+        return storedCount
+            ? JSON.parse(storedCount)
+            : { adult: 0, children: 0, infant: 0 };  
     });
 
     useEffect(() => {

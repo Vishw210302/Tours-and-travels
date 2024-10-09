@@ -179,20 +179,20 @@ const TopSearchFlights = ({ flightsData, error, classDetail }) => {
                         onClick={() => handleBookPage(flight?._id, flight?.arrival ? 1 : 0)}
                       > BOOK NOW
                       </p>
-                      <p className='font-bold text-lg'>
+                      <div className='font-bold text-lg'>
                         {flight?.departure && flight?.class_details?.[classDetail] ? (
                           <span>₹{flight?.class_details?.[classDetail]?.prices?.adult}</span>
                         ) : (
                           <div>₹2000</div>
                         )}
-                      </p>
+                      </div>
                     </div>
                     {index !== flightsData.length - 1 &&
                       <div className='border m-2'></div>
                     }
                   </div>
                 ))
-              )}
+              )}sclass
             </div>
           </div>
         </div >

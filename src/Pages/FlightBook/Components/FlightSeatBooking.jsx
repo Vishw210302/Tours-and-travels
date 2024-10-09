@@ -18,11 +18,15 @@ const FlightSeatBooking = () => {
     const [selectSeat, setSelectSeat] = useState(false);
     const navigate = useNavigate();
 
+    const totalPassengers =
+        Number(passengerCount.adult) +
+        Number(passengerCount.children)
+
     const handleSeatClick = (seat) => {
         if (selectedSeats.includes(seat)) {
             setSelectedSeats(selectedSeats.filter((selectedSeat) => selectedSeat !== seat));
         } else {
-            if (selectedSeats.length < passengerCount) {
+            if (selectedSeats.length < totalPassengers) {
                 setSelectedSeats([...selectedSeats, seat]);
             } else {
                 setSelectSeat(true)

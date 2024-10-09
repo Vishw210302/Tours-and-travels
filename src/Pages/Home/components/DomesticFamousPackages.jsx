@@ -1,99 +1,61 @@
-import React, { useState } from 'react';
-import image1 from "../../../assets/bg-img2.jpg";
-import image2 from "../../../assets/contactUs.jpg";
+import React from 'react';
+import { default as articleImage2, default as featuredImage1 } from "../../../assets/bg-img2.jpg";
+import articleImage1 from "../../../assets/people-travels3.jpg";
 
-const DomesticFamousPackages = () => {
-    const images = [image1, image2, image1]; // Your images array
-    const [currentIndex, setCurrentIndex] = useState(0);
-    const [isAnimating, setIsAnimating] = useState(false);
+const ArrowLeft = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+    </svg>
+);
 
-    const nextImage = () => {
-        if (isAnimating) return; // Prevent clicking while animating
-        setIsAnimating(true);
-        setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
-        setTimeout(() => setIsAnimating(false), 500); // Duration of the transition
-    };
+const ArrowRight = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+    </svg>
+);
 
-    const prevImage = () => {
-        if (isAnimating) return; // Prevent clicking while animating
-        setIsAnimating(true);
-        setCurrentIndex((prevIndex) =>
-            prevIndex === 0 ? images.length - 1 : prevIndex - 1
-        );
-        setTimeout(() => setIsAnimating(false), 500); // Duration of the transition
-    };
+const TravelBlogComponent = () => {
 
     return (
-        <div>
-            <div className='2xl:container 2xl:mx-auto p-5'>
-                <div className='grid grid-cols-1 md:grid-cols-2 gap-2 h-full'>
-                    <div className="relative w-full overflow-hidden rounded-xl">
-                        <div
-                            className={`flex transition-transform duration-500 ease-in-out ${isAnimating ? 'opacity-0' : 'opacity-100'}`}
-                            style={{
-                                transform: `translateX(-${currentIndex * 100}%)`,
-                                width: `${images.length * 100}%`,
-                            }}
-                        >
-                            {images.map((image, index) => (
-                                <img
-                                    key={index}
-                                    src={image}
-                                    alt={`slider-${index}`}
-                                    className="w-full h-full object-cover rounded-xl"
-                                />
-                            ))}
-                        </div>
-                        <div className="absolute top-0 left-0 h-full w-1/2 bg-black opacity-60">
-                            <div className="relative top-[5%] left-[5%]">
-                                <div className="bg-red-500 w-fit rounded-xl">
-                                    <p className="text-white p-2">Vishw Prajapati</p>
-                                </div>
-                            </div>
-                        </div>
-                        <button
-                            onClick={prevImage}
-                            className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white text-black rounded-full p-2"
-                        >
-                            Prev
-                        </button>
-                        <button
-                            onClick={nextImage}
-                            className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white text-black rounded-full p-2"
-                        >
-                            Next
-                        </button>
+        <div className="2xl:container 2xl:mx-auto p-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className='bg-white rounded-lg shadow-md overflow-hidden'>
+                    <div className='h-[100%]'>
+                        <img src={featuredImage1} alt='slider-image' className='h-full' />
                     </div>
-                    <div className='grid grid-cols-1 md:grid-cols-2 gap-2'>
-                        <div className='card bg-white rounded-xl shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg my-2 h-full flex flex-col'>
-                            <div className=''>
-                                <img src={image1} alt='image' className='w-full h-auto object-cover rounded-tr-xl rounded-tl-xl' />
+                </div>
+                <div className="space-y-6">
+                    <div className="bg-white rounded-lg shadow-md overflow-hidden">
+                        <img src={articleImage1} alt="Article 1" className="w-full h-48 object-cover" />
+                        <div className="p-4">
+                            <div className="flex justify-between items-center mb-2">
+                                <span className="bg-pink-600 text-white text-xs font-bold px-2 py-1 rounded">Article</span>
+                                <span className="text-gray-500 text-sm">September 9, 2022</span>
                             </div>
-                            <div className='p-2'>
-                                <p className='text-gray-500'>September 9, 2022</p>
-                                <p className='text-black font-bold text-xl mt-1'>9 Ways to Become a Successful Travel Blogger</p>
-                                <p className='text-black font-medium text-sm mt-1'>Travel blogging is a crowded field — and it gets more crowded day by day. And a lot of the advice that people give are actually counterintuitive to...</p>
-                            </div>
-                            <div className='p-2'>
-                                <button className='bg-red-400 w-[100%] hover:bg-red-500 text-white font-bold py-2 px-4 rounded-md shadow-lg transition-all duration-300'>
-                                    View More
-                                </button>
-                            </div>
+                            <h3 className="text-xl font-bold mb-2">9 Ways to Become a Successful Travel Blogger</h3>
+                            <p className="text-gray-600 text-sm mb-4">
+                                Travel blogging is a crowded field — and it gets more crowded day by day. And a lot of the advice that people give are actually counterintuitive to...
+                            </p>
+                            <button className="text-cyan-600 hover:text-cyan-800 transition-colors duration-300">
+                                Read More ➜
+                            </button>
                         </div>
-                        <div className='card bg-white rounded-xl shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg my-2 h-full flex flex-col'>
-                            <div className=''>
-                                <img src={image1} alt='image' className='w-full h-auto object-cover rounded-tr-xl rounded-tl-xl' />
+                    </div>
+
+                    <div className="bg-white rounded-lg shadow-md overflow-hidden">
+                        <img src={articleImage2} alt="Article 2" className="w-full h-48 object-cover" />
+                        <div className="p-4">
+                            <div className="flex justify-between items-center mb-2">
+                                <span className="bg-pink-600 text-white text-xs font-bold px-2 py-1 rounded">Article</span>
+                                <span className="text-gray-500 text-sm">September 11, 2022</span>
                             </div>
-                            <div className='p-2'>
-                                <p className='text-gray-500'>September 9, 2022</p>
-                                <p className='text-black font-bold text-xl mt-1'>9 Ways to Become a Successful Travel Blogger</p>
-                                <p className='text-black font-medium text-sm mt-1'>Travel blogging is a crowded field — and it gets more crowded day by day. And a lot of the advice that people give are actually counterintuitive to...</p>
-                            </div>
-                            <div className='p-2'>
-                                <button className='bg-red-400 w-[100%] hover:bg-red-500 text-white font-bold py-2 px-4 rounded-md shadow-lg transition-all duration-300'>
-                                    View More
-                                </button>
-                            </div>
+                            <h3 className="text-xl font-bold mb-2">The Ultimate Packing List For Female Travelers</h3>
+                            <p className="text-gray-600 text-sm mb-4">
+                                It can be daunting trying to figure out what to pack for a week, a month, or a year abroad without much — or any — prior experience in the place you want...
+                            </p>
+                            <button className="text-cyan-600 hover:text-cyan-800 transition-colors duration-300">
+                                Read More ➜
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -102,4 +64,4 @@ const DomesticFamousPackages = () => {
     );
 };
 
-export default DomesticFamousPackages;
+export default TravelBlogComponent;

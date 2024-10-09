@@ -1,10 +1,79 @@
 import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useFlightTicketsDetailsContext } from '../../../Context/FlightTicketsDetailsContext';
 import { useLazyGetParticularFlightQuery, useSubmitFlightTicketDataMutation } from '../../../Api/Api';
-import PaymentForm from '../../Payment/PaymentForm';
+import { useFlightTicketsDetailsContext } from '../../../Context/FlightTicketsDetailsContext';
 import StripePayment from '../../Payment/PaymentForm';
+
+const Modal = ({ isOpen, onClose, children }) => {
+    if (!isOpen) return null;
+
+    return (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+            <div className="bg-white w-[32%] rounded-lg p-5  relative">
+                <button onClick={onClose}
+                    className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+                {children}
+            </div>
+        </div>
+    );
+};
+
+
+const ThankYouPage = () => {
+    const bookingDetails = {
+        flightNumber: 'FL123',
+        departure: 'New York (JFK)',
+        arrival: 'London (LHR)',
+        date: '2024-10-15',
+        passengerName: 'John Doe'
+    };
+
+    const handleDownload = () => {
+        // Logic to generate and download PDF ticket
+        console.log('Downloading ticket...');
+    };
+
+    return (
+        <div className="w-full max-w-2xl mx-auto bg-white rounded-lg shadow-lg p-8">
+            <h1 className="text-3xl font-bold text-center text-red-500 mb-6">Thank You for Your Booking!</h1>
+            <p className="text-center text-gray-700 mb-6 text-lg">Your flight has been successfully booked. We can’t wait to see you on board!</p>
+
+            <div className="bg-gray-100 p-6 rounded-lg shadow-md mb-6">
+                <h3 className="text-xl font-semibold mb-4">Booking Summary:</h3>
+                <div className="space-y-2">
+                    <p className="flex justify-between"><strong>Flight:</strong> <span>{bookingDetails.flightNumber}</span></p>
+                    <p className="flex justify-between"><strong>From:</strong> <span>{bookingDetails.departure}</span></p>
+                    <p className="flex justify-between"><strong>To:</strong> <span>{bookingDetails.arrival}</span></p>
+                    <p className="flex justify-between"><strong>Date:</strong> <span>{bookingDetails.date}</span></p>
+                    <p className="flex justify-between"><strong>Passenger:</strong> <span>{bookingDetails.passengerName}</span></p>
+                </div>
+            </div>
+
+            <div className="text-center">
+                <button
+                    onClick={handleDownload}
+                    className="text-white px-6 py-3 bg-red-500 font-semibold rounded-lg shadow-md hover:bg-red-600 transition duration-300 transform hover:scale-105">
+                    Download Ticket (PDF)
+                </button>
+            </div>
+
+            <div className="mt-8 text-sm text-gray-600">
+                <h4 className="font-semibold mb-2">Additional Information:</h4>
+                <ul className="list-disc list-inside">
+                    <li>Please arrive at the airport at least 2 hours before departure.</li>
+                    <li>Check our website for baggage allowance and policies.</li>
+                    <li>For any changes or queries, please contact our customer support.</li>
+                </ul>
+            </div>
+        </div>
+    );
+};
+
 
 const FlightsTicketsPaymentPage = () => {
 
@@ -15,6 +84,8 @@ const FlightsTicketsPaymentPage = () => {
     const [flight, setFlight] = useState();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [submitFlightTicketData] = useSubmitFlightTicketDataMutation();
+
+    const backend_url = import.meta.env.VITE_REACT_APP_BACKEND_URL;
 
     const {
         selectedMealData,
@@ -83,20 +154,7 @@ const FlightsTicketsPaymentPage = () => {
     }, [totalPrice])
 
     //payment 
-    const Modal = ({ isOpen, onClose, children }) => {
-        if (!isOpen) return null;
 
-        return (
-            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-                <div className="bg-white rounded-lg p-5 w-96 relative">
-                    <button onClick={onClose} className="absolute top-2 right-2 text-gray-600 hover:text-gray-900">
-                        &times;
-                    </button>
-                    {children}
-                </div>
-            </div>
-        );
-    };
 
 
     const handlePaymentSuccess = async () => {
@@ -104,15 +162,24 @@ const FlightsTicketsPaymentPage = () => {
 
         const payload = {
 
-            flightId:id,
+            flightId: id,
             passengerPersonalDetails,
             selectedMealData,
             flightSeatData,
-            paymentId : 'sfsdfdnsfndfnsdf'
+            paymentId: 'sfsdfdnsfndfnsdf'
 
         }
 
-       const response = await submitFlightTicketData(payload).unwrap()
+        const response = await submitFlightTicketData(payload).unwrap()
+        console.log(response, 'sas')
+        const link = document.createElement('a');
+
+        link.href = `${backend_url}${response.pdfUrl}`;
+        link.download = 'flightTicket.pdf';
+
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
 
     };
 
@@ -245,17 +312,17 @@ const FlightsTicketsPaymentPage = () => {
                         <button
                             className="mt-8 w-1/7 bg-red-400 text-white font-semibold py-3 rounded-lg hover:bg-red-500 transition duration-300 shadow-md hover:shadow-lg p-2"
                             // onClick={() => setIsModalOpen(true)}
-                         onClick={() => {
-                            handlePaymentSuccess()
-                         }} 
+                            onClick={() => {
+                                handlePaymentSuccess()
+                            }}
                         >
                             <p className='text-sm flex flex-1 gap-2 items-center'>
                                 Total Payment (₹{totalPrice})
                             </p>
                         </button>
 
-                        <Modal  isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-                            <StripePayment onPaymentSuccess={handlePaymentSuccess} />
+                        <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+                            <ThankYouPage onPaymentSuccess={handlePaymentSuccess} />
                         </Modal>
                     </div>
 

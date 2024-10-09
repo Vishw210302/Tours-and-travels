@@ -46,6 +46,7 @@ const FlightBook = () => {
     useEffect(() => {
         if(isSuccess){
             setFlight(data?.data)
+            // console.log(flight?.class_details?.[className]?.prices?.adult, 'flightflight')
         }
         
     }, [data, isSuccess, isError, error])
@@ -232,7 +233,7 @@ const FlightBook = () => {
                             <h2 className="text-xl font-bold mb-6 text-gray-800">Flight Price Summary</h2>
                             <div className='flex flex-row gap-2'>
                                 <h3 className='font-semibold text-md text-red-600'>Per person price:-</h3>
-                                <h3 className='font-semibold text-md'>₹{flight?.price ? flight?.price : "2400"}</h3>
+                                <h3 className='font-semibold text-md'>₹{flight?.class_details?.[className]?.prices?.adult ? flight?.class_details?.[className]?.prices?.adult : "2400"}</h3>
                             </div>
 
                             <button

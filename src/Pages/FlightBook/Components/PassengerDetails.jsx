@@ -1,20 +1,23 @@
-import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
-import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { usePassenger } from '../../../Context/PassengerCountContext';
 import { useFlightTicketsDetailsContext } from '../../../Context/FlightTicketsDetailsContext';
+import { usePassenger } from '../../../Context/PassengerCountContext';
 
 const PassengerDetails = ({ flightId }) => {
   const { id, className } = useParams();
   const navigate = useNavigate();
   const { passengerCount } = usePassenger();
   const { passengerPersonalDetails, setPassengerPersonalDetails } = useFlightTicketsDetailsContext();
+  const [errors, setErrors] = useState({});
+
+  const totalPassengers =
+    Number(passengerCount.adult) +
+    Number(passengerCount.children)
 
   const [details, setDetails] = useState({
     passengerDetailsData: passengerPersonalDetails?.passengerDetailsData?.length > 0
       ? passengerPersonalDetails.passengerDetailsData
-      : Array(passengerCount).fill().map(() => ({
+      : Array(totalPassengers).fill().map(() => ({
         fullName: '',
         age: '',
         gender: ''
@@ -46,13 +49,59 @@ const PassengerDetails = ({ flightId }) => {
     }));
   };
 
+  const validateForm = () => {
+    const newErrors = {};
+    let isValid = true;
+
+    // Validate passenger details
+    details.passengerDetailsData.forEach((passenger, index) => {
+      if (!passenger.fullName) {
+        newErrors[`fullName-${index}`] = 'Full Name is required';
+        isValid = false;
+      }
+      if (!passenger.age) {
+        newErrors[`age-${index}`] = 'Age is required';
+        isValid = false;
+      }
+      if (!passenger.gender) {
+        newErrors[`gender-${index}`] = 'Gender is required';
+        isValid = false;
+      }
+    });
+
+    // Validate contact details
+    if (!details.contactDetails.fullName) {
+      newErrors.contactFullName = 'Full Name is required';
+      isValid = false;
+    }
+    if (!details.contactDetails.email) {
+      newErrors.contactEmail = 'Email is required';
+      isValid = false;
+    } else if (!/\S+@\S+\.\S+/.test(details.contactDetails.email)) {
+      newErrors.contactEmail = 'Email is not valid';
+      isValid = false;
+    }
+    if (!details.contactDetails.phoneNumber) {
+      newErrors.contactPhone = 'Phone Number is required';
+      isValid = false;
+    } else if (!/^\d{10}$/.test(details.contactDetails.phoneNumber)) {
+      newErrors.contactPhone = 'Phone Number must be 10 digits';
+      isValid = false;
+    }
+
+    setErrors(newErrors);
+    return isValid;
+  };
+
   const handleTripSummaryPage = (key) => {
     navigate(`/flight-book/${className}/${key}/${id}`);
   };
 
   const handleMealAndFlightSeatPage = () => {
-    setPassengerPersonalDetails(details);
-    navigate(`/meal-booking/${className}/${id}`);
+    if (validateForm()) {
+      setPassengerPersonalDetails(details);
+      navigate(`/meal-booking/${className}/${id}`);
+    }
   };
 
   return (
@@ -69,7 +118,7 @@ const PassengerDetails = ({ flightId }) => {
           <h1 className="relative text-white text-3xl font-bold z-10">Passenger Details</h1>
         </div>
 
-        <div className='h-screen bg-[#f7f7f7]'>
+        <div className='bg-[#f7f7f7]'>
           <div className='2xl:container 2xl:mx-auto px-5 mt-5'>
             <div className='flex flex-row justify-around gap-3'>
               <div className='w-[70%]'>
@@ -93,6 +142,7 @@ const PassengerDetails = ({ flightId }) => {
                         value={passenger.fullName}
                         onChange={(e) => handleInputChange(index, 'fullName', e.target.value)}
                       />
+                      {errors[`fullName-${index}`] && <p className="text-red-500 text-sm">{errors[`fullName-${index}`]}</p>}
                     </div>
 
                     <div className='grid grid-cols-2 gap-2'>
@@ -105,6 +155,7 @@ const PassengerDetails = ({ flightId }) => {
                           value={passenger.age}
                           onChange={(e) => handleInputChange(index, 'age', e.target.value)}
                         />
+                        {errors[`age-${index}`] && <p className="text-red-500 text-sm">{errors[`age-${index}`]}</p>}
                       </div>
                       <div className='mb-4'>
                         <label className='block text-sm font-medium text-gray-700 mb-2'>Gender</label>
@@ -118,6 +169,7 @@ const PassengerDetails = ({ flightId }) => {
                           <option value='female'>Female</option>
                           <option value='other'>Other</option>
                         </select>
+                        {errors[`gender-${index}`] && <p className="text-red-500 text-sm">{errors[`gender-${index}`]}</p>}
                       </div>
                     </div>
                   </div>
@@ -137,6 +189,7 @@ const PassengerDetails = ({ flightId }) => {
                       value={details.contactDetails.fullName}
                       onChange={(e) => handleInputChangeContact('fullName', e.target.value)}
                     />
+                    {errors.contactFullName && <p className="text-red-500 text-sm">{errors.contactFullName}</p>}
                   </div>
 
                   <div className='grid grid-cols-2 gap-2'>
@@ -149,16 +202,18 @@ const PassengerDetails = ({ flightId }) => {
                         value={details.contactDetails.email}
                         onChange={(e) => handleInputChangeContact('email', e.target.value)}
                       />
+                      {errors.contactEmail && <p className="text-red-500 text-sm">{errors.contactEmail}</p>}
                     </div>
                     <div className='mb-4'>
                       <label className='block text-sm font-medium text-gray-700 mb-2'>Phone Number</label>
                       <input
-                        type='text'
+                        type='number'
                         className='w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500'
                         placeholder='Enter phone number'
                         value={details.contactDetails.phoneNumber}
                         onChange={(e) => handleInputChangeContact('phoneNumber', e.target.value)}
                       />
+                      {errors.contactPhone && <p className="text-red-500 text-sm">{errors.contactPhone}</p>}
                     </div>
                   </div>
                 </div>
@@ -183,8 +238,8 @@ const PassengerDetails = ({ flightId }) => {
                 </div>
                 <div className='my-4'>
                   <button
-                    onClick={() => handleTripSummaryPage(flightId)}
-                    className='w-full bg-[#111b2b] text-white px-3 py-2 rounded-md'
+                    onClick={() => handleTripSummaryPage('1')}
+                    className='w-full bg-[#263650] text-white font-semibold py-3 rounded-lg hover:bg-[#111b2b] transition duration-300 shadow-md hover:shadow-lg'
                   >
                     View Summary
                   </button>
@@ -192,7 +247,7 @@ const PassengerDetails = ({ flightId }) => {
                 <div>
                   <button
                     onClick={handleMealAndFlightSeatPage}
-                    className='w-full bg-[#4c6fc8] text-white px-3 py-2 rounded-md'
+                    className='w-full bg-red-400 text-white font-semibold py-3 rounded-lg hover:bg-red-500 transition duration-300 shadow-md hover:shadow-lg'
                   >
                     Continue
                   </button>

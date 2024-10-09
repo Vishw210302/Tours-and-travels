@@ -17,7 +17,7 @@ const Airlinesname = () => {
   useEffect(() => {
     if (isSuccess) {
       setErr('')
-      console.log(data?.data, 'data?.data')
+      
       setBrandData(data?.data);
     } else if (isError) {
       setErr(error?.message || 'An error occurred');

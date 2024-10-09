@@ -166,7 +166,11 @@ const FlightsPageListing = () => {
                 oneWay: directChecked
             }
 
-            const totalPassengerCount = parseInt(adlutValue) + parseInt(childrenValue);
+            const totalPassengerCount = {
+                adult: adlutValue,
+                children: childrenValue,
+                infant: infantValue
+            };
             
             setPassengerCount(totalPassengerCount)
 

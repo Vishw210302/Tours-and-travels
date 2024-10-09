@@ -79,7 +79,7 @@ const MealAndSelect = () => {
             };
         });
 
-        console.log(selecteMealData, 'selecteMealDataselecteMealData');
+        // console.log(selecteMealData, 'selecteMealDataselecteMealData');
         setSelectedMealData(selecteMealData);
         navigate(`/flight-seat-booking/${className}/${id}`);
     };
