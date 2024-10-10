@@ -8,6 +8,7 @@ import TermAndCondition from '../../TermsAndConditions/TermAndCondition';
 import Days from './Components/Days';
 import FlightsDetails from './Components/FlightsDetails';
 import SimilarPackage from './Components/SimilarPackage';
+import Testimonialform from '../../TestimonialForm/Testimonialform';
 
 const Index = () => {
   const { id } = useParams();
@@ -45,6 +46,7 @@ const Index = () => {
             <div className='w-[35%] h-[100%]'>
               <FlightsDetails />
               <SimilarPackage />
+              <Testimonialform />
             </div>
           </div>
           <TermAndCondition />

@@ -86,6 +86,14 @@ export const myApi = createApi({
             }),
         }),
 
+        testimonialReviewPost: builder.mutation({
+            query: (testimonialData) => ({
+                url: "add-testimonial-review",
+                method: "POST",
+                body: testimonialData,
+            }),
+        }),
+
         getMealType: builder.query({
             query: () => "get-flight-meals"
         }),
@@ -124,4 +132,5 @@ export const myApi = createApi({
     }),
 });
 
-export const { useGetSliderQuery, useGetBrandLogoQuery, useGetPackagesQuery, useGetTestimonialQuery, useGetItenriesQuery, useGetItenariesDetailsQuery, useLazyGetCitiesListingQuery, useContactUsPostMutation, useGetBranchesQuery, useLazyGetSubBranchesQuery, useGetFlightDetailsMutation, useGetBlogListingQuery, useGetSpecialFlightsQuery, useGetYoutubeVideosQuery, useGetTeamMemberDetailsQuery, useGetAboutUsContentQuery, useInqueriesPostMutation, useGetMealTypeQuery, useLazyGetMealByIdQuery, useLazyGetParticularFlightQuery, useGetFlightSeatQuery, useCreatePaymentIntentMutation, useSubmitFlightTicketDataMutation } = myApi;
+export const { useGetSliderQuery, useGetBrandLogoQuery, useGetPackagesQuery, useGetTestimonialQuery, useGetItenriesQuery, useTestimonialReviewPostMutation, useGetItenariesDetailsQuery, useLazyGetCitiesListingQuery, useContactUsPostMutation, useGetBranchesQuery, useLazyGetSubBranchesQuery, useGetFlightDetailsMutation, useGetBlogListingQuery, useGetSpecialFlightsQuery, useGetYoutubeVideosQuery, useGetTeamMemberDetailsQuery, useGetAboutUsContentQuery, useInqueriesPostMutation, useGetMealTypeQuery, useLazyGetMealByIdQuery, useLazyGetParticularFlightQuery, useGetFlightSeatQuery, useCreatePaymentIntentMutation, useSubmitFlightTicketDataMutation } = myApi;
+
