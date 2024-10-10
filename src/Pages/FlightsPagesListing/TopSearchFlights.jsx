@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const TopSearchFlights = ({ flightsData, error }) => {
+const TopSearchFlights = ({ flightsData, error, classDetail }) => {
 
-  const spechialFlightImage = "http://192.168.1.45:7781/uploads/special-flight-image/"
-  const [flightsDetails, setFlightsData] = useState()
+  const spechialFlightImage = `${import.meta.env.VITE_REACT_APP_IMAGE_URL}/special-flight-image/`
+  const [flightsDetails, setFlightsData] = useState();
+  const navigate = useNavigate()
+  const handleBookPage = (flightId, key) => {
+    navigate(`/flight-book/${classDetail}/${key}/${flightId}`);
+  };
 
   useEffect(() => {
     setFlightsData(flightsData)
@@ -25,9 +30,7 @@ const TopSearchFlights = ({ flightsData, error }) => {
 
   const extractTimeFromTimestamp = (timestamp, key) => {
     const date = new Date(timestamp);
-
     if (key == '1') {
-
       const options = {
         hour: '2-digit',
         minute: '2-digit',
@@ -35,16 +38,12 @@ const TopSearchFlights = ({ flightsData, error }) => {
       };
       const localTimeString = date.toLocaleTimeString(undefined, options);
       return localTimeString
-
     } else {
-
       const hours = key == '1' ? date.getUTCHours() : date.getHours();
       const minutes = key == '1' ? date.getUTCMinutes() : date.getMinutes();
       const formattedTime = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
       return formattedTime;
-
     }
-
   }
 
   const layoverTime = (arrivalTime, departureTime) => {
@@ -94,7 +93,7 @@ const TopSearchFlights = ({ flightsData, error }) => {
               </>
             ) : (
               <>
-              <div className='absolute right-[10.75rem] top-2 -z-10 bg-red-500 w-[5%] p-7 rotate-[35deg]'></div>
+                <div className='absolute right-[10.75rem] top-2 -z-10 bg-red-500 w-[5%] p-7 rotate-[35deg]'></div>
                 <div className='w-[13%] absolute right-[29px] top-[-9px] z-20 shadow-[rgba(0,_0,_0,_0.20)_0px_14px_28px,_rgba(0,_0,_0,_0.20)_0px_10px_10px]'>
                   <div className='bg-red-600 w-auto p-3 '>
                     <p className='text-white font-bold text-xl'>Special Memories</p>
@@ -108,8 +107,8 @@ const TopSearchFlights = ({ flightsData, error }) => {
                 <div className='h-28 flex justify-center items-center text-2xl font-bold'> No Flight Found </div>
               ) : (
                 flightsDetails && flightsDetails.map((flight, index) => (
-                  <div className='mt-2' key={index}>
-                    <div className='grid grid-cols-3 items-center gap-4'>
+                  <div className='mt-2' key={index + 1}>
+                    <div className='grid grid-cols-3 items-center gap-'>
 
                       <div className='flex flex-col items-center'>
                         <span>
@@ -170,8 +169,27 @@ const TopSearchFlights = ({ flightsData, error }) => {
                           <p className="font-bold">{flight?.flightsTo ? flight?.flightsTo : flight?.arrival?.city} {flight?.toAirportCode ? `(${flight?.toAirportCode})` : `(${flight?.arrival?.airport})`}</p>
                         </div>
                       </div>
+
+
+
                     </div>
-                    {index !== flightsData.length - 1 && <div className='border m-2'></div>}
+                    <div className=" flex items-center flex-row-reverse pr-6 pb-6 gap-5 ">
+                      <p
+                        className='w-auto bg-red-400 hover:bg-red-500 text-white font-semibold text-sm p-3 rounded-lg cursor-pointer'
+                        onClick={() => handleBookPage(flight?._id, flight?.arrival ? 1 : 0)}
+                      > BOOK NOW
+                      </p>
+                      <div className='font-bold text-lg'>
+                        {flight?.departure && flight?.class_details?.[classDetail] ? (
+                          <span>₹{flight?.class_details?.[classDetail]?.prices?.adult}</span>
+                        ) : (
+                          <div>₹2000</div>
+                        )}
+                      </div>
+                    </div>
+                    {index !== flightsData.length - 1 &&
+                      <div className='border m-2'></div>
+                    }
                   </div>
                 ))
               )}

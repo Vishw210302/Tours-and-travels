@@ -1,7 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useGetFlightDetailsMutation, useGetSpecialFlightsQuery, useLazyGetCitiesListingQuery } from '../../Api/Api';
+import { usePassenger } from '../../Context/PassengerCountContext';
 import Airlinesname from '../Home/components/Airlinesname';
 import TopSearchFlights from './TopSearchFlights';
+import {  useFlightTicketsDetailsContext } from '../../Context/FlightTicketsDetailsContext';
 
 const FlightsPageListing = () => {
 
@@ -22,8 +24,11 @@ const FlightsPageListing = () => {
     const [childrenValue, setChildrenValue] = useState('0');
     const [infantValue, setInfantValue] = useState('0');
     const [flightsData, setFlightsData] = useState([]);
-    const [searchErr, setSearchErr] = useState(false)
+    const [searchErr, setSearchErr] = useState(false);
+    const [classMatch, setClassMatch] = useState('economy');
     const timeoutRef = useRef(null);
+    const { setPassengerCount } = usePassenger(); 
+    const { setPassengerPersonalDetails } = useFlightTicketsDetailsContext();
 
     useEffect(() => {
         if (specialFlghtSucess) {
@@ -102,6 +107,7 @@ const FlightsPageListing = () => {
 
     const handleChangeClass = (event) => {
         setSelectedClass(event.target.value);
+        setClassMatch(event.target.value)
     };
 
     const handleChangeDate = (event) => {
@@ -138,16 +144,37 @@ const FlightsPageListing = () => {
         try {
             const formattedDate = convertDateFormat(departuredDate);
 
+            // const payload = {
+            //     from: searchValueFrom,
+            //     to: searchValueTo,
+            //     flightClass: selectedClass,
+            //     departure_Date: formattedDate,
+            //     adlut: adlutValue,
+            //     children: childrenValue,
+            //     infant: infantValue,
+            //     oneWay: directChecked
+            // }
+
             const payload = {
-                from: searchValueFrom,
-                to: searchValueTo,
-                flightClass: selectedClass,
-                departure_Date: formattedDate,
+                from: 'Ahmedabad',
+                to: 'Patna',
+                flightClass: 'economy',
+                departure_Date: '10/15/2024',
                 adlut: adlutValue,
                 children: childrenValue,
                 infant: infantValue,
                 oneWay: directChecked
             }
+
+            const totalPassengerCount = {
+                adult: adlutValue,
+                children: childrenValue,
+                infant: infantValue
+            };
+            
+            setPassengerCount(totalPassengerCount)
+
+            setPassengerPersonalDetails();
             
             await searchFlight(payload);
 
@@ -302,7 +329,7 @@ const FlightsPageListing = () => {
 
                                 <div className="mb-4">
                                     <label className="block text-white text-sm font-bold mb-2" htmlFor="children">
-                                        Children (0-15)
+                                        Children (2-11)
                                     </label>
                                     <select
                                         id="children"
@@ -321,7 +348,7 @@ const FlightsPageListing = () => {
                                 </div>
                                 <div className="mb-4">
                                     <label className="block text-white text-sm font-bold mb-2" htmlFor="children">
-                                        Infant (below 12)
+                                        Infant (below 2 years)
                                     </label>
                                     <select
                                         id="children"
@@ -358,7 +385,7 @@ const FlightsPageListing = () => {
             {isLoading ? (
                 <div>Loading...</div>
             ) : (
-                <TopSearchFlights flightsData={flightsData} error={searchErr} />
+                <TopSearchFlights flightsData={flightsData} error={searchErr} classDetail={classMatch} />
             )}
         </>
     );

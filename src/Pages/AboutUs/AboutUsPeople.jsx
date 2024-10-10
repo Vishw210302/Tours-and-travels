@@ -8,7 +8,7 @@ import { useGetTeamMemberDetailsQuery } from '../../Api/Api';
 const AboutUsPeople = () => {
     const { isError, error, data, isLoading, isSuccess } = useGetTeamMemberDetailsQuery();
     const [teamMemberListing, setTeamMemberListing] = useState([])
-    const teamMemberImage = "http://192.168.1.45:7781/uploads/team-member/";
+    const teamMemberImage = `${import.meta.env.VITE_REACT_APP_IMAGE_URL}/team-member/`;
 
     useEffect(() => {
         if (isSuccess) {

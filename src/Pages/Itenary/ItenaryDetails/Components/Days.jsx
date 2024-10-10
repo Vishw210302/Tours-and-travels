@@ -31,7 +31,7 @@ const Description = ({ description }) => {
 
 const Modal = ({ isOpen, onClose, siteDetails }) => {
 
-    const siteSeenImage = "http://192.168.1.45:7781/uploads/siteseen-image/"
+    const siteSeenImage = `${import.meta.env.VITE_REACT_APP_IMAGE_URL}/siteseen-image/`
     const [isExpanded, setIsExpanded] = useState(false);
     const maxWords = 45;
 
@@ -84,8 +84,8 @@ const Days = ({ data }) => {
     const [isModalOpen, setModalOpen] = useState(false);
     const [selectedSiteSeen, setSelectedSiteSeen] = useState(null);
 
-    const siteSeenImage = "http://192.168.1.45:7781/uploads/siteseen-image/"
-    const defultImage = "http://192.168.1.45:7781/uploads/itenary-package/";
+    const siteSeenImage = `${import.meta.env.VITE_REACT_APP_IMAGE_URL}/siteseen-image/`
+    const defultImage = `${import.meta.env.VITE_REACT_APP_IMAGE_URL}/itenary-package/`;
 
     useEffect(() => {
         if (data) {

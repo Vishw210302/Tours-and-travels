@@ -1,12 +1,15 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 import NavBar from './Partials/NavBar';
+import LocomotiveScrollWrapper from './LocomotiveScrollWrapper';
 
 const MainLayout = () => {
     return (
         <>
             <NavBar />
-            <Outlet />
+            {/* <LocomotiveScrollWrapper> */}
+                <Outlet />
+            {/* </LocomotiveScrollWrapper> */}
         </>
     )
 }

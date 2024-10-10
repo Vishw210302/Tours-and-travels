@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useGetSliderQuery } from '../../../Api/Api';
 import Loader from '../../Partials/Loader';
-import SkeletonPage from '../../Partials/SkeletonPage';
 
 const Herosection = () => {
+
 
   const { isError, isLoading, isSuccess, data, error } = useGetSliderQuery();
   const [sliderListing, setSliderListing] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [err, setErr] = useState(null);
 
-  const imageUrl = 'http://192.168.1.45:7781/uploads/Slider-Image/';
+  const imageUrl = `${import.meta.env.VITE_REACT_APP_IMAGE_URL}/Slider-Image/`;
  
   useEffect(() => {
     if (isSuccess) {

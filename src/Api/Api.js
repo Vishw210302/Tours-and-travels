@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const myApi = createApi({
     reducerPath: "api",
     baseQuery: fetchBaseQuery({
-        baseUrl: "http://192.168.1.45:7781/api/",
+        baseUrl: import.meta.env.VITE_REACT_APP_API_URL,
     }),
     endpoints: (builder) => ({
         getSlider: builder.query({
@@ -94,7 +94,43 @@ export const myApi = createApi({
             }),
         }),
 
+        getMealType: builder.query({
+            query: () => "get-flight-meals"
+        }),
+
+        getMealById: builder.query({
+            query : (id) => `get-particular-meal-listing/${id}`
+        }),
+
+        getParticularFlight: builder.query({
+            query: ({key, id}) => {
+                return `get-particular-flight/${key}/${id}`;
+            },
+
+        }),
+
+        getFlightSeat: builder.query({
+            query : (id) => `get-flights-seats/${id}`
+        }),
+
+        createPaymentIntent: builder.mutation({
+            query : (payload) => ({
+                url: "create-payment-intent",
+                method: "POST",
+                body: payload,
+            })
+        }),
+
+        submitFlightTicketData: builder.mutation({
+            query : (payload) => ({
+                url: "addFlightTicketsData",
+                method: "POST",
+                body: payload,
+            })
+        })
+
     }),
 });
 
-export const { useGetSliderQuery, useGetBrandLogoQuery, useGetPackagesQuery, useGetTestimonialQuery, useGetItenriesQuery, useGetItenariesDetailsQuery, useLazyGetCitiesListingQuery, useContactUsPostMutation, useGetBranchesQuery, useLazyGetSubBranchesQuery, useGetFlightDetailsMutation, useGetBlogListingQuery, useGetSpecialFlightsQuery, useGetYoutubeVideosQuery, useGetTeamMemberDetailsQuery, useGetAboutUsContentQuery, useInqueriesPostMutation, useTestimonialReviewPostMutation } = myApi;
+export const { useGetSliderQuery, useGetBrandLogoQuery, useGetPackagesQuery, useGetTestimonialQuery, useGetItenriesQuery, useTestimonialReviewPostMutation, useGetItenariesDetailsQuery, useLazyGetCitiesListingQuery, useContactUsPostMutation, useGetBranchesQuery, useLazyGetSubBranchesQuery, useGetFlightDetailsMutation, useGetBlogListingQuery, useGetSpecialFlightsQuery, useGetYoutubeVideosQuery, useGetTeamMemberDetailsQuery, useGetAboutUsContentQuery, useInqueriesPostMutation, useGetMealTypeQuery, useLazyGetMealByIdQuery, useLazyGetParticularFlightQuery, useGetFlightSeatQuery, useCreatePaymentIntentMutation, useSubmitFlightTicketDataMutation } = myApi;
+
