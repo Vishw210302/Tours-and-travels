@@ -192,7 +192,7 @@ const TopSearchFlights = ({ flightsData, error, classDetail }) => {
                     }
                   </div>
                 ))
-              )}sclass
+              )}
             </div>
           </div>
         </div >

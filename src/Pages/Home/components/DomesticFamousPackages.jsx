@@ -1,67 +1,65 @@
 import React from 'react';
-import { default as articleImage2, default as featuredImage1 } from "../../../assets/bg-img2.jpg";
-import articleImage1 from "../../../assets/people-travels3.jpg";
+import 'swiper/css';
+import 'swiper/css/autoplay';
+import 'swiper/css/navigation';
+import { Autoplay, Navigation } from 'swiper/modules';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import image1 from "../../../assets/bg-img2.jpg";
 
-const ArrowLeft = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-    </svg>
-);
+const DomesticFamousPackages = () => {
 
-const ArrowRight = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-    </svg>
-);
-
-const TravelBlogComponent = () => {
+    const staticImages = [
+        image1,
+        image1,
+        image1,
+    ];
 
     return (
-        <div className="2xl:container 2xl:mx-auto p-5">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className='bg-white rounded-lg shadow-md overflow-hidden'>
-                    <div className='h-[100%]'>
-                        <img src={featuredImage1} alt='slider-image' className='h-full' />
-                    </div>
-                </div>
-                <div className="space-y-6">
-                    <div className="bg-white rounded-lg shadow-md overflow-hidden">
-                        <img src={articleImage1} alt="Article 1" className="w-full h-48 object-cover" />
-                        <div className="p-4">
-                            <div className="flex justify-between items-center mb-2">
-                                <span className="bg-pink-600 text-white text-xs font-bold px-2 py-1 rounded">Article</span>
-                                <span className="text-gray-500 text-sm">September 9, 2022</span>
-                            </div>
-                            <h3 className="text-xl font-bold mb-2">9 Ways to Become a Successful Travel Blogger</h3>
-                            <p className="text-gray-600 text-sm mb-4">
-                                Travel blogging is a crowded field — and it gets more crowded day by day. And a lot of the advice that people give are actually counterintuitive to...
-                            </p>
-                            <button className="text-cyan-600 hover:text-cyan-800 transition-colors duration-300">
-                                Read More ➜
-                            </button>
+        <>
+            <div className='2xl:container 2xl:mx-auto p-5'>
+                <div className='grid grid-cols-2 gap-8 w-full'>
+                    <div className='swiper-container relative'>
+                        <Swiper
+                            spaceBetween={10}
+                            slidesPerView={1}
+                            loop={true}
+                            modules={[Autoplay, Navigation]}
+                            autoplay={{
+                                delay: 3000,
+                                disableOnInteraction: false,
+                            }}
+                            navigation={{
+                                nextEl: '.swiper-button-next',
+                                prevEl: '.swiper-button-prev',
+                            }}
+                        >
+                            {staticImages.map((image, index) => (
+                                <SwiperSlide key={index}>
+                                    <div className='w-[100%] h-[100%]'>
+                                        <img src={image} alt={`Slide ${index + 1}`} width={800} height={800} className='object-fill' />
+                                    </div>
+                                </SwiperSlide>
+                            ))}
+                        </Swiper>
+                        <div className='border border-zinc-700 bg-white'>
+                            <div className='swiper-button-prev absolute top-[90%] left-5 transform -translate-y-1/2 text-white p-2 rounded-full'></div>
+                        </div>
+                        <div className='border border-zinc-700 bg-white'>
+                            <div className='swiper-button-next absolute top-[90%] left-[10%] transform -translate-y-1/2 text-white p-2 rounded-full'></div>
                         </div>
                     </div>
-
-                    <div className="bg-white rounded-lg shadow-md overflow-hidden">
-                        <img src={articleImage2} alt="Article 2" className="w-full h-48 object-cover" />
-                        <div className="p-4">
-                            <div className="flex justify-between items-center mb-2">
-                                <span className="bg-pink-600 text-white text-xs font-bold px-2 py-1 rounded">Article</span>
-                                <span className="text-gray-500 text-sm">September 11, 2022</span>
-                            </div>
-                            <h3 className="text-xl font-bold mb-2">The Ultimate Packing List For Female Travelers</h3>
-                            <p className="text-gray-600 text-sm mb-4">
-                                It can be daunting trying to figure out what to pack for a week, a month, or a year abroad without much — or any — prior experience in the place you want...
-                            </p>
-                            <button className="text-cyan-600 hover:text-cyan-800 transition-colors duration-300">
-                                Read More ➜
-                            </button>
+                    <div className='grid grid-cols-2 gap-4'>
+                        <div className='card bg-white rounded-xl shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg p-10 my-2 h-fit'>
+                            Vishw Prajapati
+                        </div>
+                        <div className='card bg-white rounded-xl shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg p-10 my-2 h-fit'>
+                            Vishw Prajapati
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 };
 
-export default TravelBlogComponent;
+export default DomesticFamousPackages;

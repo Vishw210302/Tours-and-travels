@@ -98,10 +98,10 @@ const PassengerDetails = ({ flightId }) => {
   };
 
   const handleMealAndFlightSeatPage = () => {
-    if (validateForm()) {
-      setPassengerPersonalDetails(details);
-      navigate(`/meal-booking/${className}/${id}`);
-    }
+    // if (validateForm()) {
+    //   setPassengerPersonalDetails(details);
+    // }
+    navigate(`/meal-booking/${className}/${id}`);
   };
 
   return (

@@ -4,27 +4,12 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useLazyGetParticularFlightQuery, useSubmitFlightTicketDataMutation } from '../../../Api/Api';
 import { useFlightTicketsDetailsContext } from '../../../Context/FlightTicketsDetailsContext';
 import StripePayment from '../../Payment/PaymentForm';
-
-const Modal = ({ isOpen, onClose, children }) => {
-    if (!isOpen) return null;
-
-    return (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-            <div className="bg-white w-[32%] rounded-lg p-5  relative">
-                <button onClick={onClose}
-                    className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-                {children}
-            </div>
-        </div>
-    );
-};
-
+import Modal from '../../Modal/Modal';
+import PaymentSuccess from '../../Payment/PaymentSuccess';
+// import '../../../assets/custom.css'
 
 const ThankYouPage = () => {
+
     const bookingDetails = {
         flightNumber: 'FL123',
         departure: 'New York (JFK)',
@@ -34,12 +19,12 @@ const ThankYouPage = () => {
     };
 
     const handleDownload = () => {
-        // Logic to generate and download PDF ticket
+
         console.log('Downloading ticket...');
     };
 
     return (
-        <div className="w-full max-w-2xl mx-auto bg-white rounded-lg shadow-lg p-8">
+        <div className="w-full  mx-auto bg-white rounded-lg  p-8">
             <h1 className="text-3xl font-bold text-center text-red-500 mb-6">Thank You for Your Booking!</h1>
             <p className="text-center text-gray-700 mb-6 text-lg">Your flight has been successfully booked. We can’t wait to see you on board!</p>
 
@@ -74,7 +59,6 @@ const ThankYouPage = () => {
     );
 };
 
-
 const FlightsTicketsPaymentPage = () => {
 
     const navigate = useNavigate();
@@ -82,7 +66,9 @@ const FlightsTicketsPaymentPage = () => {
 
     const [fetchFlight, { data, isSuccess, isError, error }] = useLazyGetParticularFlightQuery();
     const [flight, setFlight] = useState();
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(true);
+    const [showThankYou, setShowThankYou] = useState(false);
+    const [showPaymentSucess, setShowPaymnetSucess] = useState(false)
     const [submitFlightTicketData] = useSubmitFlightTicketDataMutation();
 
     const backend_url = import.meta.env.VITE_REACT_APP_BACKEND_URL;
@@ -107,6 +93,7 @@ const FlightsTicketsPaymentPage = () => {
     useEffect(() => {
         if (isSuccess) {
             setFlight(data?.data)
+            console.log(data?.data, 'aasassas')
         }
 
     }, [data, isSuccess, isError, error])
@@ -160,28 +147,37 @@ const FlightsTicketsPaymentPage = () => {
     const handlePaymentSuccess = async () => {
         // console.log('Payment successful:', paymentData);
 
-        const payload = {
+        // const payload = {
 
-            flightId: id,
-            passengerPersonalDetails,
-            selectedMealData,
-            flightSeatData,
-            paymentId: 'sfsdfdnsfndfnsdf'
+        //     flightId: id,
+        //     passengerPersonalDetails,
+        //     selectedMealData,
+        //     flightSeatData,
+        //     paymentId: 'sfsdfdnsfndfnsdf'
 
-        }
+        // }
 
-        const response = await submitFlightTicketData(payload).unwrap()
-        console.log(response, 'sas')
-        const link = document.createElement('a');
+        // const response = await submitFlightTicketData(payload).unwrap()
+        // console.log(response, 'sas')
+        // const link = document.createElement('a');
 
-        link.href = `${backend_url}${response.pdfUrl}`;
-        link.download = 'flightTicket.pdf';
+        // link.href = `${backend_url}${response.pdfUrl}`;
+        // link.download = 'flightTicket.pdf';
 
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+        // document.body.appendChild(link);
+        // link.click();
+        // document.body.removeChild(link);
+
+
+        setIsModalOpen(false);
+        setShowPaymnetSucess(true);
 
     };
+
+    const handleThankYouPage = ()=> {
+        setShowPaymnetSucess(false)
+        setShowThankYou(true)
+    }
 
     return (
         <>
@@ -198,6 +194,7 @@ const FlightsTicketsPaymentPage = () => {
                 </div>
 
                 <div className="2xl:container 2xl:mx-auto px-5 mt-5">
+                    
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
 
                         <div className="bg-white rounded-xl shadow-md p-6 transition-all duration-300 hover:shadow-lg">
@@ -217,7 +214,7 @@ const FlightsTicketsPaymentPage = () => {
                             <h2 className="text-lg font-bold mb-3">Passenger Details</h2>
                             <div className="h-[200px] overflow-y-auto">
 
-                                {passengerPersonalDetails?.passengerDetails?.map((passenger, index) => (
+                                {passengerPersonalDetails?.passengerDetailsData?.map((passenger, index) => (
                                     <div key={index} className="mb-4 border-b border-gray-200 pb-3">
                                         <p className="text-sm text-gray-600 mb-1">Passenger {index + 1}: <span className="font-semibold">{passenger.fullName}</span></p>
                                         <p className="text-sm text-gray-600 mb-1">Age: <span className="font-semibold">{passenger.age}</span></p>
@@ -299,10 +296,11 @@ const FlightsTicketsPaymentPage = () => {
 
                     <div className='flex flex-row justify-center items-center gap-4 mb-3'>
                         <button
-                            className="mt-8 w-1/7 bg-blue-400 text-white font-semibold py-3 rounded-lg hover:bg-blue-500 transition duration-300 shadow-md hover:shadow-lg p-2"
-                            onClick={() => {
-                                setIsModalOpen(true)
-                            }}
+                            className="mt-8 w-1/7 bg-blue-400 text-white font-semibold py-3 rounded-lg hover:bg-blue-500 transition duration-300 shadow-md hover:shadow-lg p-2 hover:scale-105"
+
+                        // onClick={() => {
+                        //     setIsModalOpen(true)
+                        // }}
                         >
                             <p className='text-sm flex flex-1 gap-2 items-center'>
                                 <ArrowCircleLeftIcon />
@@ -310,11 +308,11 @@ const FlightsTicketsPaymentPage = () => {
                             </p>
                         </button>
                         <button
-                            className="mt-8 w-1/7 bg-red-400 text-white font-semibold py-3 rounded-lg hover:bg-red-500 transition duration-300 shadow-md hover:shadow-lg p-2"
-                            // onClick={() => setIsModalOpen(true)}
-                            onClick={() => {
-                                handlePaymentSuccess()
-                            }}
+                            className="mt-8 w-1/7 bg-red-400 text-white font-semibold py-3 rounded-lg hover:bg-red-500 transition duration-300 shadow-md hover:shadow-lg p-2 hover:scale-105"
+                            onClick={() => setIsModalOpen(true)}
+                        // onClick={() => {
+                        //     handlePaymentSuccess()
+                        // }}
                         >
                             <p className='text-sm flex flex-1 gap-2 items-center'>
                                 Total Payment (₹{totalPrice})
@@ -322,10 +320,17 @@ const FlightsTicketsPaymentPage = () => {
                         </button>
 
                         <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-                            <ThankYouPage onPaymentSuccess={handlePaymentSuccess} />
+                            <StripePayment onPaymentSuccess={handlePaymentSuccess} />
+                        </Modal>
+
+                        <Modal isOpen={showPaymentSucess} onClose={() => setShowPaymnetSucess(false)} hideCloseButton = {true}>
+                            <PaymentSuccess openThankYouPage={handleThankYouPage}/>
+                        </Modal>
+
+                        <Modal isOpen={showThankYou} onClose={() => setShowThankYou(false)}>
+                            <ThankYouPage />
                         </Modal>
                     </div>
-
 
                 </div>
             </div>
