@@ -8,7 +8,7 @@ import Modal from '../../Modal/Modal';
 import PaymentSuccess from '../../Payment/PaymentSuccess';
 // import '../../../assets/custom.css'
 
-const ThankYouPage = () => {
+const ThankYouPage = ({ pdfLink }) => {
 
     const bookingDetails = {
         flightNumber: 'FL123',
@@ -20,7 +20,14 @@ const ThankYouPage = () => {
 
     const handleDownload = () => {
 
-        console.log('Downloading ticket...');
+        const a = document.createElement('a');
+        a.href = pdfLink;
+        a.download = 'ticket.pdf';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(pdfLink);
+
     };
 
     return (
@@ -69,7 +76,14 @@ const FlightsTicketsPaymentPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(true);
     const [showThankYou, setShowThankYou] = useState(false);
     const [showPaymentSucess, setShowPaymnetSucess] = useState(false)
-    const [submitFlightTicketData] = useSubmitFlightTicketDataMutation();
+    const [pdfLink, setPdfLink] = useState('');
+    const [submitFlightTicketData,
+        { data: submittedTicketData,
+            isSuccess: isSubmissionSuccess,
+            error: submissionError,
+            isError: hasSubmissionError
+        }
+    ] = useSubmitFlightTicketDataMutation();
 
     const backend_url = import.meta.env.VITE_REACT_APP_BACKEND_URL;
 
@@ -93,10 +107,24 @@ const FlightsTicketsPaymentPage = () => {
     useEffect(() => {
         if (isSuccess) {
             setFlight(data?.data)
-            console.log(data?.data, 'aasassas')
         }
 
     }, [data, isSuccess, isError, error])
+
+    useEffect(() => {
+
+        if (isSubmissionSuccess) {
+            console.log(submittedTicketData, 'submittedTicketData')
+            const pdfUrl = `${backend_url}${submittedTicketData?.pdfUrl}`
+            setPdfLink(pdfUrl)
+            setIsModalOpen(false);
+            setShowPaymnetSucess(true);
+        }
+        else if (hasSubmissionError) {
+            console.log('Submit flight data :', submissionError)
+        }
+
+    }, [submittedTicketData, isSubmissionSuccess, submissionError, hasSubmissionError])
 
     const handleSeatBookingPage = () => {
         navigate(`/flight-seat-booking/${className}/${id}`)
@@ -140,41 +168,52 @@ const FlightsTicketsPaymentPage = () => {
         setotalTicketPrice(totalPrice)
     }, [totalPrice])
 
-    //payment 
-
-
-
     const handlePaymentSuccess = async () => {
         // console.log('Payment successful:', paymentData);
 
-        // const payload = {
+        try {
 
-        //     flightId: id,
-        //     passengerPersonalDetails,
-        //     selectedMealData,
-        //     flightSeatData,
-        //     paymentId: 'sfsdfdnsfndfnsdf'
+            const payload = {
 
-        // }
+                flightId: id,
+                passengerPersonalDetails,
+                selectedMealData,
+                flightSeatData,
+                paymentId: 'sfsdfdnsfndfnsdf'
 
-        // const response = await submitFlightTicketData(payload).unwrap()
-        // console.log(response, 'sas')
-        // const link = document.createElement('a');
+            }
+            console.log("apiapiapiapi")
 
-        // link.href = `${backend_url}${response.pdfUrl}`;
-        // link.download = 'flightTicket.pdf';
+            const response = await fetch('http://localhost:7781/api/addFlightTicketsData', {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/pdf'
+                },
+                body: JSON.stringify(payload),
+            });
 
-        // document.body.appendChild(link);
-        // link.click();
-        // document.body.removeChild(link);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const pdfBlob = await response.blob();
+
+            const pdfUrl = window.URL.createObjectURL(pdfBlob);
+
+            setPdfLink(pdfUrl)
+            setIsModalOpen(false);
+            setShowPaymnetSucess(true);
+
+           
+
+        } catch (error) {
+            console.log('flightSubmissin_error:', error)
+        }
 
 
-        setIsModalOpen(false);
-        setShowPaymnetSucess(true);
 
     };
 
-    const handleThankYouPage = ()=> {
+    const handleThankYouPage = () => {
         setShowPaymnetSucess(false)
         setShowThankYou(true)
     }
@@ -194,7 +233,7 @@ const FlightsTicketsPaymentPage = () => {
                 </div>
 
                 <div className="2xl:container 2xl:mx-auto px-5 mt-5">
-                    
+
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
 
                         <div className="bg-white rounded-xl shadow-md p-6 transition-all duration-300 hover:shadow-lg">
@@ -323,12 +362,12 @@ const FlightsTicketsPaymentPage = () => {
                             <StripePayment onPaymentSuccess={handlePaymentSuccess} />
                         </Modal>
 
-                        <Modal isOpen={showPaymentSucess} onClose={() => setShowPaymnetSucess(false)} hideCloseButton = {true}>
-                            <PaymentSuccess openThankYouPage={handleThankYouPage}/>
+                        <Modal isOpen={showPaymentSucess} onClose={() => setShowPaymnetSucess(false)} hideCloseButton={true}>
+                            <PaymentSuccess openThankYouPage={handleThankYouPage} />
                         </Modal>
 
                         <Modal isOpen={showThankYou} onClose={() => setShowThankYou(false)}>
-                            <ThankYouPage />
+                            <ThankYouPage pdfLink={pdfLink} />
                         </Modal>
                     </div>
 

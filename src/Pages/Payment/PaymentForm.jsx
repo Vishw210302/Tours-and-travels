@@ -7,13 +7,11 @@ import { useFlightTicketsDetailsContext } from '../../Context/FlightTicketsDetai
 const stripePromise = loadStripe('pk_test_51ON98CSEV9soa2c8CWj7i2O7pHm9b1EXoTi1LBhfICMonxhRKNHPPZU1bQ9FCYPwfcb4BzZ3RF8eTLHEt0ENjI3L00VzfQwTB9');
 
 
-
-
 const PaymentForm = ({ onPaymentSuccess }) => {
 
     const stripe = useStripe();
     const elements = useElements();
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     // const []
     const [createPaymentIntent] = useCreatePaymentIntentMutation();
@@ -60,11 +58,11 @@ const PaymentForm = ({ onPaymentSuccess }) => {
                 },
             }
 
-            setTimeout(() => {
+            // setTimeout(() => {
                 onPaymentSuccess({
                     payload
                 })      
-            }, 5000);
+            // }, 5000);
 
           
 
