@@ -59,7 +59,7 @@ const Destinations = () => {
 
     return (
         <div className='w-full py-10 h-auto bg-[url("https://ajaymodi.com/static/media/discouver-bg.6d953696ca0f26414fd6.jpg")] bg-cover bg-center'>
-            <div className='flex flex-row justify-center items-center p-10 w-full font-bold text-[35px]'>Popular Destinations</div>
+            <div className='flex flex-row justify-center items-center p-10 w-full font-bold text-[30px] text-red-500'>Popular Destinations</div>
             <div className='w-full flex flex-row justify-center py-5'>
                 <div className='w-[65%]'>
                     {isLoading ? (

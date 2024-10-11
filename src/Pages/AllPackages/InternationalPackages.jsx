@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useGetPackagesQuery } from '../../Api/Api';
+import RippleEffect from '../RippleEffects/RippleEffect';
+import BannerImage from "../../assets/waterEffect.png"
 
 const InternationalPackages = () => {
 
@@ -19,13 +21,13 @@ const InternationalPackages = () => {
 
     return (
         <div className='bg-[#f7f7f7]'>
-            <div className="w-full h-[500px] flex flex-col justify-center items-center bg-[url('https://webimages.ajaymoditravels.com/amtuploads/websiteimages/631155998855.png')] bg-cover bg-center relative">
-                <h1 className='text-white text-4xl font-extrabold mb-6 drop-shadow-md'>Explore Our International Packages</h1>
-                <div className='w-full max-w-lg'>
+            <div>
+                <RippleEffect BannerImage={BannerImage} BannerTitle={"Explore Our International Packages"} />
+                <div className='w-full max-w-lg absolute bottom-[55%] left-[36%]'>
                     <div className='flex'>
                         <input
                             type="text"
-                            placeholder="Search International packages..."
+                            placeholder="Search International Packages ..."
                             className="w-full p-[8px] rounded-l-md bg-white text-gray-800 placeholder-gray-400 shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                         <button className='bg-blue-600 text-white p-[8px] rounded-r-md font-semibold shadow-lg hover:bg-blue-700 transition duration-200'>

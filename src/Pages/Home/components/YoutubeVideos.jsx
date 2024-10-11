@@ -18,7 +18,7 @@ const YoutubeVideos = () => {
     }, [error, data, isSuccess, isError]);
 
     const settings = {
-        dots: true,
+        dots: false,
         infinite: true,
         speed: 1500,
         slidesToShow: 4,
@@ -47,9 +47,7 @@ const YoutubeVideos = () => {
     return (
         <div className='2xl:container 2xl:mx-auto p-5'>
             <div>
-                <div className='flex flex-row justify-center my-2'>
-                    <p className='text-lg font-semibold text-red-500'>Our tour videos</p>
-                </div>
+                <div className='flex flex-row justify-center items-center p-5 w-full font-bold text-[30px] text-red-500'>Our tour videos</div>
             </div>
             <div className='p-3'>
                 <Slider {...settings}>
