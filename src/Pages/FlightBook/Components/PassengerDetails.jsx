@@ -1,13 +1,23 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useFlightTicketsDetailsContext } from '../../../Context/FlightTicketsDetailsContext';
 import { usePassenger } from '../../../Context/PassengerCountContext';
+import { useAddPassengerDetailsMutation } from '../../../Api/Api';
 
 const PassengerDetails = ({ flightId }) => {
   const { id, className } = useParams();
   const navigate = useNavigate();
   const { passengerCount } = usePassenger();
   const { passengerPersonalDetails, setPassengerPersonalDetails } = useFlightTicketsDetailsContext();
+
+  const [submitPassengerDetails, {
+    data,
+    isSuccess,
+    isLoading,
+    isError,
+    error
+  }] = useAddPassengerDetailsMutation();
+
   const [errors, setErrors] = useState({});
 
   const totalPassengers =
@@ -28,6 +38,15 @@ const PassengerDetails = ({ flightId }) => {
       phoneNumber: '',
     },
   });
+
+  useEffect(() => {
+
+    if(isSuccess){
+      console.log(data?.data, "data data")
+    }
+    
+  }, [data, isSuccess, isError, error])
+  
 
   const handleInputChange = (index, field, value) => {
     const updatedPassengerDetails = details.passengerDetailsData.map((passenger, i) =>
@@ -97,10 +116,17 @@ const PassengerDetails = ({ flightId }) => {
     navigate(`/flight-book/${className}/${key}/${id}`);
   };
 
-  const handleMealAndFlightSeatPage = () => {
+  const handleMealAndFlightSeatPage = async () => {
     // if (validateForm()) {
     //   setPassengerPersonalDetails(details);
     // }
+
+    const payload = {
+      flightId :id,
+      details
+    }
+    
+    await submitPassengerDetails(payload)
     navigate(`/meal-booking/${className}/${id}`);
   };
 

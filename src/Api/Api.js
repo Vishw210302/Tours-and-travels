@@ -108,6 +108,14 @@ export const myApi = createApi({
             },
         }),
 
+        addPassengerDetails: builder.mutation({
+            query: (payload) => ({
+                url: "add-passenger-details",
+                method: "POST",
+                body: payload,
+            })
+        }),
+
         getFlightSeat: builder.query({
             query: (id) => `get-flights-seats/${id}`
         }),
@@ -124,8 +132,17 @@ export const myApi = createApi({
             query: (payload) => ({
                 url: "addFlightTicketsData",
                 method: "POST",
-                body: payload,
-            })
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload),
+            }),
+            transformResponse: (response) => {
+
+                const blob = new Blob([response], { type: 'application/pdf' });
+
+                return blob;
+            },
         }),
 
         getPackageThemeData: builder.query({
@@ -135,5 +152,5 @@ export const myApi = createApi({
     }),
 });
 
-export const { useGetSliderQuery, useGetBrandLogoQuery, useGetPackagesQuery, useGetTestimonialQuery, useGetItenriesQuery, useTestimonialReviewPostMutation, useGetItenariesDetailsQuery, useLazyGetCitiesListingQuery, useContactUsPostMutation, useGetBranchesQuery, useLazyGetSubBranchesQuery, useGetFlightDetailsMutation, useGetBlogListingQuery, useGetSpecialFlightsQuery, useGetYoutubeVideosQuery, useGetTeamMemberDetailsQuery, useGetAboutUsContentQuery, useInqueriesPostMutation, useGetMealTypeQuery, useLazyGetMealByIdQuery, useLazyGetParticularFlightQuery, useGetFlightSeatQuery, useCreatePaymentIntentMutation, useSubmitFlightTicketDataMutation, useGetPackageThemeDataQuery } = myApi;
+export const { useGetSliderQuery, useGetBrandLogoQuery, useGetPackagesQuery, useGetTestimonialQuery, useGetItenriesQuery, useTestimonialReviewPostMutation, useGetItenariesDetailsQuery, useLazyGetCitiesListingQuery, useContactUsPostMutation, useAddPassengerDetailsMutation, useGetBranchesQuery, useLazyGetSubBranchesQuery, useGetFlightDetailsMutation, useGetBlogListingQuery, useGetSpecialFlightsQuery, useGetYoutubeVideosQuery, useGetTeamMemberDetailsQuery, useGetAboutUsContentQuery, useInqueriesPostMutation, useGetMealTypeQuery, useLazyGetMealByIdQuery, useLazyGetParticularFlightQuery, useGetFlightSeatQuery, useCreatePaymentIntentMutation, useSubmitFlightTicketDataMutation, useGetPackageThemeDataQuery } = myApi;
 
