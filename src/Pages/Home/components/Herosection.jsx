@@ -11,7 +11,7 @@ const Herosection = () => {
   const [err, setErr] = useState(null);
 
   const imageUrl = `${import.meta.env.VITE_REACT_APP_IMAGE_URL}/Slider-Image/`;
- 
+
   useEffect(() => {
     if (isSuccess) {
       setSliderListing(data.data);

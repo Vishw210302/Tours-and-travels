@@ -19,7 +19,7 @@ const Testimonials = () => {
     }, [error, data, isSuccess, isError]);
 
     const settings = {
-        dots: true,
+        dots: false,
         infinite: true,
         speed: 1500,
         slidesToShow: 3,
@@ -48,6 +48,9 @@ const Testimonials = () => {
     return (
         <>
             <div className='p-3 bg-[#f7f7f7]'>
+                <div>
+                    <div className='flex flex-row justify-center items-center p-5 w-full font-bold text-[30px] text-red-500'>Our Testimonial</div>
+                </div>
                 <Slider {...settings}>
                     {testimonialListing && testimonialListing.map((items, index) => {
                         return (

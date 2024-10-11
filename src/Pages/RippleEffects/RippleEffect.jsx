@@ -1,9 +1,8 @@
 import React, { useEffect } from "react";
 import $ from "jquery";
 import "jquery.ripples";
-import vishw from "../../assets/waterEffect.png"
 
-const RippleEffect = () => {
+const RippleEffect = ({ BannerImage, BannerTitle }) => {
     useEffect(() => {
         $("#ripple").ripples({
             resolution: 512,
@@ -13,15 +12,18 @@ const RippleEffect = () => {
     }, []);
 
     return (
-        <section style={{ maxHeight: "100%", margin: "auto" }}>
+        <section style={{ maxHeight: "100%", margin: "auto", position: "relative", width: "100%" }}>
             <div
+                className="w-full h-[500px] flex flex-col justify-center items-center  bg-cover bg-center relative"
                 id="ripple"
                 style={{
-                    height: "500px",
-                    background: `url(${vishw}) left top / cover`,
-                    objectFit: "cover",
+                    background: `url(${BannerImage}) left top / cover`,
                 }}
-            ></div>
+            >
+                <h1 className="text-white text-4xl font-extrabold mb-6 drop-shadow-md">
+                    {BannerTitle}
+                </h1>
+            </div>
         </section>
     );
 };

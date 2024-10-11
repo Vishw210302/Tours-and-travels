@@ -6,6 +6,7 @@ import Herosection from './components/Herosection'
 import Testimonials from './components/Testimonials'
 import YoutubeVideos from './components/YoutubeVideos'
 import RippleEffect from '../RippleEffects/RippleEffect'
+import TourTheme from '../TourTheme/TourTheme'
 
 const Home = () => {
   return (
@@ -16,7 +17,8 @@ const Home = () => {
       <DomesticFamousPackages />
       <YoutubeVideos />
       <Testimonials />
-      <RippleEffect />
+      <TourTheme />
+      {/* <RippleEffect /> */}
     </>
   )
 }
