@@ -18,7 +18,7 @@ const Card = ({ isLoading, data }) => {
         return text;
     };
 
-    if (!isLoading && (!data?.itenaries || data?.itenaries.length === 0)) {
+    if (!isLoading && (!data?.itenaries || data?.itenaries?.length === 0)) {
         return (
             <div className="flex flex-row justify-center w-[70%] items-center">
                 <div>
@@ -59,10 +59,10 @@ const Card = ({ isLoading, data }) => {
                                 <div className='flex flex-row justify-between items-center mb-3'>
                                     <div className='flex items-center border rounded-full overflow-hidden border-red-200'>
                                         <div className='bg-red-500 px-4 py-1 text-center text-white'>
-                                            {value.days.length} days
+                                            {value.days?.length} days
                                         </div>
                                         <div className='px-4 py-1 text-center text-black'>
-                                            {value.days.length - 1} Nights
+                                            {value.days?.length - 1} Nights
                                         </div>
                                     </div>
                                     <div className='w-[50%] py-1'>

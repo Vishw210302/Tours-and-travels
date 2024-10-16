@@ -3,7 +3,7 @@ import { useGetFlightDetailsMutation, useGetSpecialFlightsQuery, useLazyGetCitie
 import { usePassenger } from '../../Context/PassengerCountContext';
 import Airlinesname from '../Home/components/Airlinesname';
 import TopSearchFlights from './TopSearchFlights';
-import {  useFlightTicketsDetailsContext } from '../../Context/FlightTicketsDetailsContext';
+import { useFlightTicketsDetailsContext } from '../../Context/FlightTicketsDetailsContext';
 
 const FlightsPageListing = () => {
 
@@ -27,7 +27,7 @@ const FlightsPageListing = () => {
     const [searchErr, setSearchErr] = useState(false);
     const [classMatch, setClassMatch] = useState('economy');
     const timeoutRef = useRef(null);
-    const { setPassengerCount } = usePassenger(); 
+    const { setPassengerCount } = usePassenger();
     const { setPassengerPersonalDetails } = useFlightTicketsDetailsContext();
 
     useEffect(() => {
@@ -171,11 +171,11 @@ const FlightsPageListing = () => {
                 children: childrenValue,
                 infant: infantValue
             };
-            
+
             setPassengerCount(totalPassengerCount)
 
             setPassengerPersonalDetails();
-            
+
             await searchFlight(payload);
 
         } catch (err) {
@@ -231,7 +231,7 @@ const FlightsPageListing = () => {
                                         value={searchValueFrom}
                                         autoComplete="off"
                                     />
-                                    {fromCitiesListing.length > 0 && (
+                                    {fromCitiesListing?.length > 0 && (
                                         <ul className="absolute z-10 bg-white border border-gray-300 rounded-md mt-1 w-full max-h-60 overflow-auto">
                                             {fromCitiesListing.map((city) => (
                                                 <li
@@ -259,7 +259,7 @@ const FlightsPageListing = () => {
                                         value={searchValueTo}
                                         autoComplete="off"
                                     />
-                                    {toCitiesListing.length > 0 && (
+                                    {toCitiesListing?.length > 0 && (
                                         <ul className="absolute z-10 bg-white border border-gray-300 rounded-md mt-1 w-full max-h-60 overflow-auto">
                                             {toCitiesListing.map((city) => (
                                                 <li

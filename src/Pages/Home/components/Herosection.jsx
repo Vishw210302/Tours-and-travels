@@ -22,14 +22,14 @@ const Herosection = () => {
 
   useEffect(() => {
 
-    if (sliderListing.length > 0) {
+    if (sliderListing?.length > 0) {
       const intervalId = setInterval(() => {
-        setCurrentIndex((prevIndex) => (prevIndex + 1) % sliderListing.length);
+        setCurrentIndex((prevIndex) => (prevIndex + 1) % sliderListing?.length);
       }, 3000);
 
       return () => clearInterval(intervalId);
     }
-  }, [sliderListing.length]);
+  }, [sliderListing?.length]);
 
 
   return (
@@ -46,7 +46,7 @@ const Herosection = () => {
             </div>
           ) : (
             <>
-              {sliderListing && sliderListing.length > 0 ? (
+              {sliderListing && sliderListing?.length > 0 ? (
                 sliderListing.map((item, index) => (
                   <img
                     key={index}

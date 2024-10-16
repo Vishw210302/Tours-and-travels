@@ -14,15 +14,6 @@ const TopSearchFlights = ({ flightsData, error, classDetail }) => {
     setFlightsData(flightsData)
   }, [flightsData])
 
-
-  // useEffect(() => {
-  //   if (flightsDetails?.length > 0) {
-  //     if (flightsDetails[0]?.departure) {
-  //       console.log(flightsDetails, 'flightsDataflightsData')
-  //     }
-  //   }
-  // }, [flightsDetails])
-
   const convertTime = (timeString) => {
     const [hours, minutes] = timeString.split(':');
     return `${parseInt(hours)}h ${parseInt(minutes)}m`;
@@ -130,10 +121,10 @@ const TopSearchFlights = ({ flightsData, error, classDetail }) => {
                         </div>
 
                         <div className='absolute w-full flex justify-around items-center top-1/1.5 left-1/2 transform -translate-x-1/2 -translate-y-[70%]'>
-                          {flight?.hold_details && flight.hold_details.length > 0 && (
+                          {flight?.hold_details && flight.hold_details?.length > 0 && (
                             flight.hold_details.map((detail, index) => (
 
-                              <div key={"index"} className='relative group'>
+                              <div key={index + "index"} className='relative group'>
                                 <p className='text-[70px] cursor-pointer'>.</p>
 
                                 <div className='absolute hidden w-[200px] h-[auto] shadow-[rgba(0,_0,_0,_0.25)_0px_14px_28px,_rgba(0,_0,_0,_0.22)_0px_10px_10px] group-hover:block bg-white border border-gray-300 p-2 -right-28 rounded-md -top-14'>
@@ -187,7 +178,7 @@ const TopSearchFlights = ({ flightsData, error, classDetail }) => {
                         )}
                       </div>
                     </div>
-                    {index !== flightsData.length - 1 &&
+                    {index !== flightsData?.length - 1 &&
                       <div className='border m-2'></div>
                     }
                   </div>

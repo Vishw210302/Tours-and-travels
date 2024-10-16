@@ -19,7 +19,7 @@ const Description = ({ description }) => {
         <div>
             <span className='text-[15px] font-normal mt-2 text-justify'>
                 {isExpanded ? description : description?.slice(0, maxLength)}
-                {description.length > maxLength && (
+                {description && description?.length > maxLength && (
                     <button onClick={toggleExpanded} className='text-red-500 ml-2'>
                         {isExpanded ? 'Read Less' : 'Read More'}
                     </button>
@@ -66,7 +66,7 @@ const Modal = ({ isOpen, onClose, siteDetails }) => {
                     </div>
                     <div>
                         <p className='text-base'>{getDescription(siteDetails?.SiteseenDescription)}</p>
-                        {siteDetails?.SiteseenDescription?.split(' ').length > maxWords && (
+                        {siteDetails?.SiteseenDescription?.split(' ')?.length > maxWords && (
                             <button onClick={toggleExpanded} className='text-red-500'>
                                 {isExpanded ? 'Read Less' : 'Read More'}
                             </button>
@@ -163,7 +163,7 @@ const Days = ({ data }) => {
                                         return (
                                             <div key={index} className='mt-1 cursor-pointer' onClick={() => handleSiteseenModel(siteseen)}>
                                                 <span className='text-red-500 mx-1 font-semibold'>{siteseen?.SiteseenName}</span>
-                                                {index < daysItenary.siteseens.length - 1 && '/'}
+                                                {index < daysItenary?.siteseens?.length - 1 && '/'}
                                             </div>
                                         );
                                     })}

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import mainLogo from "../../assets/asgradLogo.png"
 
 const NavBar = () => {
   const pathname = window.location.pathname.replace('/', '');
@@ -36,12 +37,19 @@ const NavBar = () => {
     setActiveLink('holidays');
   };
 
+  const handleClickOnDashboard = () => {
+    navigate("/");
+  }
+
   return (
     <>
       <nav className={`sticky top-0 bg-[#1f2746] ${windowHeight > 55 ? "h-[80px]" : "h-[90px]"} z-50 transition-all duration-300`}>
         <div className='h-full container mx-auto grid grid-cols-3 px-4'>
-          <div className='flex justify-start items-center'>
-            <img src="https://ld-wt73.template-help.com/wt_61270/images/logo-white.png" alt="Logo" />
+          <div className='flex justify-start items-center cursor-pointer w-fit' onClick={() => {
+            handleClickOnDashboard()
+          }}>
+            {/* <img src="https://ld-wt73.template-help.com/wt_61270/images/logo-white.png" alt="Logo" /> */}
+            <img src={mainLogo} alt="Logo" className='h-[78px]' />
           </div>
           <div className='col-span-2'>
             <div className='grid grid-cols-6 gap-4 items-center h-full'>

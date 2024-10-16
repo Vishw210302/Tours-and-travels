@@ -26,7 +26,7 @@ const FlightSeatBooking = () => {
         if (selectedSeats.includes(seat)) {
             setSelectedSeats(selectedSeats.filter((selectedSeat) => selectedSeat !== seat));
         } else {
-            if (selectedSeats.length < totalPassengers) {
+            if (selectedSeats?.length < totalPassengers) {
                 setSelectedSeats([...selectedSeats, seat]);
             } else {
                 setSelectSeat(true)
@@ -156,7 +156,7 @@ const FlightSeatBooking = () => {
 
                         <div className='p-5 text-center'>
                             <h4 className='text-lg font-semibold'>Selected Seats:</h4>
-                            {selectedSeats.length > 0 ? (
+                            {selectedSeats?.length > 0 ? (
                                 <p className='text-blue-500 font-bold'>{selectedSeats.join(', ')}</p>
                             ) : (
                                 <p className='text-red-500 font-semibold'>No seats selected</p>

@@ -5,11 +5,12 @@ import { Autoplay } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import image1 from "../../../assets/bg-img2.jpg";
 import image2 from "../../../assets/image.jpg";
+import image3 from "../../../assets/people-travels.jpg";
 
 const DomesticFamousPackages = () => {
 
     const swiperRef = useRef(null);
-    const staticImages = [image1, image2, image1,];
+    const staticImages = [image1, image2, image3];
 
     return (
         <>
@@ -34,14 +35,23 @@ const DomesticFamousPackages = () => {
                                             alt={`Slide ${index + 1}`}
                                             className='object-cover w-full h-full'
                                         />
-                                        <div className='absolute top-0 left-0 w-[40%] h-full bg-black bg-opacity-50 flex items-center justify-center'>
-                                            <p className='text-white text-xl text-center'>Your Text Here</p>
+                                        <div className='absolute top-0 left-0 w-[40%] h-full bg-black bg-opacity-70'>
+                                            <div className='p-2'>
+                                                <p className='text-white font-bold text-xl'>9 Ways to Become a Successful Travel Blogger</p>
+                                                <p className='text-white font-medium text-sm mt-2'>
+                                                    9 Ways to Become a Successful Travel Blogger 9 Ways to Become a Successful Travel Blogger
+                                                </p>
+                                                <div className='flex flex-row gap-2 mt-2'>
+                                                    <p className='text-white font-bold'>Price :-</p>
+                                                    <p className='text-white'>19000 /-</p>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </SwiperSlide>
                             ))}
                         </Swiper>
-                        <div className='flex flex-row gap-3 absolute top-[90%] left-[3%]'>
+                        <div className='flex flex-row gap-3 absolute top-[97%] left-[3%]'>
                             <div
                                 className='transform -translate-y-1/2 border-2 text-xl text-white cursor-pointer z-10'
                                 style={{ lineHeight: 0 }}
@@ -77,7 +87,7 @@ const DomesticFamousPackages = () => {
                                     <p className='text-xl font-bold text-gray-500'>Price:-</p>
                                     <p className='text-red-400 font-semibold text-xl'>19000/-</p>
                                 </div>
-                                <p className='w-auto bg-red-400 hover:bg-red-500 text-white font-semibold text-sm p-3 rounded-lg cursor-pointer'>View More</p>
+                                <p className='w-auto bg-red-400 hover:bg-red-500 text-white font-semibold text-sm p-2 rounded-lg cursor-pointer'>View More</p>
                             </div>
                         </div>
                         <div className='card bg-white rounded-xl shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg my-2 h-fit'>
@@ -93,7 +103,7 @@ const DomesticFamousPackages = () => {
                                     <p className='text-xl font-bold text-gray-500'>Price:-</p>
                                     <p className='text-red-400 font-semibold text-xl'>19000/-</p>
                                 </div>
-                                <p className='w-auto bg-red-400 hover:bg-red-500 text-white font-semibold text-sm p-3 rounded-lg cursor-pointer'>View More</p>
+                                <p className='w-auto bg-red-400 hover:bg-red-500 text-white font-semibold text-sm p-2 rounded-lg cursor-pointer'>View More</p>
                             </div>
                         </div>
                     </div>

@@ -140,7 +140,7 @@ const About = ({ data, allData }) => {
                     {departureDates && departureDates.map((departureDate, index) => (
                         <p key={index} className='text-[15px] font-semibold'>
                             {formatDate(departureDate)}
-                            {index < departureDates.length - 1 && ' ,  '}
+                            {index < departureDates?.length - 1 && ' ,  '}
                         </p>
                     ))}
                 </div>

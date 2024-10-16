@@ -44,11 +44,11 @@ const FlightBook = () => {
     }, [fetchFlight, key, id]);
 
     useEffect(() => {
-        if(isSuccess){
+        if (isSuccess) {
             setFlight(data?.data)
             // console.log(flight?.class_details?.[className]?.prices?.adult, 'flightflight')
         }
-        
+
     }, [data, isSuccess, isError, error])
 
 
@@ -155,7 +155,7 @@ const FlightBook = () => {
                                             </div>
 
                                             <div className='absolute w-full flex justify-around items-center top-1/1.5 left-1/2 transform -translate-x-1/2 -translate-y-[70%]'>
-                                                {flight?.hold_details && flight.hold_details.length > 0 && (
+                                                {flight?.hold_details && flight.hold_details?.length > 0 && (
                                                     flight.hold_details.map((detail, index) => {
                                                         const arrivalTime = new Date(detail?.arrival_time).toLocaleTimeString([], {
                                                             hour: '2-digit',

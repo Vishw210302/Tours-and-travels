@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useGetPackagesQuery } from '../../Api/Api';
 import BannerImage from "../../assets/waterEffect.png"
 import RippleEffect from '../RippleEffects/RippleEffect';
+import NoDataFound from '../NoDataFound';
 
 const DomesticPackages = () => {
 
@@ -38,7 +39,11 @@ const DomesticPackages = () => {
 
                 <div className='bg-gradient-to-b from-blue-100 to-white py-10'>
                     <div className='2xl:container 2xl:mx-auto px-5'>
-                        <h1 className='text-5xl font-extrabold text-center mb-12 text-gray-800'>Discover Your Dream Vacation</h1>
+                        {domesticPackagesListing && domesticPackagesListing?.length > 0 ?
+                            <h1 className='text-5xl font-extrabold text-center mb-12 text-gray-800'>Discover Your Dream Vacation</h1>
+                            : <NoDataFound message="No domestic packages found" />
+                        }
+
                         <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10'>
                             {domesticPackagesListing.map((pkg, index) => (
                                 <div key={index + "key"} className='relative group bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300'>

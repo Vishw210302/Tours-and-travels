@@ -57,7 +57,7 @@ const Airlinesname = () => {
               </div>
             ) : (
               <Slider {...settings}>
-                {brandData && brandData.length > 0 ? (
+                {brandData && brandData?.length > 0 ? (
                   brandData.map((image, index) => (
                     <div key={index} className="flex justify-center">
                       <img

@@ -46,9 +46,12 @@ const YoutubeVideos = () => {
 
     return (
         <div className='2xl:container 2xl:mx-auto p-5'>
-            <div>
-                <div className='flex flex-row justify-center items-center p-5 w-full font-bold text-[30px] text-red-500'>Our tour videos</div>
-            </div>
+            {youtubeVideosListing && youtubeVideosListing?.length > 0 ?
+                <div>
+                    <div className='flex flex-row justify-center items-center p-5 w-full font-bold text-[30px] text-red-500'>Our tour videos</div>
+                </div> :
+                <></>}
+
             <div className='p-3'>
                 <Slider {...settings}>
                     {youtubeVideosListing && youtubeVideosListing.map((video, index) => (

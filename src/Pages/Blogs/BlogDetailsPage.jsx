@@ -35,7 +35,7 @@ const BlogDetailsPage = () => {
                     <p>{blog?.blogsDescription}</p>
                 </div>
 
-                {blog?.blogGallery && blog.blogGallery.length > 0 && (
+                {blog?.blogGallery && blog.blogGallery?.length > 0 && (
                     <div className='2xl:container 2xl:mx-auto p-5'>
                         <div className='flex flex-row justify-center'>
                             <p className='text-[24px] text-red-500 my-3 border-b-2 border-red-700'>Gallery Images</p>

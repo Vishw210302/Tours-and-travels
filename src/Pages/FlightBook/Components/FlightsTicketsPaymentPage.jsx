@@ -203,7 +203,7 @@ const FlightsTicketsPaymentPage = () => {
             setIsModalOpen(false);
             setShowPaymnetSucess(true);
 
-           
+
 
         } catch (error) {
             console.log('flightSubmissin_error:', error)
@@ -295,7 +295,7 @@ const FlightsTicketsPaymentPage = () => {
                             <h2 className="text-lg font-bold mb-3">Seat Details</h2>
                             <p className="text-sm text-gray-600 mb-2">Selected Seats:
                                 {flightSeatData?.map((seat, index) => (
-                                    <span className="font-semibold">{seat?.seat_name}  {index < flightSeatData.length - 1 && ', '} </span>
+                                    <span className="font-semibold">{seat?.seat_name}  {index < flightSeatData?.length - 1 && ', '} </span>
 
                                 ))}
                             </p>

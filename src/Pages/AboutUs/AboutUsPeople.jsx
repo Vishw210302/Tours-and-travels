@@ -4,6 +4,7 @@ import 'swiper/css/autoplay';
 import { Autoplay } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { useGetTeamMemberDetailsQuery } from '../../Api/Api';
+import NoDataFound from '../NoDataFound';
 
 const AboutUsPeople = () => {
     const { isError, error, data, isLoading, isSuccess } = useGetTeamMemberDetailsQuery();
@@ -21,15 +22,24 @@ const AboutUsPeople = () => {
     return (
         <>
             <div>
-                <div className='flex flex-1 justify-center m-2'>
-                    <div className='border bg-red-400 p-2 rounded-md'>
-                        <span className='text-white font-bold text-xl'>Team Members</span>
-                    </div>
-                </div>
-                <div className='text-center my-5'>
-                    <p className='text-[30px] text-black font-bold'>We’ve Expert Team</p>
-                    <p className='text-[30px] text-black font-bold'>Members Meet With Team</p>
-                </div>
+                {teamMemberListing && teamMemberListing?.length > 0 ?
+                    <>
+                        <div className='flex flex-1 justify-center m-2'>
+                            <div className='border bg-red-400 p-2 rounded-md'>
+                                <span className='text-white font-bold text-xl'>Team Members</span>
+                            </div>
+                        </div>
+                        <div className='text-center my-5'>
+                            <p className='text-[30px] text-black font-bold'>We’ve Expert Team</p>
+                            <p className='text-[30px] text-black font-bold'>Members Meet With Team</p>
+                        </div>
+                    </>
+                    :
+                    <>
+                        <NoDataFound message="There are no data found" />
+                    </>
+                }
+
                 <div className='swiper-container my-3'>
                     <Swiper
                         spaceBetween={10}
@@ -45,11 +55,11 @@ const AboutUsPeople = () => {
                             {teamMemberListing && teamMemberListing.map((items, index) => {
                                 return (
                                     <SwiperSlide key={index + "key"}>
-                                        <div key={index + "key"}>
+                                        <div className='w-fit h-fit' key={index + "key"}>
                                             <div className='w-[200px] h-[200px]'>
                                                 <img src={items?.teamMemberImage ? `${teamMemberImage}${items?.teamMemberImage}` : `${teamMemberImage}${items?.teamMemberImage}`} alt='' className='object-fill w-full h-full rounded-full border-dotted border-red-400 p-1 border-[3px]' />
                                             </div>
-                                            <div className=' m-2'>
+                                            <div className='m-2 text-center'>
                                                 <p className='text-black font-bold text-xl'>{items?.teamMemberName}</p>
                                                 <p className='text-black font-semibold text-xl'>{items?.teamMemberRole}</p>
                                             </div>

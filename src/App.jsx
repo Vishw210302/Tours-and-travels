@@ -1,4 +1,6 @@
 
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import { FlightTicketsDetailsProvider } from './Context/FlightTicketsDetailsContext';
 import { PassengerCountProvider } from './Context/PassengerCountContext';
@@ -18,8 +20,7 @@ import Home from './Pages/Home/Home';
 import Itenary from './Pages/Itenary/Itenary';
 import ItenaryDetail from './Pages/Itenary/ItenaryDetails/index';
 import MainLayout from './Pages/MainLayout';
-import { Elements } from '@stripe/react-stripe-js';
-import { loadStripe } from '@stripe/stripe-js';
+import PopularTheme from './Pages/PopularTheme/PopularTheme';
 
 const stripePromise = loadStripe('pk_test_51ON98CSEV9soa2c8CWj7i2O7pHm9b1EXoTi1LBhfICMonxhRKNHPPZU1bQ9FCYPwfcb4BzZ3RF8eTLHEt0ENjI3L00VzfQwTB9');
 
@@ -46,6 +47,7 @@ function App() {
                 <Route path="flight-seat-booking/:className/:id" element={<FlightSeatBooking />} />
                 <Route path="tickets-payment/:className/:id" element={<FlightsTicketsPaymentPage />} />
                 <Route path="passenger-details/:className/:id" element={<PassengerDetails />} />
+                <Route path="popularTheme" element={<PopularTheme />} />
               </Route>
             </Routes>
           </Router>

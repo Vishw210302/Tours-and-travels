@@ -19,7 +19,7 @@ export const myApi = createApi({
         }),
 
         getTestimonial: builder.query({
-            query: () => "get-testimonial",
+            query: () => "get-testimonial-active",
         }),
 
         getItenries: builder.query({
@@ -146,11 +146,10 @@ export const myApi = createApi({
         }),
 
         getPackageThemeData: builder.query({
-            query: () => "get-package-theme"
+            query: () => "get-package-theme-active"
         }),
 
     }),
 });
 
 export const { useGetSliderQuery, useGetBrandLogoQuery, useGetPackagesQuery, useGetTestimonialQuery, useGetItenriesQuery, useTestimonialReviewPostMutation, useGetItenariesDetailsQuery, useLazyGetCitiesListingQuery, useContactUsPostMutation, useAddPassengerDetailsMutation, useGetBranchesQuery, useLazyGetSubBranchesQuery, useGetFlightDetailsMutation, useGetBlogListingQuery, useGetSpecialFlightsQuery, useGetYoutubeVideosQuery, useGetTeamMemberDetailsQuery, useGetAboutUsContentQuery, useInqueriesPostMutation, useGetMealTypeQuery, useLazyGetMealByIdQuery, useLazyGetParticularFlightQuery, useGetFlightSeatQuery, useCreatePaymentIntentMutation, useSubmitFlightTicketDataMutation, useGetPackageThemeDataQuery } = myApi;
-

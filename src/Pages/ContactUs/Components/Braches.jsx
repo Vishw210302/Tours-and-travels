@@ -37,9 +37,12 @@ const Braches = () => {
     return (
         <div className='2xl:container 2xl:mx-auto p-5'>
             <div>
-                <div className='text-center'>
-                    <p className='text-[40px] font-semibold'>Our Branches</p>
-                </div>
+                {allBrach && allBrach?.length > 0 ?
+                    <div className='text-center'>
+                        <p className='text-[40px] font-semibold'>Our Branches</p>
+                    </div> :
+                    <></>
+                }
                 <div>
                     <div className='flex justify-center gap-6 text-4xl flex-wrap'>
                         {allBrach.map((city, index) => (

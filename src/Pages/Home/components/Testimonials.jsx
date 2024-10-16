@@ -1,12 +1,13 @@
+import StarIcon from '@mui/icons-material/Star';
 import React, { useEffect, useState } from 'react';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick-theme.css';
 import 'slick-carousel/slick/slick.css';
 import { useGetTestimonialQuery } from '../../../Api/Api';
-import StarIcon from '@mui/icons-material/Star';
 import testimonialImage from "../../../assets/image.jpg";
 
 const Testimonials = () => {
+
     const { isError, error, data, isLoading, isSuccess } = useGetTestimonialQuery();
     const [testimonialListing, setTestimonialListing] = useState([]);
 
@@ -20,9 +21,9 @@ const Testimonials = () => {
 
     const settings = {
         dots: false,
-        infinite: true,
+        infinite: testimonialListing?.length > 1,
         speed: 1500,
-        slidesToShow: 3,
+        slidesToShow: testimonialListing?.length < 5 ? testimonialListing?.length : 5,
         slidesToScroll: 1,
         autoplay: true,
         autoplaySpeed: 3000,
@@ -47,10 +48,15 @@ const Testimonials = () => {
 
     return (
         <>
-            <div className='p-3 bg-[#f7f7f7]'>
-                <div>
-                    <div className='flex flex-row justify-center items-center p-5 w-full font-bold text-[30px] text-red-500'>Our Testimonial</div>
-                </div>
+            <div className='bg-[#f7f7f7]'>
+                {testimonialListing && testimonialListing?.length > 0 ?
+                    <div>
+                        <div className='flex flex-row justify-center items-center p-5 w-full font-bold text-[30px] text-red-500'>
+                            Our Testimonial
+                        </div>
+                    </div> :
+                    <></>}
+
                 <Slider {...settings}>
                     {testimonialListing && testimonialListing.map((items, index) => {
                         return (

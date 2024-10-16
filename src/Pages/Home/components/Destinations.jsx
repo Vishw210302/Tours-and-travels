@@ -1,109 +1,119 @@
-import React, { useEffect, useState } from 'react';
-import Skeleton from 'react-loading-skeleton';
-import { useNavigate } from 'react-router-dom';
-import Slider from 'react-slick';
-import "slick-carousel/slick/slick-theme.css";
-import "slick-carousel/slick/slick.css";
-import { useGetPackagesQuery } from '../../../Api/Api';
-import '../../../assets/custom.css';
+import React, { useRef } from 'react';
+import 'swiper/css';
+import 'swiper/css/autoplay';
+import { Autoplay } from 'swiper/modules';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import image1 from "../../../assets/bg-img2.jpg";
+import image2 from "../../../assets/image.jpg";
+import image3 from "../../../assets/people-travels.jpg";
 
 const Destinations = () => {
 
-    const { isError, error, data, isLoading, isSuccess } = useGetPackagesQuery();
-    const [pkg, setPkg] = useState('');
-    const [err, setErr] = useState('');
-    const navigate = useNavigate();
-
-    const handleItenary = (id) => {
-        navigate(`itenary/${id}`)
-    }
-
-    useEffect(() => {
-        if (isSuccess) {
-            setPkg(data?.data);
-        } else if (isError) {
-            setErr(error?.error);
-        }
-
-    }, [error, data, isSuccess, isError]);
-
-    const imageUrl = `${import.meta.env.VITE_REACT_APP_IMAGE_URL}/packages-Image/`
-
-    const settings = {
-        dots: false,
-        infinite: true,
-        speed: 500,
-        slidesToShow: 3,
-        slidesToScroll: 1,
-        autoplay: true,
-        autoplaySpeed: 2000,
-        responsive: [
-            {
-                breakpoint: 1024,
-                settings: {
-                    slidesToShow: 2,
-                    slidesToScroll: 1,
-                    infinite: true,
-                    dots: true
-                }
-            },
-            {
-                breakpoint: 600,
-                settings: {
-                    slidesToShow: 1,
-                    slidesToScroll: 1
-                }
-            }
-        ]
-    };
+    const swiperRef = useRef(null);
+    const staticImages = [image1, image2, image3];
 
     return (
-        <div className='w-full py-10 h-auto bg-[url("https://ajaymodi.com/static/media/discouver-bg.6d953696ca0f26414fd6.jpg")] bg-cover bg-center'>
-            <div className='flex flex-row justify-center items-center p-10 w-full font-bold text-[30px] text-red-500'>Popular Destinations</div>
-            <div className='w-full flex flex-row justify-center py-5'>
-                <div className='w-[65%]'>
-                    {isLoading ? (
-                        <div className="w-full flex flex-row gap-10 justify-center">
-                            <Skeleton width={300} height={400} borderRadius={10} className="shadow-xl" />
-                            <Skeleton width={300} height={400} borderRadius={10} className="shadow-xl" />
-                            <Skeleton width={300} height={400} borderRadius={10} className="shadow-xl" />
-                        </div>
-                    ) : (
-                        <>
-                            {err ? (
-                                <div className="w-full flex flex-row gap-10 justify-center">
-                                    <Skeleton width={300} height={400} borderRadius={10} className="shadow-xl" />
-                                    <Skeleton width={300} height={400} borderRadius={10} className="shadow-xl" />
-                                    <Skeleton width={300} height={400} borderRadius={10} className="shadow-xl" />
+        <>
+            <div>
+                <div className='flex flex-row justify-center items-center p-10 w-full font-bold text-[30px] text-red-500'>Top International Packages</div>
+                <div className='2xl:container 2xl:mx-auto p-5'>
+                    <div className='grid grid-cols-2 gap-8 w-full'>
+
+                        <div className='grid grid-cols-2 gap-4'>
+                            <div className='card bg-white rounded-xl shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg my-2 h-fit'>
+                                <div className='w-[100%] h-[100%]'>
+                                    <img src={image1} alt='image' width={800} height={800} className='object-fill' />
                                 </div>
-                            ) : (
-                                <Slider {...settings} className="w-full flex flex-row justify-center">
-                                    {pkg && pkg.length > 0 ? (
-                                        pkg?.map((img, index) => (
-                                            <div key={index} onClick={() => handleItenary(img._id)} className='relative  !w-[300px] !h-[400px] overflow-hidden '>
-                                                <button className='border-none w-full h-full focus:outline-none'>
-                                                    <img src={`${imageUrl}${img.packageImage}`} alt={`destination-${index}`} className='rounded-lg shadow-lg w-full h-full' />
-                                                    <div className='rounded-b-lg tracking-wider text-white text-xl font-bold capitalize w-full bg-black/50 p-5 z-10 absolute bottom-0'>
-                                                        {img.packageName}
+                                <div className='p-3'>
+                                    <p className='text-black text-xl font-bold'>9 Ways to Become a Successful Travel Blogger</p>
+                                    <p className='text-gray-400 text-base text-justify'>9 Ways to Become a Successful Travel Blogger 9 Ways to Become a Successful Travel Blogger</p>
+                                </div>
+                                <div className='flex flex-row justify-between items-center p-2'>
+                                    <div className='flex flex-row items-center gap-2'>
+                                        <p className='text-xl font-bold text-gray-500'>Price:-</p>
+                                        <p className='text-red-400 font-semibold text-xl'>19000/-</p>
+                                    </div>
+                                    <p className='w-auto bg-red-400 hover:bg-red-500 text-white font-semibold text-sm p-2 rounded-lg cursor-pointer'>View More</p>
+                                </div>
+                            </div>
+                            <div className='card bg-white rounded-xl shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg my-2 h-fit'>
+                                <div className='w-[100%] h-[100%]'>
+                                    <img src={image1} alt='image' width={800} height={800} className='object-fill' />
+                                </div>
+                                <div className='p-3'>
+                                    <p className='text-black text-xl font-bold'>9 Ways to Become a Successful Travel Blogger</p>
+                                    <p className='text-gray-400 text-base text-justify'>9 Ways to Become a Successful Travel Blogger 9 Ways to Become a Successful Travel Blogger</p>
+                                </div>
+                                <div className='flex flex-row justify-between items-center p-2'>
+                                    <div className='flex flex-row items-center gap-2'>
+                                        <p className='text-xl font-bold text-gray-500'>Price:-</p>
+                                        <p className='text-red-400 font-semibold text-xl'>19000/-</p>
+                                    </div>
+                                    <p className='w-auto bg-red-400 hover:bg-red-500 text-white font-semibold text-sm p-2 rounded-lg cursor-pointer'>View More</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className='relative w-full h-[400px]'>
+                            <Swiper
+                                spaceBetween={10}
+                                slidesPerView={1}
+                                loop={true}
+                                modules={[Autoplay]}
+                                onSwiper={(swiper) => {
+                                    swiperRef.current = swiper;
+                                }}
+                            >
+                                {staticImages.map((image, index) => (
+                                    <SwiperSlide key={index}>
+                                        <div className='relative w-full h-[430px]'>
+                                            <img
+                                                src={image}
+                                                alt={`Slide ${index + 1}`}
+                                                className='object-cover w-full h-full'
+                                            />
+                                            <div className='absolute top-0 left-0 w-[40%] h-full bg-black bg-opacity-70'>
+                                                <div className='p-2'>
+                                                    <p className='text-white font-bold text-xl'>9 Ways to Become a Successful Travel Blogger</p>
+                                                    <p className='text-white font-medium text-sm mt-2'>
+                                                        9 Ways to Become a Successful Travel Blogger 9 Ways to Become a Successful Travel Blogger
+                                                    </p>
+                                                    <div className='flex flex-row gap-2 mt-2'>
+                                                        <p className='text-white font-bold'>Price :-</p>
+                                                        <p className='text-white'>19000 /-</p>
                                                     </div>
-                                                </button>
+                                                </div>
                                             </div>
-
-                                        ))
-                                    ) : (
-                                        <div className="flex justify-center items-center w-full h-full">
-                                            <p className="text-gray-500">No Packages available.</p>
                                         </div>
-                                    )}
-                                </Slider>
-                            )}
-                        </>
-                    )}
-
+                                    </SwiperSlide>
+                                ))}
+                            </Swiper>
+                            <div className='flex flex-row gap-3 absolute top-[97%] left-[3%]'>
+                                <div
+                                    className='transform -translate-y-1/2 border-2 text-xl text-white cursor-pointer z-10'
+                                    style={{ lineHeight: 0 }}
+                                    onClick={() => swiperRef.current.slidePrev()}
+                                >
+                                    <p className='text-3xl p-1'>
+                                        ←
+                                    </p>
+                                </div>
+                                <div
+                                    className='transform -translate-y-1/2 border-2 text-xl text-white cursor-pointer z-10'
+                                    style={{ lineHeight: 0 }}
+                                    onClick={() => swiperRef.current.slideNext()}
+                                >
+                                    <p className='text-3xl p-1'>
+                                        →
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
+            </div >
+        </>
     );
-}
+};
 
 export default Destinations;
