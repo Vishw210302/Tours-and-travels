@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import mainLogo from "../../assets/asgradLogo.png"
 
 const NavBar = () => {
+
   const pathname = window.location.pathname.replace('/', '');
   const [activeLink, setActiveLink] = useState(pathname);
   const [windowHeight, setWindowHeight] = useState(false);
@@ -48,11 +49,10 @@ const NavBar = () => {
           <div className='flex justify-start items-center cursor-pointer w-fit' onClick={() => {
             handleClickOnDashboard()
           }}>
-            {/* <img src="https://ld-wt73.template-help.com/wt_61270/images/logo-white.png" alt="Logo" /> */}
             <img src={mainLogo} alt="Logo" className='h-[78px]' />
           </div>
           <div className='col-span-2'>
-            <div className='grid grid-cols-6 gap-4 items-center h-full'>
+            <div className='grid grid-cols-7 gap-4 items-center h-full'>
 
               <button
                 className={`flex justify-center items-center h-full ${getActiveClass('')}`}
@@ -99,7 +99,14 @@ const NavBar = () => {
                 className={`flex justify-center items-center h-full ${getActiveClass('flights')}`}
                 onClick={() => handleLinkClick('flights')}
               >
-                <div className='font-semibold text-lg text-white'>Flights Details</div>
+                <div className='font-semibold text-lg text-white'>Flights Booking</div>
+              </button>
+
+              <button
+                className={`flex justify-center items-center h-full ${getActiveClass('hotels')}`}
+                onClick={() => handleLinkClick('hotels')}
+              >
+                <div className='font-semibold text-lg text-white'>Hotels Booking</div>
               </button>
 
               <button

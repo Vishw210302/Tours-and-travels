@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import CopyAllIcon from '@mui/icons-material/CopyAll';
 
-const PaymentSuccess = ({openThankYouPage}) => {
+const PaymentSuccess = ({ openThankYouPage }) => {
+
     const [countdown, setCountdown] = useState(5);
-    const [showContent, setShowContent] = useState(false); 
-    const [animationClass, setAnimationClass] = useState('translate-y-full opacity-0'); 
+    const [showContent, setShowContent] = useState(false);
+    const [animationClass, setAnimationClass] = useState('translate-y-full opacity-0');
 
     const formatDate = (date) => {
         const options = { month: 'short', day: '2-digit', year: 'numeric' };
@@ -31,11 +32,11 @@ const PaymentSuccess = ({openThankYouPage}) => {
     };
 
     useEffect(() => {
-       
+
         setTimeout(() => {
-            setAnimationClass('translate-y-0 opacity-100'); 
+            setAnimationClass('translate-y-0 opacity-100');
             setShowContent(true);
-        }, 1000); 
+        }, 1000);
 
         const timer = setInterval(() => {
             setCountdown(prev => {

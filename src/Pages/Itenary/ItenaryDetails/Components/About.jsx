@@ -1,26 +1,25 @@
-import React, { useEffect, useState } from 'react';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import ApartmentIcon from '@mui/icons-material/Apartment';
 import AvTimerIcon from '@mui/icons-material/AvTimer';
 import DirectionsBikeIcon from '@mui/icons-material/DirectionsBike';
-import DownhillSkiingIcon from '@mui/icons-material/DownhillSkiing';
 import InterpreterModeIcon from '@mui/icons-material/InterpreterMode';
 import LocalDiningIcon from '@mui/icons-material/LocalDining';
 import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
 import PaidIcon from '@mui/icons-material/Paid';
 import PersonIcon from '@mui/icons-material/Person';
 import WarningIcon from '@mui/icons-material/Warning';
+import React, { useEffect, useState } from 'react';
 
-// Helper function to format dates
 const formatDate = (dateString) => {
     const date = new Date(dateString);
     const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
-    const year = String(date.getFullYear()).slice(2); // Get the last two digits of the year
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = String(date.getFullYear()).slice(2);
     return `${day}/${month}/${year}`;
 };
 
 const ReadMoreText = ({ text }) => {
+
     const [isExpanded, setIsExpanded] = useState(false);
     const words = text?.split(' ');
     const shortText = words?.slice(0, 100).join(' ');

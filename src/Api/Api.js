@@ -22,6 +22,10 @@ export const myApi = createApi({
             query: () => "get-testimonial-active",
         }),
 
+        getTestimonialHotel: builder.query({
+            query: () => "get-testimonial-active-hotel",
+        }),
+
         getItenries: builder.query({
             query: (id) => `get-particular-itenary/${id}`,
         }),
@@ -39,6 +43,14 @@ export const myApi = createApi({
                 url: "contact-us-post",
                 method: "POST",
                 body: contactData,
+            }),
+        }),
+
+        contactUsHotelPost: builder.mutation({
+            query: (hotelContactUsData) => ({
+                url: "contact-us-post-hotel",
+                method: "POST",
+                body: hotelContactUsData,
             }),
         }),
 
@@ -91,6 +103,14 @@ export const myApi = createApi({
                 url: "add-testimonial-review",
                 method: "POST",
                 body: testimonialData,
+            }),
+        }),
+
+        testimonialHotelReviewPost: builder.mutation({
+            query: (testimonialHotelData) => ({
+                url: "post-hotel-testimonial-review",
+                method: "POST",
+                body: testimonialHotelData,
             }),
         }),
 
@@ -149,7 +169,11 @@ export const myApi = createApi({
             query: () => "get-package-theme-active"
         }),
 
+        getSocialMediaLinkListing: builder.query({
+            query: () => "get-social-media-link"
+        }),
+
     }),
 });
 
-export const { useGetSliderQuery, useGetBrandLogoQuery, useGetPackagesQuery, useGetTestimonialQuery, useGetItenriesQuery, useTestimonialReviewPostMutation, useGetItenariesDetailsQuery, useLazyGetCitiesListingQuery, useContactUsPostMutation, useAddPassengerDetailsMutation, useGetBranchesQuery, useLazyGetSubBranchesQuery, useGetFlightDetailsMutation, useGetBlogListingQuery, useGetSpecialFlightsQuery, useGetYoutubeVideosQuery, useGetTeamMemberDetailsQuery, useGetAboutUsContentQuery, useInqueriesPostMutation, useGetMealTypeQuery, useLazyGetMealByIdQuery, useLazyGetParticularFlightQuery, useGetFlightSeatQuery, useCreatePaymentIntentMutation, useSubmitFlightTicketDataMutation, useGetPackageThemeDataQuery } = myApi;
+export const { useGetSliderQuery, useGetBrandLogoQuery, useGetPackagesQuery, useGetTestimonialQuery, useGetTestimonialHotelQuery,useGetItenriesQuery, useTestimonialReviewPostMutation, useTestimonialHotelReviewPostMutation, useGetItenariesDetailsQuery, useLazyGetCitiesListingQuery, useContactUsPostMutation, useContactUsHotelPostMutation, useAddPassengerDetailsMutation, useGetBranchesQuery, useLazyGetSubBranchesQuery, useGetFlightDetailsMutation, useGetBlogListingQuery, useGetSpecialFlightsQuery, useGetYoutubeVideosQuery, useGetTeamMemberDetailsQuery, useGetAboutUsContentQuery, useInqueriesPostMutation, useGetMealTypeQuery, useLazyGetMealByIdQuery, useLazyGetParticularFlightQuery, useGetFlightSeatQuery, useCreatePaymentIntentMutation, useSubmitFlightTicketDataMutation, useGetPackageThemeDataQuery, useGetSocialMediaLinkListingQuery } = myApi;

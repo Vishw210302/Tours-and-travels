@@ -4,18 +4,61 @@ import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import XIcon from '@mui/icons-material/X';
 import YouTubeIcon from '@mui/icons-material/YouTube';
 import { Plane, Sun, Umbrella } from 'lucide-react';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { FaCcPaypal } from "react-icons/fa";
+import { FaCcDiscover } from "react-icons/fa6";
+import { RiVisaLine } from "react-icons/ri";
+import { useNavigate } from 'react-router-dom';
 import footerLogo from "../../assets/asgradLogo.png";
 import recentTours from "../../assets/image.jpg";
-import { RiVisaLine } from "react-icons/ri";
-import { FaCcDiscover } from "react-icons/fa6";
-import { FaCcPaypal } from "react-icons/fa";
+import { useGetSocialMediaLinkListingQuery } from '../../Api/Api';
 
 const Footer = () => {
 
+  const navigate = useNavigate();
+  const { isError, error, data, isLoading, isSuccess } = useGetSocialMediaLinkListingQuery();
+  const [socialMediaLinkListing, setSocialMediaLinkListing] = useState([]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      setSocialMediaLinkListing(data?.data);
+    } else if (isError) {
+      console.log("error", isError);
+    }
+  }, [error, data, isSuccess, isError]);
+
+
+  const handleNavigateAboutUs = () => {
+    navigate("aboutUs");
+  }
+
+  const handleNavigateContactUs = () => {
+    navigate("contact");
+  }
+
+  const handleNavigateBlogs = () => {
+    navigate("Blogs");
+  }
+
+  const handleNavigateInternationalPackages = () => {
+    navigate("International");
+  }
+
+  const handleNavigateDomesticPackages = () => {
+    navigate("Domestic");
+  }
+
+  const handleNavigateFlightBooking = () => {
+    navigate("flights");
+  }
+
+  const handleNavigateHotelBooking = () => {
+    navigate("hotels");
+  }
+
   return (
 
-    <footer className="relative bg-[#032040] text-white overflow-hidden">
+    <footer className="relative bg-[#1f2746] text-white overflow-hidden">
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute left-0 top-0 w-full h-full">
           <Plane className="absolute text-white/10 w-24 h-24 animate-plane-fly" style={{ top: '10%', left: '25%' }} />
@@ -34,16 +77,40 @@ const Footer = () => {
             <div className='text-justify text-sm font-medium mt-3' style={{ letterSpacing: '-0.4px' }}>
               <p>Welcome to Asgard Tours and Travels, your gateway to unforgettable adventures and immersive travel experiences. Explore with us and let your journey begin!</p>
             </div>
-            <div>
-              <div className='w-fit bg-[#15304d] rounded-lg p-3 mt-3'>
-                <p className='text-sm font-semibold'>Social Networks:</p>
-                <div className='text-gray-400 text-[25px] flex flex-row gap-2'>
-                  <FacebookIcon fontSize='medium' />
-                  <InstagramIcon fontSize='medium' />
-                  <LinkedInIcon fontSize='medium' />
-                  <YouTubeIcon fontSize='medium' />
-                  <XIcon fontSize='medium' />
-                </div>
+            <div className='w-fit bg-[#15304d] rounded-lg p-3 mt-3'>
+              <p className='text-sm font-semibold'>Social Networks:</p>
+              <div className='text-gray-400 text-[25px] flex flex-row gap-2'>
+                {socialMediaLinkListing && socialMediaLinkListing.map((item, index) => {
+                  return (
+                    <div key={index}>
+                      {item.socialMediaName === 'facebook' && (
+                        <a href={`https://${item.socialMediaLink}`} target="_blank" rel="noopener noreferrer">
+                          <FacebookIcon fontSize='medium' />
+                        </a>
+                      )}
+                      {item.socialMediaName === 'Instagram' && (
+                        <a href={`https://${item.socialMediaLink}`} target="_blank" rel="noopener noreferrer">
+                          <InstagramIcon fontSize='medium' />
+                        </a>
+                      )}
+                      {item.socialMediaName === 'linkedin' && (
+                        <a href={`https://${item.socialMediaLink}`} target="_blank" rel="noopener noreferrer">
+                          <LinkedInIcon fontSize='medium' />
+                        </a>
+                      )}
+                      {item.socialMediaName === 'youtube' && (
+                        <a href={`https://${item.socialMediaLink}`} target="_blank" rel="noopener noreferrer">
+                          <YouTubeIcon fontSize='medium' />
+                        </a>
+                      )}
+                      {item.socialMediaName === 'twitter' && (
+                        <a href={`https://${item.socialMediaLink}`} target="_blank" rel="noopener noreferrer">
+                          <XIcon fontSize='medium' />
+                        </a>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </div>
@@ -51,17 +118,23 @@ const Footer = () => {
           <div>
             <p className='text-base font-semibold border-b-2 border-red-500 w-fit'>Company</p>
             <div className='mt-2 space-y-2'>
-              <div>
+              <div onClick={() => {
+                handleNavigateAboutUs()
+              }}>
                 <p className='text-sm relative inline-block hover:text-red-500 hover:cursor-pointer after:content-[""] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-red-500 hover:after:w-full after:transition-all after:duration-300'>
                   About Us
                 </p>
               </div>
-              <div>
+              <div onClick={() => {
+                handleNavigateContactUs()
+              }}>
                 <p className='text-sm relative inline-block hover:text-red-500 hover:cursor-pointer after:content-[""] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-red-500 hover:after:w-full after:transition-all after:duration-300'>
                   Contact Us
                 </p>
               </div>
-              <div>
+              <div onClick={() => {
+                handleNavigateBlogs()
+              }}>
                 <p className='text-sm relative inline-block hover:text-red-500 hover:cursor-pointer after:content-[""] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-red-500 hover:after:w-full after:transition-all after:duration-300'>
                   Blogs
                 </p>
@@ -72,18 +145,24 @@ const Footer = () => {
           <div>
             <p className='text-base font-semibold border-b-2 border-red-500 w-fit'>Service</p>
             <div className='mt-2 space-y-2'>
-              <div>
-
+              <div onClick={() => {
+                handleNavigateInternationalPackages()
+              }}>
                 <p className='text-sm relative inline-block hover:text-red-500 hover:cursor-pointer after:content-[""] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-red-500 hover:after:w-full after:transition-all after:duration-300'>International Package</p>
               </div>
-              <div>
+              <div onClick={() => {
+                handleNavigateDomesticPackages()
+              }}>
                 <p className='text-sm relative inline-block hover:text-red-500 hover:cursor-pointer after:content-[""] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-red-500 hover:after:w-full after:transition-all after:duration-300'>Domestic Package</p>
               </div>
-              <div>
-
+              <div onClick={() => {
+                handleNavigateFlightBooking()
+              }}>
                 <p className='text-sm relative inline-block hover:text-red-500 hover:cursor-pointer after:content-[""] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-red-500 hover:after:w-full after:transition-all after:duration-300'>Flight Booking</p>
               </div>
-              <div>
+              <div onClick={() => {
+                handleNavigateHotelBooking()
+              }}>
                 <p className='text-sm relative inline-block hover:text-red-500 hover:cursor-pointer after:content-[""] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-red-500 hover:after:w-full after:transition-all after:duration-300'>Hotel Booking</p>
               </div>
               <div>

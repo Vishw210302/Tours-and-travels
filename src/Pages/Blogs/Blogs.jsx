@@ -7,6 +7,7 @@ const Blogs = () => {
     const { data, isLoading, isSuccess, isError, error } = useGetBlogListingQuery();
     const [blogListing, setBlogListing] = useState([]);
     const vlogBannerImage = `${import.meta.env.VITE_REACT_APP_IMAGE_URL}/blogs-image/`;
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (isSuccess) {
@@ -15,8 +16,6 @@ const Blogs = () => {
             console.log("isLocationError", isError);
         }
     }, [error, data, isSuccess, isError]);
-
-    const navigate = useNavigate();
 
     const truncateText = (text, wordLimit) => {
         return text.split(' ').slice(0, wordLimit).join(' ') + '...';

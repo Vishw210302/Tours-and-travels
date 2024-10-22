@@ -17,7 +17,7 @@ const Airlinesname = () => {
   useEffect(() => {
     if (isSuccess) {
       setErr('')
-      
+
       setBrandData(data?.data);
     } else if (isError) {
       setErr(error?.message || 'An error occurred');
@@ -52,7 +52,7 @@ const Airlinesname = () => {
           <>
             {err ? (
               <div className='flex flex-row gap-16 justify-between'>
-               
+
                 {skeletonItems}
               </div>
             ) : (

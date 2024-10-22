@@ -47,7 +47,7 @@ const DomesticPackages = () => {
                         <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10'>
                             {domesticPackagesListing.map((pkg, index) => (
                                 <div key={index + "key"} className='relative group bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300'>
-                                    <img src={`${imageUrl}${pkg.packageImage}`} alt={pkg.packageName} className='w-full h-64 object-cover transform group-hover:scale-105 transition-transform duration-300' />
+                                    <img src={`${imageUrl}${pkg.packageImage}`} alt={pkg.packageName} className='w-full h-64  transform group-hover:scale-105 transition-transform duration-300' />
                                     <div className='absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300'></div>
                                     <div className='absolute bottom-0 p-3 bg-opacity-80 bg-black w-full text-white'>
                                         <div className='flex justify-between items-center'>

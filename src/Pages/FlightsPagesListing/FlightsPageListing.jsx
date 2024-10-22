@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useGetFlightDetailsMutation, useGetSpecialFlightsQuery, useLazyGetCitiesListingQuery } from '../../Api/Api';
+import { useFlightTicketsDetailsContext } from '../../Context/FlightTicketsDetailsContext';
 import { usePassenger } from '../../Context/PassengerCountContext';
 import Airlinesname from '../Home/components/Airlinesname';
 import TopSearchFlights from './TopSearchFlights';
-import { useFlightTicketsDetailsContext } from '../../Context/FlightTicketsDetailsContext';
 
 const FlightsPageListing = () => {
 
@@ -115,11 +115,6 @@ const FlightsPageListing = () => {
         setDeparturedDate(date);
     };
 
-    function convertDateFormat(dateString) {
-        const [year, month, day] = dateString.split('-');
-        return `${month}/${day}/${year}`;
-    }
-
     const handleAdultValue = (event) => {
         const data = event.target.value
         setAdlutValue(data);
@@ -142,19 +137,6 @@ const FlightsPageListing = () => {
     const handleSearchFlight = async (e) => {
         e.preventDefault();
         try {
-            const formattedDate = convertDateFormat(departuredDate);
-
-            // const payload = {
-            //     from: searchValueFrom,
-            //     to: searchValueTo,
-            //     flightClass: selectedClass,
-            //     departure_Date: formattedDate,
-            //     adlut: adlutValue,
-            //     children: childrenValue,
-            //     infant: infantValue,
-            //     oneWay: directChecked
-            // }
-
             const payload = {
                 from: 'Ahmedabad',
                 to: 'Patna',
@@ -220,7 +202,12 @@ const FlightsPageListing = () => {
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 <div className="mb-4 relative">
                                     <label className="text-white text-sm flex gap-3 font-bold mb-2" htmlFor="fromCity">
-                                        From {selectedCityFrom ? (<p className='text-red-500 text-[12.5px]'>Please select another city</p>) : (<></>)}
+                                        From
+                                        {selectedCityFrom ? (
+                                            <p className='text-red-500 text-[12.5px]'>Please select another city</p>
+                                        ) :
+                                            <></>
+                                        }
                                     </label>
                                     <input
                                         type="text"
@@ -248,7 +235,12 @@ const FlightsPageListing = () => {
 
                                 <div className="mb-4 relative">
                                     <label className="text-white text-sm flex gap-3 font-bold mb-2" htmlFor="toCity">
-                                        To {selectedCityTo ? (<p className='text-red-500 text-[12.5px]'>Please select another city</p>) : (<></>)}
+                                        To
+                                        {selectedCityTo ?
+                                            <p className='text-red-500 text-[12.5px]'>Please select another city</p>
+                                            :
+                                            <></>
+                                        }
                                     </label>
                                     <input
                                         type="text"

@@ -1,12 +1,25 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import YouTubeIcon from '@mui/icons-material/YouTube';
 import XIcon from '@mui/icons-material/X';
+import { useGetSocialMediaLinkListingQuery } from '../../../Api/Api';
 
 const Details = () => {
+
+    const { isError, error, data, isLoading, isSuccess } = useGetSocialMediaLinkListingQuery();
+    const [socialMediaLinkListing, setSocialMediaLinkListing] = useState([]);
+
+    useEffect(() => {
+        if (isSuccess) {
+            setSocialMediaLinkListing(data?.data);
+        } else if (isError) {
+            console.log("error", isError);
+        }
+    }, [error, data, isSuccess, isError]);
+
     return (
         <div className='card bg-white rounded-xl shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg p-10 my-2 w-[95%] h-fit'>
             <p className='text-red-400 text-[18px] font-bold'>
@@ -47,21 +60,38 @@ const Details = () => {
                 </p>
                 <div className='text-gray-400 text-[25px]'>
                     <div className='flex flex-row'>
-                        <div className='p-1'>
-                            <FacebookIcon fontSize='large' className='hover:text-blue-500' />
-                        </div>
-                        <div className='p-1'>
-                            <InstagramIcon fontSize='large' className='hover:text-pink-500' />
-                        </div>
-                        <div className='p-1'>
-                            <LinkedInIcon fontSize='large' className='hover:text-blue-700' />
-                        </div>
-                        <div className='p-1'>
-                            <YouTubeIcon fontSize='large' className='hover:text-red-500' />
-                        </div>
-                        <div className='p-1'>
-                            <XIcon fontSize='large' className='hover:text-blue-400' />
-                        </div>
+                        {socialMediaLinkListing && socialMediaLinkListing.map((item, index) => {
+                            console.log("item", item);
+                            return (
+                                <div key={index} className='p-1'>
+                                    {item.socialMediaName === 'facebook' && (
+                                        <a href={`https://${item.socialMediaLink}`} target="_blank" rel="noopener noreferrer">
+                                            <FacebookIcon fontSize='large' className='hover:text-blue-500' />
+                                        </a>
+                                    )}
+                                    {item.socialMediaName === 'Instagram' && (
+                                        <a href={`https://${item.socialMediaLink}`} target="_blank" rel="noopener noreferrer">
+                                            <InstagramIcon fontSize='large' className='hover:text-pink-500' />
+                                        </a>
+                                    )}
+                                    {item.socialMediaName === 'linkedin' && (
+                                        <a href={`https://${item.socialMediaLink}`} target="_blank" rel="noopener noreferrer">
+                                            <LinkedInIcon fontSize='large' className='hover:text-blue-700' />
+                                        </a>
+                                    )}
+                                    {item.socialMediaName === 'youtube' && (
+                                        <a href={`https://${item.socialMediaLink}`} target="_blank" rel="noopener noreferrer">
+                                            <YouTubeIcon fontSize='large' className='hover:text-red-500' />
+                                        </a>
+                                    )}
+                                    {item.socialMediaName === 'twitter' && (
+                                        <a href={`https://${item.socialMediaLink}`} target="_blank" rel="noopener noreferrer">
+                                            <XIcon fontSize='large' className='hover:text-blue-400' />
+                                        </a>
+                                    )}
+                                </div>
+                            );
+                        })}
                     </div>
                 </div>
             </div>

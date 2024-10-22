@@ -116,11 +116,15 @@
   transform: scale(1.05);
 }
 
-.swiperItem {
-  width: fit-content !important;
-  gap: 5px !important;
-}
-
 .sliderTheme {
   width: auto;
+}
+
+.swiperItem {
+  width: auto !important;
+  margin-right: 5px !important;
+}
+
+.swiper-wrapper {
+  display: flex !important;
 }

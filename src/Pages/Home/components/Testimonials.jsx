@@ -55,13 +55,14 @@ const Testimonials = () => {
                             Our Testimonial
                         </div>
                     </div> :
-                    <></>}
+                    <></>
+                }
 
                 <Slider {...settings}>
                     {testimonialListing && testimonialListing.map((items, index) => {
                         return (
-                            <div className='w-[100%]' key={index}>
-                                <div className='card mt-10 bg-white shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg p-1 my-2 relative  w-[480px] h-[150px] rounded-xl'>
+                            <div key={index}>
+                                <div className='card mt-10 bg-white shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg p-1 my-2 relative w-[400px] h-[140px] rounded-xl'>
                                     <div className='absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-full overflow-hidden w-[70px] h-[70px]'>
                                         <img
                                             src={testimonialImage}
