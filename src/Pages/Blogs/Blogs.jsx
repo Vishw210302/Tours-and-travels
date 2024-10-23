@@ -4,7 +4,8 @@ import { useGetBlogListingQuery } from '../../Api/Api';
 import NoDataFound from '../NoDataFound';
 
 const Blogs = () => {
-    const { data, isLoading, isSuccess, isError, error } = useGetBlogListingQuery();
+
+    const { data, isSuccess, isError, error } = useGetBlogListingQuery();
     const [blogListing, setBlogListing] = useState([]);
     const vlogBannerImage = `${import.meta.env.VITE_REACT_APP_IMAGE_URL}/blogs-image/`;
     const navigate = useNavigate();
@@ -13,7 +14,7 @@ const Blogs = () => {
         if (isSuccess) {
             setBlogListing(data?.data);
         } else if (isError) {
-            console.log("isLocationError", isError);
+            console.log("isError", isError);
         }
     }, [error, data, isSuccess, isError]);
 
@@ -44,6 +45,7 @@ const Blogs = () => {
             </div>
             {blogListing && blogListing?.length > 0 ?
                 blogListing && blogListing.map((items, index) => {
+
                     return (
                         <div key={index + "key"} className='2xl:container 2xl:mx-auto px-5 py-3'>
                             <div className='grid grid-cols-3 gap-4 my-5'>
@@ -85,6 +87,7 @@ const Blogs = () => {
                             </div>
                         </div>
                     );
+
                 })
                 :
                 <NoDataFound message="No blogs Available" />

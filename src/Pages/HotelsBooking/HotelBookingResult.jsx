@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import FirstStepsBookingHotel from './AllStepsBookingHotel/FirstStepsBookingHotel';
+import FourthStepsBookingHotel from './AllStepsBookingHotel/FourthStepsBookingHotel';
 import SecondStepsBookingHotel from './AllStepsBookingHotel/SecondStepsBookingHotel';
 import ThirdStepsBookingHotel from './AllStepsBookingHotel/ThirdStepsBookingHotel';
-import FourthStepsBookingHotel from './AllStepsBookingHotel/FourthStepsBookingHotel';
 
 const steps = [
     { id: 1, label: 'Dates' },
@@ -14,6 +14,8 @@ const steps = [
 const HotelBookingResult = () => {
 
     const [currentStep, setCurrentStep] = useState(1);
+    const [isHotelSelected, setIsHotelSelected] = useState(false);
+    const [isHotelPriceSelect, setHotelPriceSelect] = useState(false);
 
     const handleNext = () => {
         if (currentStep < steps.length) {
@@ -58,15 +60,23 @@ const HotelBookingResult = () => {
                                         <span>{step.label}</span>
                                     </span>
                                 </li>
-                            )
+                            );
                         })}
                     </ol>
 
                     <div className="py-6">
-                        {currentStep === 1 && <FirstStepsBookingHotel />}
-                        {currentStep === 2 && <SecondStepsBookingHotel />}
-                        {currentStep === 3 && <ThirdStepsBookingHotel />}
-                        {currentStep === 4 && <FourthStepsBookingHotel />}
+                        {currentStep === 1 &&
+                            <FirstStepsBookingHotel setIsHotelSelected={setIsHotelSelected} />
+                        }
+                        {currentStep === 2 &&
+                            <SecondStepsBookingHotel setHotelPriceSelect={setHotelPriceSelect} />
+                        }
+                        {currentStep === 3 &&
+                            <ThirdStepsBookingHotel />
+                        }
+                        {currentStep === 4 &&
+                            <FourthStepsBookingHotel />
+                        }
                     </div>
 
                     <div className="flex justify-between mt-4">
@@ -81,11 +91,18 @@ const HotelBookingResult = () => {
                         {currentStep < steps.length && (
                             <button
                                 onClick={handleNext}
-                                className={`bg-red-500 text-white px-4 py-2 rounded-lg`}
+                                disabled={
+                                    (currentStep === 1 && !isHotelSelected) ||
+                                    (currentStep === 2 && !isHotelPriceSelect)
+                                }
+                                className={`bg-red-500 text-white px-4 py-2 rounded-lg 
+                                ${(currentStep === 1 && !isHotelSelected) ||
+                                        (currentStep === 2 && !isHotelPriceSelect) ? 'opacity-50 cursor-not-allowed' : ''}`}
                             >
                                 Next
                             </button>
                         )}
+
                     </div>
 
                 </div>

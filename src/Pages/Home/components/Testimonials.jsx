@@ -1,14 +1,13 @@
-import StarIcon from '@mui/icons-material/Star';
 import React, { useEffect, useState } from 'react';
+import { FaStar } from 'react-icons/fa';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick-theme.css';
 import 'slick-carousel/slick/slick.css';
 import { useGetTestimonialQuery } from '../../../Api/Api';
-import testimonialImage from "../../../assets/image.jpg";
 
 const Testimonials = () => {
 
-    const { isError, error, data, isLoading, isSuccess } = useGetTestimonialQuery();
+    const { isError, error, data, isSuccess } = useGetTestimonialQuery();
     const [testimonialListing, setTestimonialListing] = useState([]);
 
     useEffect(() => {
@@ -23,7 +22,7 @@ const Testimonials = () => {
         dots: false,
         infinite: testimonialListing?.length > 1,
         speed: 1500,
-        slidesToShow: testimonialListing?.length < 5 ? testimonialListing?.length : 5,
+        slidesToShow: testimonialListing?.length < 2 ? testimonialListing?.length : 3,
         slidesToScroll: 1,
         autoplay: true,
         autoplaySpeed: 3000,
@@ -59,35 +58,31 @@ const Testimonials = () => {
                 }
 
                 <Slider {...settings}>
-                    {testimonialListing && testimonialListing.map((items, index) => {
+                    {testimonialListing && testimonialListing.map((testimonialList, index) => {
                         return (
-                            <div key={index}>
-                                <div className='card mt-10 bg-white shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg p-1 my-2 relative w-[400px] h-[140px] rounded-xl'>
-                                    <div className='absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-full overflow-hidden w-[70px] h-[70px]'>
-                                        <img
-                                            src={testimonialImage}
-                                            alt='review_image'
-                                            className='w-full h-full object-cover'
-                                        />
-                                    </div>
-                                    <div className='mt-[40px]'>
+                            <div key={index} className='p-4'>
+                                <div className='bg-gradient-to-r from-red-300 to-blue-300 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 p-3 w-[500px] mx-auto relative overflow-hidden'>
+                                    <div className='relative z-10'>
                                         <div className='text-center'>
-                                            <span className='text-lg'>{items?.reviewPersonName}</span>
-                                        </div>
-                                        <div className='text-center'>
-                                            {Array.from({ length: Number(items?.numberOfReview) }).map((_, i) => (
-                                                <StarIcon key={i} sx={{ color: '#f9d41e' }} />
-                                            ))}
-                                        </div>
-                                        <div className='text-center pb-2'>
-                                            <span>{items?.reviewDescription}</span>
+                                            <p className='font-bold text-lg text-gray-900 mb-2'>{testimonialList?.reviewPersonName}</p>
+                                            <p className='text-gray-700 font-medium text-sm leading-relaxed'>
+                                                {testimonialList?.reviewDescription}
+                                            </p>
+                                            <div className="flex justify-center mb-4">
+                                                {[...Array(parseInt(testimonialList?.numberOfReview))].map((_, i) => (
+                                                    <FaStar key={i} className="text-yellow-400 mx-1 animate-pulse text-2xl" />
+                                                ))}
+                                            </div>
                                         </div>
                                     </div>
+
+                                    <div className="absolute inset-0 bg-gradient-to-br from-purple-400 to-indigo-500 opacity-10 transition duration-500 hover:scale-110 rounded-full blur-3xl"></div>
                                 </div>
                             </div>
                         )
                     })}
                 </Slider>
+
             </div>
         </>
     );

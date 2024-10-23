@@ -123,10 +123,14 @@ const FourthStepsBookingHotel = () => {
                     <p className='text-2xl font-semibold text-gray-500 mb-4'>Billing Information</p>
 
                     <form onSubmit={handleSubmit}>
+
                         <div className='flex flex-row gap-2 items-center'>
 
                             <div className="mb-4 w-[100%]">
-                                <label className="block text-base font-medium text-gray-500">First Name</label>
+                                <div className='flex flex-row gap-1'>
+                                    <label className="block text-base font-medium text-gray-500 h-fit">First Name :-</label>
+                                    <span className='text-red-500 text-2xl h-fit font-semibold'>*</span>
+                                </div>
                                 <input
                                     type="text"
                                     name="firstName"
@@ -135,11 +139,14 @@ const FourthStepsBookingHotel = () => {
                                     className={`w-full mt-1 p-2 border border-gray-300 rounded-md ${errors.firstName ? 'border-red-500' : ''}`}
                                     placeholder="Enter your first name"
                                 />
-                                {errors.firstName && <p className="text-red-500 text-sm">{errors.firstName}</p>}
+                                {errors.firstName && <p className="text-red-500 text-md font-medium">{errors.firstName}</p>}
                             </div>
 
                             <div className="mb-4 w-[100%]">
-                                <label className="block text-base font-medium text-gray-700">Last Name</label>
+                                <div className='flex flex-row gap-1'>
+                                    <label className="block text-base font-medium text-gray-700">Last Name</label>
+                                    <span className='text-red-500 text-2xl h-fit font-semibold'>*</span>
+                                </div>
                                 <input
                                     type="text"
                                     name="lastName"
@@ -148,7 +155,7 @@ const FourthStepsBookingHotel = () => {
                                     className={`w-full mt-1 p-2 border border-gray-300 rounded-md ${errors.lastName ? 'border-red-500' : ''}`}
                                     placeholder="Enter your last name"
                                 />
-                                {errors.lastName && <p className="text-red-500 text-sm">{errors.lastName}</p>}
+                                {errors.lastName && <p className="text-red-500 text-md font-medium">{errors.lastName}</p>}
                             </div>
 
                         </div>
@@ -156,7 +163,10 @@ const FourthStepsBookingHotel = () => {
                         <div className='flex flex-row gap-2 items-center'>
 
                             <div className="mb-4 w-[100%]">
-                                <label className="block text-base font-medium text-gray-700">Email Address</label>
+                                <div className='flex flex-row gap-1'>
+                                    <label className="block text-base font-medium text-gray-700">Email Address</label>
+                                    <span className='text-red-500 text-2xl h-fit font-semibold'>*</span>
+                                </div>
                                 <input
                                     type="email"
                                     name="email"
@@ -165,11 +175,14 @@ const FourthStepsBookingHotel = () => {
                                     className={`w-full mt-1 p-2 border border-gray-300 rounded-md ${errors.email ? 'border-red-500' : ''}`}
                                     placeholder="Enter your email"
                                 />
-                                {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
+                                {errors.email && <p className="text-red-500 text-md font-medium">{errors.email}</p>}
                             </div>
 
                             <div className="mb-4 w-[100%]">
-                                <label className="block text-base font-medium text-gray-700">Phone Number</label>
+                                <div className='flex flex-row gap-1'>
+                                    <label className="block text-base font-medium text-gray-700">Phone Number</label>
+                                    <span className='text-red-500 text-2xl h-fit font-semibold'>*</span>
+                                </div>
                                 <input
                                     type="text"
                                     name="phone"
@@ -178,7 +191,7 @@ const FourthStepsBookingHotel = () => {
                                     className={`w-full mt-1 p-2 border border-gray-300 rounded-md ${errors.phone ? 'border-red-500' : ''}`}
                                     placeholder="Enter your phone number"
                                 />
-                                {errors.phone && <p className="text-red-500 text-sm">{errors.phone}</p>}
+                                {errors.phone && <p className="text-red-500 text-md font-medium">{errors.phone}</p>}
                             </div>
 
                         </div>
@@ -198,12 +211,16 @@ const FourthStepsBookingHotel = () => {
                             </div>
 
                             <div className="mb-4 w-[100%]">
-                                <label className="block text-base font-medium text-gray-700">
-                                    Upload Documents (ID Proof)
-                                </label>
-                                <p className="text-sm text-gray-500 mb-2">
-                                    Please upload a valid ID proof for security purposes. Accepted formats: PDF, JPG, PNG.
-                                </p>
+                                <div className='flex flex-row gap-1'>
+                                    <label className="block text-base font-medium text-gray-700">
+                                        Upload Documents (ID Proof)
+                                        <span className='text-red-500 text-2xl h-fit font-semibold'>*</span>
+                                        <p className="text-sm text-gray-500 mb-2">
+                                            Please upload a valid ID proof for security purposes. Accepted formats: PDF, JPG, PNG.
+                                        </p>
+                                    </label>
+                                </div>
+
                                 <input
                                     type="file"
                                     name="idProof"
@@ -211,7 +228,7 @@ const FourthStepsBookingHotel = () => {
                                     className={`w-full mt-1 p-2 border border-gray-300 rounded-md ${errors.idProof ? 'border-red-500' : ''}`}
                                     accept=".pdf,.jpg,.jpeg,.png"
                                 />
-                                {errors.idProof && <p className="text-red-500 text-sm">{errors.idProof}</p>}
+                                {errors.idProof && <p className="text-red-500 text-md font-medium">{errors.idProof}</p>}
                             </div>
 
                         </div>
@@ -224,6 +241,7 @@ const FourthStepsBookingHotel = () => {
                                 Confirm Booking (₹ 5000)
                             </button>
                         </div>
+
                     </form>
                 </div>
             </div>

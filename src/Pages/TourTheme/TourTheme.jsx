@@ -32,7 +32,7 @@ const TourTheme = () => {
         slidesToScroll: 1,
         autoplay: true,
         autoplaySpeed: 3000,
-        arrows: false, // Added this to remove navigation buttons
+        arrows: false,
         responsive: [
             {
                 breakpoint: 1024,
@@ -72,7 +72,7 @@ const TourTheme = () => {
                         <div className='my-3'>
                             <Slider {...settings}>
                                 {packageListing.map((theme, index) => (
-                                    <div className='w-fit' key={index + "1"}>
+                                    <div className='w-fit cursor-pointer' key={index + "1"}>
                                         <div
                                             onClick={() => handlePopularThemeOpen()}>
                                             <div className='w-[200px] h-[200px]'>

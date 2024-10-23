@@ -20,9 +20,9 @@ const HotelTestimonial = () => {
 
     const settings = {
         dots: false,
-        infinite: true,
+        infinite: testimonialHotelListing?.length > 1,
         speed: 500,
-        slidesToShow: 3,
+        slidesToShow: testimonialHotelListing?.length < 5 ? testimonialHotelListing?.length : 3,
         slidesToScroll: 1,
         autoplay: false,
         autoplaySpeed: 3000,
@@ -47,36 +47,32 @@ const HotelTestimonial = () => {
     return (
 
         <>
-            <div className='text-center mb-6'>
-                <div className='flex flex-1 justify-center p-4'>
-                    <div className='border bg-red-400 p-2 rounded-md'>
-                        <span className='text-white font-bold text-xl'>Team Members</span>
+            {testimonialHotelListing && testimonialHotelListing.length > 0 ?
+                <div>
+                    <div className='flex flex-row justify-center p-5'>
+                        <p className='text-4xl font-extrabold text-gray-800 p-0'>Our Clients' Feedback</p>
                     </div>
                 </div>
-            </div>
-
-            <div className='text-center mb-8'>
-                <p className='text-4xl font-extrabold text-gray-800 mb-4'>Our Clients' Feedback</p>
-            </div>
-
+                :
+                <></>
+            }
             <Slider {...settings}>
 
                 {testimonialHotelListing && testimonialHotelListing.map((testimonialList, index) => {
-
                     return (
                         <div key={index} className='p-4'>
-                            <div className='bg-gradient-to-r from-red-300 to-blue-300 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 p-3 w-[500px] mx-auto relative overflow-hidden'>
+                            <div className='bg-gradient-to-r from-red-300 to-blue-300 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 p-3 w-[500px] h-[150px] mx-auto relative overflow-hidden'>
                                 <div className='relative z-10'>
                                     <div className='text-center'>
-                                        <p className='font-bold text-lg text-gray-900 mb-2'>{testimonialList?.reviewPersonName}</p>
+                                        <p className='font-bold text-xl text-gray-900 mb-2'>{testimonialList?.reviewPersonName}</p>
+                                        <p className='text-gray-700 font-medium text-lg leading-relaxed'>
+                                            {testimonialList?.reviewDescription}
+                                        </p>
                                         <div className="flex justify-center mb-4">
                                             {[...Array(parseInt(testimonialList?.numberOfReview))].map((_, i) => (
                                                 <FaStar key={i} className="text-yellow-400 mx-1 animate-pulse text-2xl" />
                                             ))}
                                         </div>
-                                        <p className='text-gray-700 font-medium text-sm leading-relaxed'>
-                                            {testimonialList?.reviewDescription}
-                                        </p>
                                     </div>
                                 </div>
 
@@ -84,7 +80,6 @@ const HotelTestimonial = () => {
                             </div>
                         </div>
                     )
-
                 })}
 
             </Slider>

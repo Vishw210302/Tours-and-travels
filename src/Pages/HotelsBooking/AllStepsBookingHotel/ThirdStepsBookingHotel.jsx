@@ -1,10 +1,46 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { CgCalendarDates } from "react-icons/cg";
 import { FaPerson } from "react-icons/fa6";
 import { MdOutlineLogin } from "react-icons/md";
+import { useGetHotelCouponCodeDataQuery } from '../../../Api/Api';
 import HotelTestimonialForm from '../HotelTestimonialForm';
 
 const ThirdStepsBookingHotel = () => {
+
+    const { isError, error, data, isSuccess } = useGetHotelCouponCodeDataQuery();
+    const [hotelCouponCodeListing, setHotelCouponCodeListing] = useState([]);
+    const [showSuggestions, setShowSuggestions] = useState(false);
+    const [filteredCoupons, setFilteredCoupons] = useState(hotelCouponCodeListing);
+
+    useEffect(() => {
+        if (isSuccess) {
+            setHotelCouponCodeListing(data?.data);
+        } else if (isError) {
+            console.log("error", isError);
+        }
+    }, [error, data, isSuccess, isError]);
+
+    const handleInputFocus = () => {
+        setFilteredCoupons(hotelCouponCodeListing);
+        setShowSuggestions(true);
+    };
+
+    const handleInputBlur = () => {
+        setTimeout(() => setShowSuggestions(false), 150);
+    };
+
+    const handleInputChange = (event) => {
+        const value = event.target.value.toLowerCase();
+        const filtered = hotelCouponCodeListing.filter(coupon =>
+            coupon.promoCode.toLowerCase().includes(value)
+        );
+        setFilteredCoupons(filtered);
+    };
+
+    const handleCouponClick = (couponCode) => {
+        document.getElementById('promoCode').value = couponCode;
+        setShowSuggestions(false);
+    };
 
     return (
         <>
@@ -50,6 +86,7 @@ const ThirdStepsBookingHotel = () => {
                     </div>
                 </div>
             </div>
+
             <div className='card bg-white shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg p-5 my-2 h-fit rounded-md'>
                 <div className='grid grid-cols-6 gap-2'>
                     <div>
@@ -78,48 +115,46 @@ const ThirdStepsBookingHotel = () => {
                     </div>
                 </div>
             </div>
-            <div className='card bg-white shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg p-5 my-2 h-fit rounded-md'>
-                <div className='grid grid-cols-6 gap-2'>
-                    <div>
-                        <p className='text-lg text-red-500 font-semibold'>Total</p>
-                    </div>
-                    <div></div>
-                    <div></div>
-                    <div>
-                        <p className='text-lg text-red-500 font-semibold'>Net Price</p>
-                        <p className='text-base text-gray-400 font-medium'>₹ 100</p>
-                    </div>
-                    <div>
-                        <p className='text-lg text-red-500 font-semibold'>Tax</p>
-                        <p className='text-base text-gray-400 font-medium'>₹ 15</p>
-                    </div>
-                    <div>
-                        <p className='text-lg text-red-500 font-semibold'>Total Price</p>
-                        <p className='text-base text-gray-400 font-medium'>₹ 115</p>
-                    </div>
-                </div>
-            </div>
-            <div className='flex flex-row gap-2'>
-                <div className='card bg-white shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg p-5 my-2 h-fit rounded-md w-[100%]'>
-                    <p className='text-gray-400 font-semibold text-lg'>Enter here your coupon code</p>
-                    <div className="mt-4">
-                        <div className="mt-1 flex rounded-md shadow-sm">
+
+            <div className='flex flex-row gap-2 w-full'>
+                <div className='card bg-white shadow-lg transition-all duration-300 hover:shadow-xl p-5 my-2 rounded-md w-full h-fit'>
+                    <p className='text-gray-400 font-semibold text-lg w-fit'>Enter your coupon code</p>
+
+                    <div className="mt-4 relative">
+                        <div className="flex rounded-md shadow-sm">
                             <input
                                 type="text"
                                 id="promoCode"
-                                className="flex-1 block w-full rounded-l-md sm:text-sm border border-gray-300 p-2"
+                                className="flex-1 block w-full rounded-l-md text-base font-medium border border-gray-300 px-2"
                                 placeholder="Enter coupon code"
+                                onFocus={handleInputFocus}
+                                onBlur={handleInputBlur}
+                                onChange={handleInputChange}
                             />
                             <button
                                 type="button"
-                                className="bg-blue-600 text-white rounded-r-md px-4 py-2 hover:bg-blue-700 transition-colors"
+                                className="bg-blue-600 text-white rounded-r-md hover:bg-blue-700 transition-all h-fit px-[23px] py-[7px]"
                             >
                                 Apply
                             </button>
                         </div>
+                        {showSuggestions && filteredCoupons.length > 0 && (
+                            <div className="absolute z-20 w-full bg-white border border-gray-300 rounded-md shadow-lg mt-2 max-h-60 overflow-auto">
+                                {filteredCoupons.map((coupon, index) => (
+                                    <div
+                                        key={index}
+                                        className="p-3 hover:bg-blue-100 cursor-pointer transition-all"
+                                        onClick={() => handleCouponClick(coupon.promoCode)}
+                                    >
+                                        <p className="text-gray-800 font-semibold">{coupon.promoCode}</p>
+                                        <p className="text-sm text-gray-500">Discount: {coupon.discountAmount} ₹</p>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </div>
                 </div>
-                <div className='w-[100%]'>
+                <div className='w-full'>
                     <HotelTestimonialForm />
                 </div>
             </div>
