@@ -109,19 +109,17 @@ const FlightBook = () => {
                             <div className="space-y-6">
                                 <div>
                                     <h3 className="text-lg font-medium mb-2">Selected Departure Flight</h3>
-                                    <p className="font-bold">
+                                    <p className="font-bold text-red-400">
                                         {flight?.departure ? (
                                             `${flight?.departure?.city} (${flight?.departure?.airport}) → ${flight?.arrival?.city} (${flight?.arrival?.airport})`
                                         ) : (
                                             `${flight?.flightsFrom} (${flight?.fromAirportCode}) → ${flight?.flightsTo} (${flight?.toAirportCode})`
                                         )}
                                     </p>
-                                    <p className="text-sm text-gray-600 mt-2">
+                                    <p className="text-md text-gray-700 font-medium mt-2">
                                         {flight?.departure ? (
                                             <>
-                                                {new Date(flight?.departure?.time).toLocaleDateString()} |
-                                                {new Date(flight?.departure?.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} -
-                                                {new Date(flight?.arrival?.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                                {new Date(flight?.departure?.time).toLocaleDateString()} | {new Date(flight?.departure?.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - {new Date(flight?.arrival?.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                             </>
                                         ) :
                                             <>
@@ -140,7 +138,7 @@ const FlightBook = () => {
                                             <div className='mt-2'>
                                                 <p className="font-bold">
                                                     {flight?.departure ?
-                                                        (`${flight?.departure?.city}(${flight?.departure?.airport})`)
+                                                        (`${flight?.departure?.city} (${flight?.departure?.airport})`)
                                                         :
                                                         (`${flight?.flightsFrom} (${flight?.fromAirportCode})`)
                                                     }
@@ -207,7 +205,7 @@ const FlightBook = () => {
                                         {holdDetails?.length > 0 && holdDetails.map((detail, index) => (
                                             <div key={index} className="flex items-center space-x-2">
                                                 <ClockIcon />
-                                                <span className="text-sm">
+                                                <span className="text-md text-gray-700 font-semibold">
                                                     Layover: {detail.duration} in {detail.city} ({detail.airport})
                                                 </span>
                                             </div>
@@ -219,11 +217,11 @@ const FlightBook = () => {
                                 <div className="flex space-x-8">
                                     <div className="flex items-center space-x-2">
                                         <BriefcaseIcon />
-                                        <span>Cabin Baggage: 7kg</span>
+                                        <span className='text-md text-gray-600 font-medium'>Cabin Baggage: 7kg</span>
                                     </div>
                                     <div className="flex items-center space-x-2">
                                         <LuggageIcon />
-                                        <span>Checked Baggage: 15kg</span>
+                                        <span className='text-md text-gray-600 font-medium'>Checked Baggage: 15kg</span>
                                     </div>
                                 </div>
                             </div>

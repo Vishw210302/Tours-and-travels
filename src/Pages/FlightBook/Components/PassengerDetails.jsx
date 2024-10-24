@@ -2,13 +2,25 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useFlightTicketsDetailsContext } from '../../../Context/FlightTicketsDetailsContext';
 import { usePassenger } from '../../../Context/PassengerCountContext';
-import { useAddPassengerDetailsMutation } from '../../../Api/Api';
+import { useAddPassengerDetailsMutation, useGetPassengerDetailsByEmailQuery } from '../../../Api/Api';
+import { ToastContainer, toast } from 'react-toastify';
 
 const PassengerDetails = ({ flightId }) => {
   const { id, className } = useParams();
   const navigate = useNavigate();
   const { passengerCount } = usePassenger();
   const { passengerPersonalDetails, setPassengerPersonalDetails } = useFlightTicketsDetailsContext();
+  const [email, setEmail] = useState('')
+
+  
+  const {
+    data: storeDPassengerData,
+    isSuccess: isPassengerDataFetched,
+    isError: isPassengerDataError,
+    error: passengerFetchError
+  } = useGetPassengerDetailsByEmailQuery(email)
+
+ 
 
   const [submitPassengerDetails, {
     data,
@@ -40,13 +52,23 @@ const PassengerDetails = ({ flightId }) => {
   });
 
   useEffect(() => {
+    var savedEmail = localStorage.getItem('email');
+    setEmail(savedEmail)
+    // console.log(savedEmail, 'savedEmailsavedEmail')
+  }, []);
 
-    if(isSuccess){
-      console.log(data?.data, "data data")
+  useEffect(() => {
+
+    if (isSuccess) {
+      console.log(data?.email, "data data")
+      localStorage.setItem('email', data?.email);
+    } else if (isError) {
+      toast.error('Error ocuure while storing a mail ;', { autoClose: 3000 });
+      // alert('Error ocuure while storing a mail :', error)
     }
-    
+
   }, [data, isSuccess, isError, error])
-  
+
 
   const handleInputChange = (index, field, value) => {
     const updatedPassengerDetails = details.passengerDetailsData.map((passenger, i) =>
@@ -122,17 +144,23 @@ const PassengerDetails = ({ flightId }) => {
     // }
 
     const payload = {
-      flightId :id,
+      flightId: id,
       details
     }
-    
-    await submitPassengerDetails(payload)
-    navigate(`/meal-booking/${className}/${id}`);
+
+    console.log(email, 'savedEmailsavedEmailsavedEmailsavedEmailsavedEmailsavedEmail')
+
+    if (!email) {
+      const response = await submitPassengerDetails(payload)
+
+    }
+
+    // navigate(`/meal-booking/${className}/${id}`);
   };
 
   return (
     <>
-      <div className='bg-[#f7f7f7] h-screen'>
+      <div className='bg-[#f7f7f7]'>
         <div className="relative h-[400px] w-full bg-[url('https://assets.gqindia.com/photos/6540e2ba4622f7146b12b76b/16:9/w_2560%2Cc_limit/best-time-to-book-flights.jpg')] bg-cover bg-center flex justify-center items-center">
           <div
             className="absolute top-0 bottom-0 left-0 right-0"
@@ -282,6 +310,11 @@ const PassengerDetails = ({ flightId }) => {
             </div>
           </div>
         </div>
+        <ToastContainer
+          position="top-right"
+          className="toast-container"
+          draggable="true"
+        />
       </div>
     </>
   );

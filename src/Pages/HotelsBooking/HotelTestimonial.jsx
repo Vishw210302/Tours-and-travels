@@ -7,7 +7,7 @@ import { useGetTestimonialHotelQuery } from '../../Api/Api';
 
 const HotelTestimonial = () => {
 
-    const { isError, error, data, isLoading, isSuccess } = useGetTestimonialHotelQuery();
+    const { isError, error, data, isSuccess } = useGetTestimonialHotelQuery();
     const [testimonialHotelListing, setTestimonialHotelListing] = useState([])
 
     useEffect(() => {

@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { useContactUsPostMutation } from '../../../Api/Api';
-
 
 const ContactusForm = () => {
 
-    const [contactUsPost, { isLoading, isSuccess, isError }] = useContactUsPostMutation();
+    const [contactUsPost, { isLoading }] = useContactUsPostMutation();
 
     const [formData, setFormData] = useState({
         name: '',
@@ -15,80 +16,47 @@ const ContactusForm = () => {
 
     const handleChange = (e) => {
         const { id, value } = e.target;
-        setFormData((prevState) => ({
-            ...prevState,
-            [id]: value,
-        }));
+        setFormData((prevState) => ({ ...prevState, [id]: value }));
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const result = await contactUsPost(formData).unwrap();
-            if (isSuccess) {
-                setFormData({
-                    name: '',
-                    email: '',
-                    message: ''
-                });
-                console.log('Form submitted successfully:', result);
-            }
+            await contactUsPost(formData).unwrap();
+            toast.success('Form submitted successfully!', { autoClose: 3000 });
+            setFormData({ name: '', email: '', mobileNumber: '', message: '' });
         } catch (error) {
-            console.error('Failed to submit form:', error);
+            toast.error('Please fill contact us form.', { autoClose: 3000 });
         }
     };
 
+    const renderInputField = (id, label, type = "text", placeholder) => (
+        <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor={id}>
+                {label}
+            </label>
+            <input
+                type={type}
+                id={id}
+                value={formData[id]}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline focus:border-red-400"
+                placeholder={placeholder}
+            />
+        </div>
+    );
+
     return (
-        <div className='card bg-white rounded-xl shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg p-3 my-2 w-[95%] h-fit'>
-            <div className="2xl:container 2xl:mx-auto p-5">
-                <div className="">
+        <>
+            <div className='card bg-white rounded-xl shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg p-3 my-2 w-[95%] h-fit'>
+                <div className="2xl:container 2xl:mx-auto p-5">
                     <p className="text-xl font-bold text-center text-red-400 mb-6">
                         Love to hear from you, Get in touch
                     </p>
-
                     <form onSubmit={handleSubmit}>
-                        <div className="mb-4">
-                            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
-                                Name
-                            </label>
-                            <input
-                                type="text"
-                                id="name"
-                                value={formData.name}
-                                onChange={handleChange}
-                                className="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline focus:border-red-400"
-                                placeholder="Your Name"
-                            />
-                        </div>
-
-                        <div className="mb-4">
-                            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
-                                Email
-                            </label>
-                            <input
-                                type="email"
-                                id="email"
-                                value={formData.email}
-                                onChange={handleChange}
-                                className="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline focus:border-red-400"
-                                placeholder="Your Email"
-                            />
-                        </div>
-
-                        <div className="mb-4">
-                            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="mobileNumber">
-                                Mobile Number
-                            </label>
-                            <input
-                                type="tel"
-                                id="mobileNumber"
-                                value={formData.mobileNumber}
-                                onChange={handleChange}
-                                className="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline focus:border-red-400"
-                                placeholder="Your Mobile Number"
-                            />
-                        </div>
-
+                        {renderInputField('name', 'Name')}
+                        {renderInputField('email', 'Email', 'email', 'Your Email')}
+                        {renderInputField('mobileNumber', 'Mobile Number', 'tel', 'Your Mobile Number')}
                         <div className="mb-4">
                             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="message">
                                 Message
@@ -102,7 +70,6 @@ const ContactusForm = () => {
                                 placeholder="Your Message"
                             ></textarea>
                         </div>
-
                         <div className="text-center">
                             <button
                                 type="submit"
@@ -111,14 +78,17 @@ const ContactusForm = () => {
                             >
                                 {isLoading ? "Submitting..." : "Submit"}
                             </button>
-                            {isSuccess && <p className="text-green-500 mt-2">Message sent successfully!</p>}
-                            {isError && <p className="text-red-500 mt-2">Failed to send message.</p>}
                         </div>
                     </form>
+                    <ToastContainer
+                        position="top-right"
+                        className="toast-container"
+                        draggable="true"
+                    />
                 </div>
             </div>
-        </div>
-    )
-}
+        </>
+    );
+};
 
-export default ContactusForm
+export default ContactusForm;

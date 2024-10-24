@@ -116,7 +116,7 @@ const MealAndSelect = () => {
 
     return (
         <>
-            <div className='bg-[#f7f7f7] h-screen'>
+            <div className='bg-[#f7f7f7]'>
                 <div className="relative h-[400px] w-full bg-[url('https://assets.gqindia.com/photos/6540e2ba4622f7146b12b76b/16:9/w_2560%2Cc_limit/best-time-to-book-flights.jpg')] bg-cover bg-center flex justify-center items-center">
                     <div
                         className="absolute top-0 bottom-0 left-0 right-0"
@@ -127,7 +127,7 @@ const MealAndSelect = () => {
                     />
                     <h1 className="relative text-white text-3xl font-bold z-10">Take good meal</h1>
                 </div>
-                <div className='h-screen bg-[#f7f7f7]'>
+                <div className='bg-[#f7f7f7]'>
 
                     <div className='2xl:container 2xl:mx-auto px-5 mt-5'>
                         <div className='flex justify-center gap-6 text-4xl flex-wrap'>

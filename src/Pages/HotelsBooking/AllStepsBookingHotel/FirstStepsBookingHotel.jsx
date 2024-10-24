@@ -15,41 +15,69 @@ const FirstStepsBookingHotel = ({ setIsHotelSelected }) => {
     const allHotelListing = [
         {
             hotelImages: [
-                { hotelImage: hotelImage },
-                { hotelImage: hotelImage },
-                { hotelImage: hotelImage },
+                { url: hotelImage },
+                { url: hotelImage },
+                { url: hotelImage }
             ],
             hotelName: "Taj Skyline",
-            hotelContent: "Enjoy luxury at its finest in the heart of the city, with stunning skyline views and world-class amenities.",
-            hotelAccessories: {
-                wifi: 1,
-                tv: 1,
-                ac: 1,
-                bathroom: 1,
-                miniBar: 1,
-                petsAllowed: 1,
-                disableFacilities: 1,
+            description: "Enjoy luxury at its finest in the heart of the city, with stunning skyline views and world-class amenities.",
+            amenities: {
+                wifi: true,
+                tv: true,
+                ac: true,
+                bathroom: true,
+                miniBar: true,
+                petsAllowed: true,
+                disabledFacilities: true,
             },
-            hotelPrice: "5000₹"
+            basePrice: "5000₹",
+            pricingOptions: [
+                {
+                    type: "Non-refundable Rate",
+                    inclusions: "",
+                    description: "Best available rate",
+                    totalPrice: "5000₹"
+                },
+                {
+                    type: "Standard Rate",
+                    inclusions: "Breakfast Included",
+                    description: "Free cancellation",
+                    totalPrice: "5500₹"
+                }
+            ]
         },
         {
             hotelImages: [
-                { hotelImage: hotelImage },
-                { hotelImage: hotelImage },
-                { hotelImage: hotelImage },
+                { url: hotelImage },
+                { url: hotelImage },
+                { url: hotelImage }
             ],
             hotelName: "ITC Narmada",
-            hotelContent: "Enjoy luxury at its finest in the heart of the city, with stunning skyline views and world-class amenities.",
-            hotelAccessories: {
-                wifi: 1,
-                tv: 1,
-                ac: 1,
-                bathroom: 1,
-                miniBar: 1,
-                petsAllowed: 1,
-                disableFacilities: 1,
+            description: "Enjoy luxury at its finest in the heart of the city, with stunning skyline views and world-class amenities.",
+            amenities: {
+                wifi: true,
+                tv: true,
+                ac: false,
+                bathroom: true,
+                miniBar: false,
+                petsAllowed: true,
+                disabledFacilities: false,
             },
-            hotelPrice: "8000₹"
+            basePrice: "8000₹",
+            pricingOptions: [
+                {
+                    type: "Non-refundable Rate",
+                    inclusions: "",
+                    description: "Best available rate",
+                    totalPrice: "8000₹"
+                },
+                {
+                    type: "Standard Rate",
+                    inclusions: "Breakfast Included",
+                    description: "Free cancellation",
+                    totalPrice: "8500₹"
+                }
+            ]
         },
     ];
 
@@ -111,7 +139,7 @@ const FirstStepsBookingHotel = ({ setIsHotelSelected }) => {
                                     {items?.hotelImages && items?.hotelImages.map((image, index) => {
                                         return (
                                             <SwiperSlide key={index + "Hotel"}>
-                                                <img src={image.hotelImage} alt="hotel-images" className='w-full rounded-md object-cover h-full' />
+                                                <img src={image.url} alt="hotel-images" className='w-full rounded-md object-cover h-full' />
                                             </SwiperSlide>
                                         )
                                     })}
@@ -119,43 +147,44 @@ const FirstStepsBookingHotel = ({ setIsHotelSelected }) => {
                             </div>
 
                             <div>
+
                                 <div>
                                     <h4 className='font-semibold text-2xl text-black'>{items?.hotelName}</h4>
-                                    <p className='font-medium text-lg text-black py-2'>{items?.hotelContent}</p>
+                                    <p className='font-medium text-lg text-black py-2'>{items?.description}</p>
                                 </div>
 
                                 <div className='flex flex-row flex-wrap gap-4 py-2'>
-                                    {items?.hotelAccessories?.wifi === 1 &&
+                                    {items?.amenities?.wifi === true &&
                                         <div className='cursor-pointer'>
                                             <FaWifi size={25} color='#3cb7ff' />
                                         </div>
                                     }
-                                    {items?.hotelAccessories?.tv === 1 &&
+                                    {items?.amenities?.tv === true &&
                                         <div className='cursor-pointer'>
                                             <FaTv size={25} color='#3cb7ff' />
                                         </div>
                                     }
-                                    {items?.hotelAccessories?.ac === 1 &&
+                                    {items?.amenities?.ac === true &&
                                         <div className='cursor-pointer'>
                                             <TbAirConditioning size={25} color='#3cb7ff' />
                                         </div>
                                     }
-                                    {items?.hotelAccessories?.bathroom === 1 &&
+                                    {items?.amenities?.bathroom === true &&
                                         <div className='cursor-pointer'>
                                             <FaShower size={25} color='#3cb7ff' />
                                         </div>
                                     }
-                                    {items?.hotelAccessories?.miniBar === 1 &&
+                                    {items?.amenities?.miniBar === true &&
                                         <div className='cursor-pointer'>
                                             <RiDrinksLine size={25} color='#3cb7ff' />
                                         </div>
                                     }
-                                    {items?.hotelAccessories?.petsAllowed === 1 &&
+                                    {items?.amenities?.petsAllowed === true &&
                                         <div className='cursor-pointer'>
                                             <MdOutlinePets size={25} color='#3cb7ff' />
                                         </div>
                                     }
-                                    {items?.hotelAccessories?.disableFacilities === 1 &&
+                                    {items?.amenities?.disableFacilities === true &&
                                         <div className='cursor-pointer'>
                                             <TbDisabled size={25} color='#3cb7ff' />
                                         </div>
@@ -166,7 +195,7 @@ const FirstStepsBookingHotel = ({ setIsHotelSelected }) => {
                             <div className='text-center flex flex-col items-center justify-center'>
                                 <div className='w-fit'>
                                     <h3 className='font-semibold text-2xl text-black'>
-                                        {items?.hotelPrice}
+                                        {items?.basePrice}
                                     </h3>
                                 </div>
                                 <div className='w-fit'>

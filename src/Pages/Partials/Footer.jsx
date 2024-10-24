@@ -58,7 +58,7 @@ const Footer = () => {
 
   return (
 
-    <footer className="relative bg-[#1f2746] text-white overflow-hidden">
+    <footer className="relative bg-[#1f2746] text-white overflow-hidden mt-8">
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute left-0 top-0 w-full h-full">
           <Plane className="absolute text-white/10 w-24 h-24 animate-plane-fly" style={{ top: '10%', left: '25%' }} />

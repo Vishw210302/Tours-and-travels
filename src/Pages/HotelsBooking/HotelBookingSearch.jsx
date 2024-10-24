@@ -35,6 +35,7 @@ const HotelBookingSearch = ({ onSearch }) => {
             toast.error("Please fill in all required fields.", {
                 position: "top-right",
                 className: "toast-error",
+                draggable: true,
             });
             return;
         }
@@ -214,6 +215,7 @@ const HotelBookingSearch = ({ onSearch }) => {
             <ToastContainer
                 position="top-center"
                 className="toast-container"
+                draggable="true"
             />
 
         </>

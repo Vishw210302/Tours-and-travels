@@ -136,6 +136,10 @@ export const myApi = createApi({
             })
         }),
 
+        getPassengerDetailsByEmail: builder.query({
+            query: (email) => `get-passengers-by-email?email=${email}`
+        }),
+
         getFlightSeat: builder.query({
             query: (id) => `get-flights-seats/${id}`
         }),
@@ -180,4 +184,4 @@ export const myApi = createApi({
     }),
 });
 
-export const { useGetSliderQuery, useGetBrandLogoQuery, useGetPackagesQuery, useGetTestimonialQuery, useGetTestimonialHotelQuery, useGetItenriesQuery, useTestimonialReviewPostMutation, useTestimonialHotelReviewPostMutation, useGetItenariesDetailsQuery, useLazyGetCitiesListingQuery, useContactUsPostMutation, useContactUsHotelPostMutation, useAddPassengerDetailsMutation, useGetBranchesQuery, useLazyGetSubBranchesQuery, useGetFlightDetailsMutation, useGetBlogListingQuery, useGetSpecialFlightsQuery, useGetYoutubeVideosQuery, useGetTeamMemberDetailsQuery, useGetAboutUsContentQuery, useInqueriesPostMutation, useGetMealTypeQuery, useLazyGetMealByIdQuery, useLazyGetParticularFlightQuery, useGetFlightSeatQuery, useCreatePaymentIntentMutation, useSubmitFlightTicketDataMutation, useGetPackageThemeDataQuery, useGetHotelCouponCodeDataQuery, useGetSocialMediaLinkListingQuery } = myApi;
+export const { useGetSliderQuery, useGetBrandLogoQuery, useGetPackagesQuery, useGetTestimonialQuery, useGetTestimonialHotelQuery, useGetItenriesQuery, useTestimonialReviewPostMutation, useTestimonialHotelReviewPostMutation, useGetItenariesDetailsQuery, useLazyGetCitiesListingQuery, useContactUsPostMutation, useContactUsHotelPostMutation, useAddPassengerDetailsMutation, useGetPassengerDetailsByEmailQuery, useGetBranchesQuery, useLazyGetSubBranchesQuery, useGetFlightDetailsMutation, useGetBlogListingQuery, useGetSpecialFlightsQuery, useGetYoutubeVideosQuery, useGetTeamMemberDetailsQuery, useGetAboutUsContentQuery, useInqueriesPostMutation, useGetMealTypeQuery, useLazyGetMealByIdQuery, useLazyGetParticularFlightQuery, useGetFlightSeatQuery, useCreatePaymentIntentMutation, useSubmitFlightTicketDataMutation, useGetPackageThemeDataQuery, useGetHotelCouponCodeDataQuery, useGetSocialMediaLinkListingQuery } = myApi;

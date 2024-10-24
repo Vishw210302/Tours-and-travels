@@ -4,7 +4,7 @@ import { useContactUsHotelPostMutation } from '../../Api/Api';
 
 const GetInTouchHotelBooking = () => {
 
-    const [contactUsHotelPost, { isLoading, isSuccess, isError }] = useContactUsHotelPostMutation();
+    const [contactUsHotelPost, { isLoading }] = useContactUsHotelPostMutation();
 
     const [formData, setFormData] = useState({
         name: '',
@@ -26,26 +26,20 @@ const GetInTouchHotelBooking = () => {
         try {
             await contactUsHotelPost(formData).unwrap();
 
-            setFormData({
-                name: '',
-                email: '',
-                mobileNumber: '',
-                message: '',
-            });
+            setFormData({ name: '', email: '', mobileNumber: '', message: '' });
 
-            toast.success("Message Sent successfully", {
+            toast.success("Message sent successfully!", {
                 position: "top-right",
                 className: "toast-success",
             });
         } catch (error) {
             console.error('Failed to submit form:', error);
-            toast.error("Failed to submit the form. Please try again.", {
+            toast.error("Please fill out all fields in the form.", {
                 position: "top-right",
                 className: "toast-error",
             });
         }
     };
-
 
     return (
         <>
@@ -60,61 +54,32 @@ const GetInTouchHotelBooking = () => {
                         We are dedicated to making your hotel booking experience seamless and enjoyable. Reach out to us for any inquiries, and we’ll be happy to assist!
                     </p>
 
-                    {isError && <p className="text-red-500">Failed to submit form. Please try again.</p>}
-
                     <div className="bg-white shadow-lg rounded-lg p-8 max-w-lg mx-auto border border-gray-300 z-10">
                         <form onSubmit={handleSubmit} className="space-y-6">
-                            <div>
-                                <p className='w-fit'>Your Name:</p>
-                                <input
-                                    type="text"
-                                    id="name"
-                                    value={formData.name}
-                                    onChange={handleChange}
-                                    placeholder="Enter Your Name"
-                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring focus:ring-blue-500 focus:outline-none transition duration-200"
-                                    required
-                                />
-                            </div>
-
-                            <div>
-                                <p className='w-fit'>Your Email:</p>
-                                <input
-                                    type="email"
-                                    id="email"
-                                    value={formData.email}
-                                    onChange={handleChange}
-                                    placeholder="Enter Your Email"
-                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring focus:ring-blue-500 focus:outline-none transition duration-200"
-                                    required
-                                />
-                            </div>
-
-                            <div>
-                                <p className='w-fit'>Your Number:</p>
-                                <input
-                                    type="tel"
-                                    id="mobileNumber"
-                                    value={formData.mobileNumber}
-                                    onChange={handleChange}
-                                    placeholder="Enter Your Number"
-                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring focus:ring-blue-500 focus:outline-none transition duration-200"
-                                    required
-                                />
-                            </div>
-
-                            <div>
-                                <p className='w-fit'>Your Message:</p>
-                                <textarea
-                                    id="message"
-                                    placeholder="Enter Your Message"
-                                    value={formData.message}
-                                    onChange={handleChange}
-                                    rows="4"
-                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring focus:ring-blue-500 focus:outline-none transition duration-200"
-                                    required
-                                ></textarea>
-                            </div>
+                            {['name', 'email', 'mobileNumber', 'message'].map((field, index) => (
+                                <div key={field}>
+                                    <label className='w-fit flex flex-1 justify-start'>{`Your ${field.charAt(0).toUpperCase() + field.slice(1)}:`}</label>
+                                    {field !== 'message' ? (
+                                        <input
+                                            type={field === 'email' ? 'email' : field === 'mobileNumber' ? 'tel' : 'text'}
+                                            id={field}
+                                            value={formData[field]}
+                                            onChange={handleChange}
+                                            placeholder={`Enter Your ${field.charAt(0).toUpperCase() + field.slice(1)}`}
+                                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring focus:ring-blue-500 focus:outline-none transition duration-200"
+                                        />
+                                    ) : (
+                                        <textarea
+                                            id={field}
+                                            value={formData[field]}
+                                            onChange={handleChange}
+                                            placeholder="Enter Your Message"
+                                            rows="4"
+                                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring focus:ring-blue-500 focus:outline-none transition duration-200"
+                                        ></textarea>
+                                    )}
+                                </div>
+                            ))}
 
                             <div>
                                 <button
@@ -129,10 +94,7 @@ const GetInTouchHotelBooking = () => {
                     </div>
                 </div>
             </div>
-            <ToastContainer
-                position="top-center"
-                className="toast-container"
-            />
+            <ToastContainer position="top-center" className="toast-container" />
         </>
     );
 };
