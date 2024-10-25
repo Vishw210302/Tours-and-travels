@@ -135,6 +135,7 @@ const FlightsPageListing = () => {
     };
 
     const handleSearchFlight = async (e) => {
+        localStorage.removeItem('contactId');
         e.preventDefault();
         try {
             const payload = {

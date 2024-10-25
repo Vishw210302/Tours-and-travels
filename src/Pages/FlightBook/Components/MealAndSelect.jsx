@@ -2,14 +2,20 @@ import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useGetMealTypeQuery, useLazyGetMealByIdQuery } from '../../../Api/Api';
+import { useAddMealDataMutation, useGetMealTypeQuery, useLazyGetMealByIdQuery, useLazyGetUpdatedMealOrderQuery } from '../../../Api/Api';
 import { useFlightTicketsDetailsContext } from '../../../Context/FlightTicketsDetailsContext';
 
 
 const MealAndSelect = () => {
 
     const { id, className } = useParams();
-    const { selectedMealData, setSelectedMealData } = useFlightTicketsDetailsContext();
+    const navigate = useNavigate();
+    const [selectedMeal, setSelectedMeal] = useState(null);
+    const [selecteParticularMeals, setSelectetParticularMeals] = useState([]);
+    const [mealTypes, setMealTypes] = useState();
+    const [particularMeal, setParticularMeal] = useState([]);
+    const [mealCounts, setMealCounts] = useState({});
+    // const { selectedMealData, setSelectedMealData } = useFlightTicketsDetailsContext();
     const { data, isLoading, isSuccess, isError, error } = useGetMealTypeQuery();
 
     const [fetchMealByParticularId, {
@@ -21,13 +27,19 @@ const MealAndSelect = () => {
 
     }] = useLazyGetMealByIdQuery();
 
-    const [selectedMeal, setSelectedMeal] = useState(null);
-    const [selecteParticularMeals, setSelectetParticularMeals] = useState([]);
-    const [mealTypes, setMealTypes] = useState();
-    const [particularMeal, setParticularMeal] = useState([]);
-    const [mealCounts, setMealCounts] = useState({});
+    const [addMealData, {
+        isSuccess: isMealDataAddedSuccessfully,
+        isError: isMealDataAdditionError,
+        error: mealDataAdditionError
+    }] = useAddMealDataMutation();
 
-    const navigate = useNavigate();
+    const [getUpdatedMealData, {
+        data: updatedMealData,
+        isSuccess: isUpdatedMealDataFetchedSuccessfully,
+        isError: isUpdatedMealDataFetchError,
+        error: updatedMealDataFetchError
+    }] = useLazyGetUpdatedMealOrderQuery();
+    
 
     const mealUrl = `${import.meta.env.VITE_REACT_APP_IMAGE_URL}/meal-items-image/`;
 
@@ -51,6 +63,22 @@ const MealAndSelect = () => {
         }
     }, [errorPasricularMeal, ParticularMealData, isSuccessPasricularMeal, isErrorPasricularMeal]);
 
+    useEffect(() => {
+        if (isMealDataAddedSuccessfully) {
+            // navigate(`/flight-seat-booking/${className}/${id}`);
+        } else if (isMealDataAdditionError) {
+            console.log("isLocationError", mealDataAdditionError);
+        }
+    }, [isMealDataAddedSuccessfully, isMealDataAdditionError, mealDataAdditionError]);
+
+    useEffect(() => {
+        const contactId = localStorage.getItem('contactId');
+        if (contactId) {
+          console.log(contactId, 'contactIdcontactId');
+          getUpdatedMealData(contactId)
+        }
+      }, []);
+
     // const getSelectedMealData = (id) => {
     //     return selectedMealData.some(value => value.meal_id === id);
     // }
@@ -68,20 +96,26 @@ const MealAndSelect = () => {
         navigate(`/passenger-details/${className}/${id}`)
     }
 
-    const handleSelectFlightSeat = () => {
+    const handleSelectFlightSeat = async () => {
 
         const selecteMealData = selecteParticularMeals.map((meal) => {
             return {
                 meal_id: meal?._id,
-                meal_name: meal.mealItems,
                 count: mealCounts[meal?._id] || 1,
-                price: meal?.mealPrice
             };
         });
 
-        // console.log(selecteMealData, 'selecteMealDataselecteMealData');
-        setSelectedMealData(selecteMealData);
-        navigate(`/flight-seat-booking/${className}/${id}`);
+        const id = localStorage.getItem('contactId');
+
+        const payload = {
+            selecteMealData,
+            id
+        }
+
+        console.log(payload, 'selecteMealDataselecteMealData');
+
+        await addMealData(payload);
+       
     };
 
     const handleSelectMeal = (id) => {
@@ -111,8 +145,6 @@ const MealAndSelect = () => {
             [id]: prevCounts[id] > 0 ? prevCounts[id] - 1 : 0,
         }));
     };
-
-
 
     return (
         <>
