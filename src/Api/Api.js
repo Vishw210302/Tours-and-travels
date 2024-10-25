@@ -137,10 +137,29 @@ export const myApi = createApi({
                 method: "POST",
                 body: payload,
             }),
+
+        }),
+
+        getPassengerDetailsByContactId: builder.query({
+            query: (id) => `get-passengers-by-contact-id?id=${id}`,
+        }),
+
+        addMealData: builder.mutation({
+            query: (mealData) => ({
+                url: "update-meal-order",
+                method: "POST",
+                body: mealData,
+            })
+        }),
+
+        getUpdatedMealOrder: builder.query({
+            query: (id) => `get-updated-meal-order?id=${id}`
+
         }),
 
         getPassengerDetailsByEmail: builder.query({
             query: (email) => `get-passengers-by-email?email=${email}`,
+
         }),
 
         getFlightSeat: builder.query({
@@ -181,12 +200,12 @@ export const myApi = createApi({
 
         getSocialMediaLinkListing: builder.query({
             query: () => "get-social-media-link",
+
         }),
 
         getParticularHotelListing: builder.query({
             query: (city) => `get-particular-hotel-listing/${city}`,
         }),
-
     }),
 
 });
@@ -205,6 +224,9 @@ export const {
     useContactUsPostMutation,
     useContactUsHotelPostMutation,
     useAddPassengerDetailsMutation,
+    useLazyGetPassengerDetailsByContactIdQuery,
+    useAddMealDataMutation,
+    useLazyGetUpdatedMealOrderQuery,
     useGetPassengerDetailsByEmailQuery,
     useGetBranchesQuery,
     useLazyGetSubBranchesQuery,
@@ -226,3 +248,4 @@ export const {
     useGetSocialMediaLinkListingQuery,
     useGetParticularHotelListingQuery,
 } = myApi;
+

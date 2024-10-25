@@ -2,25 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useFlightTicketsDetailsContext } from '../../../Context/FlightTicketsDetailsContext';
 import { usePassenger } from '../../../Context/PassengerCountContext';
-import { useAddPassengerDetailsMutation, useGetPassengerDetailsByEmailQuery } from '../../../Api/Api';
+import { useAddPassengerDetailsMutation, useLazyGetPassengerDetailsByContactIdQuery } from '../../../Api/Api';
 import { ToastContainer, toast } from 'react-toastify';
 
 const PassengerDetails = ({ flightId }) => {
+
   const { id, className } = useParams();
   const navigate = useNavigate();
   const { passengerCount } = usePassenger();
   const { passengerPersonalDetails, setPassengerPersonalDetails } = useFlightTicketsDetailsContext();
-  const [email, setEmail] = useState('')
-
-  
-  const {
-    data: storeDPassengerData,
-    isSuccess: isPassengerDataFetched,
-    isError: isPassengerDataError,
-    error: passengerFetchError
-  } = useGetPassengerDetailsByEmailQuery(email)
-
- 
 
   const [submitPassengerDetails, {
     data,
@@ -40,11 +30,13 @@ const PassengerDetails = ({ flightId }) => {
     passengerDetailsData: passengerPersonalDetails?.passengerDetailsData?.length > 0
       ? passengerPersonalDetails.passengerDetailsData
       : Array(totalPassengers).fill().map(() => ({
+        id: '',
         fullName: '',
         age: '',
         gender: ''
       })),
     contactDetails: passengerPersonalDetails?.contactDetails || {
+      id: '',
       fullName: '',
       email: '',
       phoneNumber: '',
@@ -52,19 +44,60 @@ const PassengerDetails = ({ flightId }) => {
   });
 
   useEffect(() => {
-    var savedEmail = localStorage.getItem('email');
-    setEmail(savedEmail)
-    // console.log(savedEmail, 'savedEmailsavedEmail')
+    const contactId = localStorage.getItem('contactId');
+    if (contactId) {
+      console.log(contactId, 'contactIdcontactId');
+      fetchDetailsByContactId(contactId)
+    }
   }, []);
+
+  const [fetchDetailsByContactId,{
+
+    data: storeDPassengerData,
+    isSuccess: isPassengerDataFetched,
+    isError: isPassengerDataError,
+    error: passengerFetchError
+
+  }] = useLazyGetPassengerDetailsByContactIdQuery();
+
+  useEffect(() => {
+
+    if (isPassengerDataFetched) {
+
+      console.log(storeDPassengerData?.data, "Fetched passenger data");
+      const fetchedPassengerData = storeDPassengerData.data.passengerDetails;
+      const contactData = {
+        id: storeDPassengerData.data._id,
+        fullName: storeDPassengerData.data.fullName,
+        email: storeDPassengerData.data.email,
+        phoneNumber: storeDPassengerData.data.mobileNumber,
+      };
+
+      setDetails({
+        passengerDetailsData: fetchedPassengerData.map(passenger => ({
+          id: passenger._id,
+          fullName: passenger.fullName,
+          age: passenger.age,
+          gender: passenger.gender,
+        })),
+        contactDetails: contactData,
+      });
+
+    } else if (isError) {
+      toast.error('Error occure while getting a passnger details ;', { autoClose: 3000 });
+      // alert('Error ocuure while storing a mail :', error)
+    }
+
+  }, [storeDPassengerData, isPassengerDataFetched, isPassengerDataError, passengerFetchError])
 
   useEffect(() => {
 
     if (isSuccess) {
-      console.log(data?.email, "data data")
-      localStorage.setItem('email', data?.email);
+      localStorage.setItem('contactId', data?.id);
+      navigate(`/meal-booking/${className}/${id}`);
     } else if (isError) {
-      toast.error('Error ocuure while storing a mail ;', { autoClose: 3000 });
-      // alert('Error ocuure while storing a mail :', error)
+      toast.error('Error ocuure while storing a mail ', { autoClose: 3000 });
+      console.log('Error ocuure while storing a mail :', error)
     }
 
   }, [data, isSuccess, isError, error])
@@ -139,23 +172,16 @@ const PassengerDetails = ({ flightId }) => {
   };
 
   const handleMealAndFlightSeatPage = async () => {
-    // if (validateForm()) {
-    //   setPassengerPersonalDetails(details);
-    // }
+    if (validateForm()) {
+      setPassengerPersonalDetails(details);
+    }
 
     const payload = {
       flightId: id,
-      details
+      details,
     }
 
-    console.log(email, 'savedEmailsavedEmailsavedEmailsavedEmailsavedEmailsavedEmail')
-
-    if (!email) {
-      const response = await submitPassengerDetails(payload)
-
-    }
-
-    // navigate(`/meal-booking/${className}/${id}`);
+    await submitPassengerDetails(payload)
   };
 
   return (
@@ -177,7 +203,7 @@ const PassengerDetails = ({ flightId }) => {
             <div className='flex flex-row justify-around gap-3'>
               <div className='w-[70%]'>
                 <p className='px-2 font-bold text-xl'>Passenger Detail</p>
-                {details.passengerDetailsData.map((passenger, index) => (
+                {details?.passengerDetailsData.length && details.passengerDetailsData.map((passenger, index) => (
                   <div key={index + 1} className='card bg-white rounded-xl shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg p-5 my-2 h-fit'>
                     <div>
                       <p className='font-medium mb-4'>Passenger {index + 1}</p>
@@ -240,7 +266,7 @@ const PassengerDetails = ({ flightId }) => {
                       type='text'
                       className='w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500'
                       placeholder='Enter full name'
-                      value={details.contactDetails.fullName}
+                      value={details?.contactDetails.fullName}
                       onChange={(e) => handleInputChangeContact('fullName', e.target.value)}
                     />
                     {errors.contactFullName && <p className="text-red-500 text-sm">{errors.contactFullName}</p>}
@@ -253,7 +279,7 @@ const PassengerDetails = ({ flightId }) => {
                         type='text'
                         className='w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500'
                         placeholder='Enter valid email'
-                        value={details.contactDetails.email}
+                        value={details?.contactDetails.email}
                         onChange={(e) => handleInputChangeContact('email', e.target.value)}
                       />
                       {errors.contactEmail && <p className="text-red-500 text-sm">{errors.contactEmail}</p>}
@@ -264,7 +290,7 @@ const PassengerDetails = ({ flightId }) => {
                         type='number'
                         className='w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500'
                         placeholder='Enter phone number'
-                        value={details.contactDetails.phoneNumber}
+                        value={details?.contactDetails.phoneNumber}
                         onChange={(e) => handleInputChangeContact('phoneNumber', e.target.value)}
                       />
                       {errors.contactPhone && <p className="text-red-500 text-sm">{errors.contactPhone}</p>}
