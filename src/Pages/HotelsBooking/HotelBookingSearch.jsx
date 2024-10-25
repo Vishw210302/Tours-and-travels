@@ -3,14 +3,14 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useLazyGetCitiesListingQuery } from '../../Api/Api';
+import { useGetParticularHotelListingQuery, useLazyGetCitiesListingQuery } from '../../Api/Api';
 
 const HotelBookingSearch = ({ onSearch }) => {
 
     const navigate = useNavigate();
     const [fetchCitiesListing, { data, error, isSuccess, isError }] = useLazyGetCitiesListingQuery();
-    const [fromCitiesListing, setFromCitiesListing] = useState([]);
     const timeoutRef = useRef(null);
+    const [fromCitiesListing, setFromCitiesListing] = useState([]);
     const [selectedCityFrom, setSelectedCityFrom] = useState(false);
     const [searchValueFrom, setSearchValueFrom] = useState('');
 
@@ -21,6 +21,10 @@ const HotelBookingSearch = ({ onSearch }) => {
         adults: 1,
         children: 0,
         rooms: 1,
+    });
+
+    const { data: hotelCityData, refetch: refetchHotelData } = useGetParticularHotelListingQuery(formData.city, {
+        skip: !formData.city,
     });
 
     const handleChange = (e) => {
@@ -40,7 +44,8 @@ const HotelBookingSearch = ({ onSearch }) => {
             return;
         }
         onSearch();
-        navigate('/booking-results', { state: { formData } });
+        refetchHotelData();
+        navigate('/booking-results', { state: { formData, hotelCityData } });
     };
 
     const handleInputChangeCity = (event) => {
@@ -85,7 +90,6 @@ const HotelBookingSearch = ({ onSearch }) => {
                 <div className="max-w-7xl mx-auto">
                     <h2 className="text-3xl font-bold text-center mb-6 text-white">Luxury Stay Booking</h2>
                     <form className="grid grid-cols-1 md:grid-cols-7 gap-4 items-center" onSubmit={handleSubmit}>
-
                         <div className="col-span-1">
                             <div className="relative">
                                 <label htmlFor="fromCity" className="text-sm font-semibold text-white mb-1 flex items-center">
@@ -119,7 +123,6 @@ const HotelBookingSearch = ({ onSearch }) => {
                                 )}
                             </div>
                         </div>
-
                         <div className="col-span-1">
                             <label htmlFor="checkinDate" className="text-sm font-semibold text-white mb-1 flex items-center">
                                 <Calendar className="mr-1" size={16} />
@@ -197,27 +200,19 @@ const HotelBookingSearch = ({ onSearch }) => {
                                 min="1"
                             />
                         </div>
-
                         <div className="col-span-1 w-fit h-fit mt-6">
                             <button
                                 type="submit"
                                 className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold py-2 px-4 rounded-lg shadow-lg hover:from-indigo-600 hover:to-blue-500 transition-all ease-in-out duration-300 flex items-center justify-center"
                             >
-                                <Search className="mr-2" size={20} />
-                                Find Your Stay
+                                <Search className="mr-2" size={16} />
+                                Search
                             </button>
                         </div>
-
                     </form>
                 </div>
             </div>
-
-            <ToastContainer
-                position="top-center"
-                className="toast-container"
-                draggable="true"
-            />
-
+            <ToastContainer />
         </>
     );
 };

@@ -1,11 +1,14 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const myApi = createApi({
+
     reducerPath: "api",
     baseQuery: fetchBaseQuery({
         baseUrl: import.meta.env.VITE_REACT_APP_API_URL,
     }),
+
     endpoints: (builder) => ({
+
         getSlider: builder.query({
             query: () => "get-slider",
         }),
@@ -55,11 +58,11 @@ export const myApi = createApi({
         }),
 
         getBranches: builder.query({
-            query: () => "get-branch-location"
+            query: () => "get-branch-location",
         }),
 
         getSubBranches: builder.query({
-            query: (id) => `get-branch-listing/${id}`
+            query: (id) => `get-branch-listing/${id}`,
         }),
 
         getFlightDetails: builder.mutation({
@@ -71,23 +74,23 @@ export const myApi = createApi({
         }),
 
         getSpecialFlights: builder.query({
-            query: () => "get-special-flight-data_V_P_D"
+            query: () => "get-special-flight-data_V_P_D",
         }),
 
         getBlogListing: builder.query({
-            query: () => "get-blog-listing"
+            query: () => "get-blog-listing",
         }),
 
         getYoutubeVideos: builder.query({
-            query: () => "get-youtube-videos"
+            query: () => "get-youtube-videos",
         }),
 
         getTeamMemberDetails: builder.query({
-            query: () => "get-all-members-details"
+            query: () => "get-all-members-details",
         }),
 
         getAboutUsContent: builder.query({
-            query: () => "get-about-us-content"
+            query: () => "get-about-us-content",
         }),
 
         inqueriesPost: builder.mutation({
@@ -115,11 +118,11 @@ export const myApi = createApi({
         }),
 
         getMealType: builder.query({
-            query: () => "get-flight-meals"
+            query: () => "get-flight-meals",
         }),
 
         getMealById: builder.query({
-            query: (id) => `get-particular-meal-listing/${id}`
+            query: (id) => `get-particular-meal-listing/${id}`,
         }),
 
         getParticularFlight: builder.query({
@@ -133,15 +136,15 @@ export const myApi = createApi({
                 url: "add-passenger-details",
                 method: "POST",
                 body: payload,
-            })
+            }),
         }),
 
         getPassengerDetailsByEmail: builder.query({
-            query: (email) => `get-passengers-by-email?email=${email}`
+            query: (email) => `get-passengers-by-email?email=${email}`,
         }),
 
         getFlightSeat: builder.query({
-            query: (id) => `get-flights-seats/${id}`
+            query: (id) => `get-flights-seats/${id}`,
         }),
 
         createPaymentIntent: builder.mutation({
@@ -149,7 +152,7 @@ export const myApi = createApi({
                 url: "create-payment-intent",
                 method: "POST",
                 body: payload,
-            })
+            }),
         }),
 
         submitFlightTicketData: builder.mutation({
@@ -157,31 +160,69 @@ export const myApi = createApi({
                 url: "addFlightTicketsData",
                 method: "POST",
                 headers: {
-                    'Content-Type': 'application/json'
+                    "Content-Type": "application/json",
                 },
                 body: JSON.stringify(payload),
             }),
             transformResponse: (response) => {
-
-                const blob = new Blob([response], { type: 'application/pdf' });
+                const blob = new Blob([response], { type: "application/pdf" });
 
                 return blob;
             },
         }),
 
         getPackageThemeData: builder.query({
-            query: () => "get-package-theme-active"
+            query: () => "get-package-theme-active",
         }),
 
         getHotelCouponCodeData: builder.query({
-            query: () => "get-all-coupon-code-active"
+            query: () => "get-all-coupon-code-active",
         }),
 
         getSocialMediaLinkListing: builder.query({
-            query: () => "get-social-media-link"
+            query: () => "get-social-media-link",
+        }),
+
+        getParticularHotelListing: builder.query({
+            query: (city) => `get-particular-hotel-listing/${city}`,
         }),
 
     }),
+
 });
 
-export const { useGetSliderQuery, useGetBrandLogoQuery, useGetPackagesQuery, useGetTestimonialQuery, useGetTestimonialHotelQuery, useGetItenriesQuery, useTestimonialReviewPostMutation, useTestimonialHotelReviewPostMutation, useGetItenariesDetailsQuery, useLazyGetCitiesListingQuery, useContactUsPostMutation, useContactUsHotelPostMutation, useAddPassengerDetailsMutation, useGetPassengerDetailsByEmailQuery, useGetBranchesQuery, useLazyGetSubBranchesQuery, useGetFlightDetailsMutation, useGetBlogListingQuery, useGetSpecialFlightsQuery, useGetYoutubeVideosQuery, useGetTeamMemberDetailsQuery, useGetAboutUsContentQuery, useInqueriesPostMutation, useGetMealTypeQuery, useLazyGetMealByIdQuery, useLazyGetParticularFlightQuery, useGetFlightSeatQuery, useCreatePaymentIntentMutation, useSubmitFlightTicketDataMutation, useGetPackageThemeDataQuery, useGetHotelCouponCodeDataQuery, useGetSocialMediaLinkListingQuery } = myApi;
+export const {
+    useGetSliderQuery,
+    useGetBrandLogoQuery,
+    useGetPackagesQuery,
+    useGetTestimonialQuery,
+    useGetTestimonialHotelQuery,
+    useGetItenriesQuery,
+    useTestimonialReviewPostMutation,
+    useTestimonialHotelReviewPostMutation,
+    useGetItenariesDetailsQuery,
+    useLazyGetCitiesListingQuery,
+    useContactUsPostMutation,
+    useContactUsHotelPostMutation,
+    useAddPassengerDetailsMutation,
+    useGetPassengerDetailsByEmailQuery,
+    useGetBranchesQuery,
+    useLazyGetSubBranchesQuery,
+    useGetFlightDetailsMutation,
+    useGetBlogListingQuery,
+    useGetSpecialFlightsQuery,
+    useGetYoutubeVideosQuery,
+    useGetTeamMemberDetailsQuery,
+    useGetAboutUsContentQuery,
+    useInqueriesPostMutation,
+    useGetMealTypeQuery,
+    useLazyGetMealByIdQuery,
+    useLazyGetParticularFlightQuery,
+    useGetFlightSeatQuery,
+    useCreatePaymentIntentMutation,
+    useSubmitFlightTicketDataMutation,
+    useGetPackageThemeDataQuery,
+    useGetHotelCouponCodeDataQuery,
+    useGetSocialMediaLinkListingQuery,
+    useGetParticularHotelListingQuery,
+} = myApi;
