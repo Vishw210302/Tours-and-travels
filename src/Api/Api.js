@@ -1,11 +1,14 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const myApi = createApi({
+
     reducerPath: "api",
     baseQuery: fetchBaseQuery({
         baseUrl: import.meta.env.VITE_REACT_APP_API_URL,
     }),
+
     endpoints: (builder) => ({
+
         getSlider: builder.query({
             query: () => "get-slider",
         }),
@@ -134,6 +137,7 @@ export const myApi = createApi({
                 method: "POST",
                 body: payload,
             }),
+
         }),
 
         getPassengerDetailsByContactId: builder.query({
@@ -150,6 +154,12 @@ export const myApi = createApi({
 
         getUpdatedMealOrder: builder.query({
             query: (id) => `get-updated-meal-order?id=${id}`
+
+        }),
+
+        getPassengerDetailsByEmail: builder.query({
+            query: (email) => `get-passengers-by-email?email=${email}`,
+
         }),
 
         getFlightSeat: builder.query({
@@ -190,8 +200,14 @@ export const myApi = createApi({
 
         getSocialMediaLinkListing: builder.query({
             query: () => "get-social-media-link",
+
+        }),
+
+        getParticularHotelListing: builder.query({
+            query: (city) => `get-particular-hotel-listing/${city}`,
         }),
     }),
+
 });
 
 export const {
@@ -211,6 +227,7 @@ export const {
     useLazyGetPassengerDetailsByContactIdQuery,
     useAddMealDataMutation,
     useLazyGetUpdatedMealOrderQuery,
+    useGetPassengerDetailsByEmailQuery,
     useGetBranchesQuery,
     useLazyGetSubBranchesQuery,
     useGetFlightDetailsMutation,
@@ -229,4 +246,6 @@ export const {
     useGetPackageThemeDataQuery,
     useGetHotelCouponCodeDataQuery,
     useGetSocialMediaLinkListingQuery,
+    useGetParticularHotelListingQuery,
 } = myApi;
+

@@ -1,85 +1,30 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { CgCalendarDates } from "react-icons/cg";
 import { FaShower, FaTv } from "react-icons/fa";
 import { FaPerson, FaWifi } from "react-icons/fa6";
 import { MdOutlineLogin, MdOutlinePets } from "react-icons/md";
 import { RiDrinksLine } from "react-icons/ri";
 import { TbAirConditioning, TbDisabled } from "react-icons/tb";
+import { useLocation } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import hotelImage from "../../../assets/banner-hotel-image.jpg";
 
 const FirstStepsBookingHotel = ({ setIsHotelSelected }) => {
 
     const [selectedHotel, setSelectedHotel] = useState(null);
+    const location = useLocation();
+    const { formData, hotelCityData } = location.state || {};
+    const [particularHotelListing, setparticularHotelListing] = useState([])
+    const [formInputData, setformInputData] = useState([])
 
-    const allHotelListing = [
-        {
-            hotelImages: [
-                { url: hotelImage },
-                { url: hotelImage },
-                { url: hotelImage }
-            ],
-            hotelName: "Taj Skyline",
-            description: "Enjoy luxury at its finest in the heart of the city, with stunning skyline views and world-class amenities.",
-            amenities: {
-                wifi: true,
-                tv: true,
-                ac: true,
-                bathroom: true,
-                miniBar: true,
-                petsAllowed: true,
-                disabledFacilities: true,
-            },
-            basePrice: "5000₹",
-            pricingOptions: [
-                {
-                    type: "Non-refundable Rate",
-                    inclusions: "",
-                    description: "Best available rate",
-                    totalPrice: "5000₹"
-                },
-                {
-                    type: "Standard Rate",
-                    inclusions: "Breakfast Included",
-                    description: "Free cancellation",
-                    totalPrice: "5500₹"
-                }
-            ]
-        },
-        {
-            hotelImages: [
-                { url: hotelImage },
-                { url: hotelImage },
-                { url: hotelImage }
-            ],
-            hotelName: "ITC Narmada",
-            description: "Enjoy luxury at its finest in the heart of the city, with stunning skyline views and world-class amenities.",
-            amenities: {
-                wifi: true,
-                tv: true,
-                ac: false,
-                bathroom: true,
-                miniBar: false,
-                petsAllowed: true,
-                disabledFacilities: false,
-            },
-            basePrice: "8000₹",
-            pricingOptions: [
-                {
-                    type: "Non-refundable Rate",
-                    inclusions: "",
-                    description: "Best available rate",
-                    totalPrice: "8000₹"
-                },
-                {
-                    type: "Standard Rate",
-                    inclusions: "Breakfast Included",
-                    description: "Free cancellation",
-                    totalPrice: "8500₹"
-                }
-            ]
-        },
-    ];
+    useEffect(() => {
+        if (hotelCityData?.data && Array.isArray(hotelCityData.data)) {
+            setparticularHotelListing(hotelCityData.data);
+            setformInputData(formData);
+        } else {
+            setparticularHotelListing([]);
+            setformInputData([]);
+        }
+    }, [hotelCityData]);
 
     const handleSelectHotel = (index) => {
         setSelectedHotel(index);
@@ -97,7 +42,14 @@ const FirstStepsBookingHotel = ({ setIsHotelSelected }) => {
                             </div>
                             <div className='border-r border-gray-500 pr-3'>
                                 <p className='text-black text-sm font-semibold'>Check In</p>
-                                <p className='text-gray-600 text-sm font-semibold'>22/01/2025</p>
+                                <p className='text-gray-600 text-sm font-semibold'>{formInputData?.checkinDate}</p>
+                            </div>
+                        </div>
+                        <div className='flex flex-row items-center gap-3'>
+                            <MdOutlineLogin size={25} color='#3cb7ff' />
+                            <div className='border-r border-gray-500 pr-3'>
+                                <p className='text-black text-sm font-semibold'>Check Out</p>
+                                <p className='text-gray-600 text-sm font-semibold'>{formInputData?.checkoutDate}</p>
                             </div>
                         </div>
                         <div className='flex flex-row items-center gap-3'>
@@ -122,7 +74,7 @@ const FirstStepsBookingHotel = ({ setIsHotelSelected }) => {
                 </div>
             </div>
 
-            {allHotelListing && allHotelListing.map((items, index) => {
+            {particularHotelListing && particularHotelListing.map((items, index) => {
                 return (
                     <div
                         key={index + "1"}
@@ -139,7 +91,7 @@ const FirstStepsBookingHotel = ({ setIsHotelSelected }) => {
                                     {items?.hotelImages && items?.hotelImages.map((image, index) => {
                                         return (
                                             <SwiperSlide key={index + "Hotel"}>
-                                                <img src={image.url} alt="hotel-images" className='w-full rounded-md object-cover h-full' />
+                                                <img src={image.url} alt="hotel-images" className='w-[100%] h-[230px] rounded-md object-cover' />
                                             </SwiperSlide>
                                         )
                                     })}

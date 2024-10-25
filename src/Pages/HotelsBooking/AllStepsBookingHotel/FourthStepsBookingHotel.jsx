@@ -238,7 +238,7 @@ const FourthStepsBookingHotel = () => {
                                 type="submit"
                                 className="bg-red-400 text-white font-semibold px-4 py-2 rounded-md hover:bg-red-500 transition duration-200"
                             >
-                                Confirm Booking (₹ 5000)
+                                Confirm Booking ( ₹ 5000)
                             </button>
                         </div>
 
