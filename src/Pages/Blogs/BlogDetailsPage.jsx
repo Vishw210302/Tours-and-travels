@@ -1,23 +1,24 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import ImageModal from '../ImageModal';
 
 const BlogDetailsPage = () => {
 
-    const [selectedImage, setSelectedImage] = useState(null);
-    const [isModalOpen, setIsModalOpen] = useState(false);
     const location = useLocation();
     const { blog } = location.state || {};
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [modalImage, setModalImage] = useState(null);
     const vlogBannerImage = `${import.meta.env.VITE_REACT_APP_IMAGE_URL}/blogs-image/`;
     const galleryImagePath = `${import.meta.env.VITE_REACT_APP_IMAGE_URL}/blogs-image/`;
 
-    const openModal = (image) => {
-        setSelectedImage(image);
+    const handleImageClick = (imageUrl) => {
+        setModalImage(imageUrl);
         setIsModalOpen(true);
     };
 
     const closeModal = () => {
-        setSelectedImage(null);
         setIsModalOpen(false);
+        setModalImage(null);
     };
 
     return (
@@ -42,7 +43,10 @@ const BlogDetailsPage = () => {
                         </div>
                         <div className='grid grid-cols-3 gap-2 w-full h-full'>
                             {blog.blogGallery.map((galleryImage, index) => (
-                                <div key={index} onClick={() => openModal(`${galleryImagePath}${galleryImage}`)}>
+                                <div
+                                    key={index}
+                                    onClick={() => handleImageClick(`${galleryImagePath}${galleryImage}`)}
+                                >
                                     <img
                                         src={`${galleryImagePath}${galleryImage}`}
                                         alt={`gallery-${index}`}
@@ -54,20 +58,11 @@ const BlogDetailsPage = () => {
                     </div>
                 )}
             </div>
-
-            {isModalOpen && (
-                <div className="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center z-50">
-                    <div className="relative">
-                        <img src={selectedImage} alt='selected gallery' className='w-full h-auto max-h-[80vh]' />
-                        <button
-                            onClick={closeModal}
-                            className='absolute top-0 right-0 mt-2 mr-2 text-white text-xl font-bold'
-                        >
-                            &times;
-                        </button>
-                    </div>
-                </div>
-            )}
+            <ImageModal
+                isOpen={isModalOpen}
+                onClose={closeModal}
+                imageUrl={modalImage}
+            />
         </>
     )
 }
