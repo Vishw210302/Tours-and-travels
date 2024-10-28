@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useGetPackagesQuery } from '../../Api/Api';
+import pkgImage from "../../assets/image.jpg";
 import BannerImage from "../../assets/waterEffect.png";
 import NoDataFound from '../NoDataFound';
 import RippleEffect from '../RippleEffects/RippleEffect';
@@ -9,6 +10,30 @@ const InternationalPackages = () => {
     const { isError, error, data, isSuccess } = useGetPackagesQuery();
     const [internationalPackagesListing, setInternationalPackagesListing] = useState([]);
     const imageUrl = `${import.meta.env.VITE_REACT_APP_IMAGE_URL}/packages-Image/`;
+
+    const travelPackages = [
+        {
+            id: 1,
+            name: "Maldives Getaway",
+            description: "Enjoy 7 days in the beautiful Maldives with beach resorts and water sports.",
+            price: "$1500",
+            image: pkgImage,
+        },
+        {
+            id: 2,
+            name: "Swiss Alps Adventure",
+            description: "A 10-day tour of the Swiss Alps with skiing, snowboarding, and scenic train rides.",
+            price: "$2000",
+            image: pkgImage,
+        },
+        {
+            id: 3,
+            name: "Bali Vacation",
+            description: "Relax in Bali with a 5-day trip including temple visits and beach fun.",
+            price: "$1200",
+            image: pkgImage,
+        }
+    ];
 
     useEffect(() => {
         if (isSuccess) {
@@ -41,30 +66,36 @@ const InternationalPackages = () => {
             <div className='bg-gradient-to-b from-blue-100 to-white py-10'>
                 <div className='2xl:container 2xl:mx-auto px-5'>
                     {internationalPackagesListing && internationalPackagesListing?.length > 0 ?
-                        <h1 className='text-5xl font-extrabold text-center mb-12 text-gray-800'>Discover Your Dream Vacation</h1>
+                        <h1 className='text-3xl font-extrabold text-center mb-12 text-gray-800'>Discover Your Dream Vacation</h1>
                         :
                         <NoDataFound message="No international Package found" />
                     }
 
-                    <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10'>
-                        {internationalPackagesListing && internationalPackagesListing.map((item, index) => {
-                            return (
-                                <div key={index + "key"} className='relative group bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 cursor-pointer'>
-                                    <img src={`${imageUrl}${item?.packageImage}`} alt={item?.packageName} className='w-full h-64  transform group-hover:scale-105 transition-transform duration-300' />
-                                    <div className='absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300'></div>
-                                    <div className='absolute bottom-0 p-3 bg-opacity-80 bg-black w-full text-white'>
-                                        <div className='flex justify-between items-center'>
-                                            <h2 className='text-2xl font-bold mb-1'>{item?.packageName}</h2>
-                                            <span className='text-yellow-400 font-bold text-lg'>Royal</span>
-                                        </div>
-                                        <div className='flex justify-between items-center'>
-                                            <span className='text-gray-300'>7 days / 8 nights</span>
-                                            <span className='text-yellow-400 font-bold text-lg'>20,000</span>
-                                        </div>
+                    <div className='grid md:grid-cols-2 lg:grid-cols-3 gap-10'>
+                        {travelPackages && travelPackages.map((packageItem) => (
+                            <div
+                                key={packageItem.id}
+                                className='relative bg-white rounded-3xl shadow-lg overflow-hidden'>
+
+                                <div className='absolute -top-8 -right-12 w-36 h-36 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-full opacity-40 transition-all duration-500'></div>
+                                <div className='absolute -bottom-16 -left-16 w-48 h-48 bg-gradient-to-tl from-green-500 to-yellow-500 rounded-full opacity-30 transition-all duration-500'></div>
+
+                                <img src={packageItem.image} alt={packageItem.name} className='w-full h-48 object-cover rounded-t-3xl' />
+
+                                <div className='p-6 relative z-10'>
+                                    <h3 className='text-xl font-bold text-black tracking-wide'>{packageItem.name}</h3>
+                                    <p className='text-base text-gray-700'>{packageItem.description}</p>
+                                    <div>
+                                        <span className='text-lg font-bold text-red-400'>{packageItem.price}</span>
                                     </div>
+                                    <button className='mt-4 py-3 px-6 w-full bg-gradient-to-r from-green-400 to-blue-600 text-white font-bold rounded-xl'>
+                                        View More
+                                    </button>
                                 </div>
-                            )
-                        })}
+
+                                <div className='absolute from-gray-800'></div>
+                            </div>
+                        ))}
                     </div>
                 </div>
             </div>

@@ -1,3 +1,4 @@
+import { Download, RotateCw, X, ZoomIn, ZoomOut } from 'lucide-react';
 import React, { useRef, useState } from 'react';
 import { CgCalendarDates } from "react-icons/cg";
 import { FaShower, FaTv } from "react-icons/fa";
@@ -10,11 +11,88 @@ import 'swiper/css/autoplay';
 import { Autoplay } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
+const ImageModal = ({ isOpen, onClose, imageUrl }) => {
+
+    const [scale, setScale] = useState(1);
+    const [rotation, setRotation] = useState(0);
+
+    const handleZoomIn = () => {
+        setScale(prev => Math.min(prev + 0.2, 3));
+    };
+
+    const handleZoomOut = () => {
+        setScale(prev => Math.max(prev - 0.2, 0.5));
+    };
+
+    const handleRotate = () => {
+        setRotation(prev => prev + 90);
+    };
+
+    if (!isOpen) return null;
+
+    return (
+        <div className="fixed inset-0 z-50 overflow-hidden">
+            <div
+                className="absolute inset-0 bg-black/80 backdrop-blur-sm transition-opacity duration-300"
+                onClick={onClose}
+            />
+
+            <div className="relative h-full w-full flex items-center justify-center p-4">
+                <div className="absolute top-4 right-4 left-4 flex items-center justify-between z-10">
+                    <div className="flex items-center gap-2">
+                        <button
+                            onClick={handleZoomIn}
+                            className="p-2 bg-white/10 hover:bg-white/20 rounded-full transition-colors duration-200"
+                        >
+                            <ZoomIn className="w-5 h-5 text-white" />
+                        </button>
+                        <button
+                            onClick={handleZoomOut}
+                            className="p-2 bg-white/10 hover:bg-white/20 rounded-full transition-colors duration-200"
+                        >
+                            <ZoomOut className="w-5 h-5 text-white" />
+                        </button>
+                        <button
+                            onClick={handleRotate}
+                            className="p-2 bg-white/10 hover:bg-white/20 rounded-full transition-colors duration-200"
+                        >
+                            <RotateCw className="w-5 h-5 text-white" />
+                        </button>
+                        <button
+                            className="p-2 bg-white/10 hover:bg-white/20 rounded-full transition-colors duration-200"
+                        >
+                            <Download className="w-5 h-5 text-white" />
+                        </button>
+                    </div>
+                    <button
+                        onClick={onClose}
+                        className="p-2 bg-white/10 hover:bg-white/20 rounded-full transition-colors duration-200"
+                    >
+                        <X className="w-5 h-5 text-white" />
+                    </button>
+                </div>
+
+                <div className="relative max-w-5xl w-full h-full flex items-center justify-center">
+                    <img
+                        src={imageUrl}
+                        alt="Modal content"
+                        className="max-w-full max-h-[85vh] object-contain transition-transform duration-200 rounded-lg"
+                        style={{
+                            transform: `scale(${scale}) rotate(${rotation}deg)`
+                        }}
+                    />
+                </div>
+            </div>
+        </div>
+    );
+};
+
 const SecondStepsBookingHotel = ({ setHotelPriceSelect, selectedHotel }) => {
 
     const swiperRef = useRef(null);
     const [selectedHotelPrice, setSelectedHotelPrice] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [hoveredAmenity, setHoveredAmenity] = useState(null);
     const [modalImage, setModalImage] = useState(null);
 
     const handleSelectHotelPrice = (indexHotel) => {
@@ -31,6 +109,16 @@ const SecondStepsBookingHotel = ({ setHotelPriceSelect, selectedHotel }) => {
         setIsModalOpen(false);
         setModalImage(null);
     };
+
+    const amenities = [
+        { name: 'Wifi', icon: <FaWifi size={25} color='#3cb7ff' className='cursor-pointer' />, condition: selectedHotel?.amenities?.wifi },
+        { name: 'TV', icon: <FaTv size={25} color='#3cb7ff' className='cursor-pointer' />, condition: selectedHotel?.amenities?.tv },
+        { name: 'Air Conditioning', icon: <TbAirConditioning size={25} color='#3cb7ff' className='cursor-pointer' />, condition: selectedHotel?.amenities?.ac },
+        { name: 'Bathroom', icon: <FaShower size={25} color='#3cb7ff' className='cursor-pointer' />, condition: selectedHotel?.amenities?.bathroom },
+        { name: 'Mini Bar', icon: <RiDrinksLine size={25} color='#3cb7ff' className='cursor-pointer' />, condition: selectedHotel?.amenities?.miniBar },
+        { name: 'Pets Allowed', icon: <MdOutlinePets size={25} color='#3cb7ff' className='cursor-pointer' />, condition: selectedHotel?.amenities?.petsAllowed },
+        { name: 'Disable Facilities', icon: <TbDisabled size={25} color='#3cb7ff' className='cursor-pointer' />, condition: selectedHotel?.amenities?.disableFacilities }
+    ];
 
     return (
         <>
@@ -116,7 +204,7 @@ const SecondStepsBookingHotel = ({ setHotelPriceSelect, selectedHotel }) => {
                     </div>
 
                     <div>
-                        <h1 className='text-[26px] text-gray-700 font-semibold'>{selectedHotel?.hotelName}</h1>
+                        <h1 className='text-[26px] text-black font-semibold'>{selectedHotel?.hotelName}</h1>
                         <p className='text-justify text-lg tracking-wide'>
                             {selectedHotel?.description}
                         </p>
@@ -126,27 +214,23 @@ const SecondStepsBookingHotel = ({ setHotelPriceSelect, selectedHotel }) => {
                 <div className='px-3'>
                     <p className='text-2xl text-gray-500 font-semibold my-2'>Characteristics</p>
                     <div className='flex flex-row items-center gap-3 my-3'>
-                        {selectedHotel?.amenities?.wifi &&
-                            <FaWifi size={25} color='#3cb7ff' className='cursor-pointer' />
-                        }
-                        {selectedHotel?.amenities?.tv &&
-                            <FaTv size={25} color='#3cb7ff' className='cursor-pointer' />
-                        }
-                        {selectedHotel?.amenities?.ac &&
-                            <TbAirConditioning size={25} color='#3cb7ff' className='cursor-pointer' />
-                        }
-                        {selectedHotel?.amenities?.bathroom &&
-                            <FaShower size={25} color='#3cb7ff' className='cursor-pointer' />
-                        }
-                        {selectedHotel?.amenities?.miniBar &&
-                            <RiDrinksLine size={25} color='#3cb7ff' className='cursor-pointer' />
-                        }
-                        {selectedHotel?.amenities?.petsAllowed &&
-                            <MdOutlinePets size={25} color='#3cb7ff' className='cursor-pointer' />
-                        }
-                        {selectedHotel?.amenities?.disableFacilities &&
-                            <TbDisabled size={25} color='#3cb7ff' className='cursor-pointer' />
-                        }
+                        {amenities.map((amenity, index) => (
+                            amenity.condition && (
+                                <div
+                                    key={index}
+                                    className="relative flex items-center"
+                                    onMouseEnter={() => setHoveredAmenity(amenity.name)}
+                                    onMouseLeave={() => setHoveredAmenity(null)}
+                                >
+                                    {amenity.icon}
+                                    {hoveredAmenity === amenity.name && (
+                                        <div className='absolute top-[25px] py-[6px] px-[8px] text-white bg-black p-1 rounded-md text-sm'>
+                                            {amenity.name}
+                                        </div>
+                                    )}
+                                </div>
+                            )
+                        ))}
                     </div>
                 </div>
 
@@ -154,8 +238,8 @@ const SecondStepsBookingHotel = ({ setHotelPriceSelect, selectedHotel }) => {
                     <h2 className='text-2xl text-gray-500 font-semibold mb-4'>Price</h2>
                     <div className='space-y-3'>
                         {selectedHotel?.pricingOptions.map((items, indexHotel) => (
-                            <div key={indexHotel} className={`mt-3 card bg-white rounded-xl shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg w-[100%] h-fit mb-2 ${selectedHotelPrice === indexHotel ? 'border-4 border-blue-500' : ''}`}>
-                                <div className="border border-gray-300 rounded-lg p-4 shadow-sm" onClick={() => handleSelectHotelPrice(indexHotel)}>
+                            <div key={indexHotel} className={`mt-3 card bg-white rounded-xl shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg w-[100%] h-fit mb-2 ${selectedHotelPrice === indexHotel ? 'border-4 border-blue-500' : ''}`} onClick={() => handleSelectHotelPrice(indexHotel)}>
+                                <div className="border border-gray-300 rounded-lg p-4 shadow-sm" >
                                     <label className="flex items-center space-x-4 cursor-pointer">
                                         <input
                                             type="radio"
@@ -181,25 +265,11 @@ const SecondStepsBookingHotel = ({ setHotelPriceSelect, selectedHotel }) => {
                 </div>
             </div>
 
-            {isModalOpen && (
-                <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
-                    <div className="relative max-w-3xl mx-auto bg-white rounded-lg shadow-lg">
-                        <div>
-                            <button
-                                className="absolute top-2 right-2 p-[5px] w-fit h-fit bg-black text-white font-bold text-2xl"
-                                onClick={closeModal}
-                            >
-                                x
-                            </button>
-                        </div>
-                        <img
-                            src={modalImage}
-                            alt="Modal View"
-                            className="w-full h-auto rounded-lg"
-                        />
-                    </div>
-                </div>
-            )}
+            <ImageModal
+                isOpen={isModalOpen}
+                onClose={closeModal}
+                imageUrl={modalImage}
+            />
         </>
     );
 };

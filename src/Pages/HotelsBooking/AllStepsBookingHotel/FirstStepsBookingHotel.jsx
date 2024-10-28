@@ -9,21 +9,21 @@ import { useLocation } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 const FirstStepsBookingHotel = ({ setIsHotelSelected, onSelectHotel }) => {
-
     const [selectedHotel, setSelectedHotel] = useState(null);
     const location = useLocation();
     const { formData, hotelCityData } = location.state || {};
-    const [particularHotelListing, setparticularHotelListing] = useState([]);
-    const [formInputData, setformInputData] = useState([]);
+    const [particularHotelListing, setParticularHotelListing] = useState([]);
+    const [formInputData, setFormInputData] = useState([]);
     const [itemsToShow, setItemsToShow] = useState(5);
+    const [hoveredAmenity, setHoveredAmenity] = useState({});
 
     useEffect(() => {
         if (hotelCityData?.data && Array.isArray(hotelCityData.data)) {
-            setparticularHotelListing(hotelCityData.data);
-            setformInputData(formData);
+            setParticularHotelListing(hotelCityData.data);
+            setFormInputData(formData);
         } else {
-            setparticularHotelListing([]);
-            setformInputData([]);
+            setParticularHotelListing([]);
+            setFormInputData([]);
         }
     }, [hotelCityData]);
 
@@ -100,6 +100,16 @@ const FirstStepsBookingHotel = ({ setIsHotelSelected, onSelectHotel }) => {
             </div>
 
             {particularHotelListing && particularHotelListing.slice(0, itemsToShow).map((items, index) => {
+                const amenities = [
+                    { name: 'Wifi', icon: <FaWifi size={25} color='#3cb7ff' className='cursor-pointer' />, condition: items?.amenities?.wifi },
+                    { name: 'TV', icon: <FaTv size={25} color='#3cb7ff' className='cursor-pointer' />, condition: items?.amenities?.tv },
+                    { name: 'Air Conditioning', icon: <TbAirConditioning size={25} color='#3cb7ff' className='cursor-pointer' />, condition: items?.amenities?.ac },
+                    { name: 'Bathroom', icon: <FaShower size={25} color='#3cb7ff' className='cursor-pointer' />, condition: items?.amenities?.bathroom },
+                    { name: 'Mini Bar', icon: <RiDrinksLine size={25} color='#3cb7ff' className='cursor-pointer' />, condition: items?.amenities?.miniBar },
+                    { name: 'Pets Allowed', icon: <MdOutlinePets size={25} color='#3cb7ff' className='cursor-pointer' />, condition: items?.amenities?.petsAllowed },
+                    { name: 'Disable Facilities', icon: <TbDisabled size={25} color='#3cb7ff' className='cursor-pointer' />, condition: items?.amenities?.disableFacilities }
+                ];
+
                 return (
                     <div
                         key={index + "1"}
@@ -123,48 +133,27 @@ const FirstStepsBookingHotel = ({ setIsHotelSelected, onSelectHotel }) => {
                             </div>
 
                             <div>
-
-                                <div>
-                                    <h4 className='font-semibold text-2xl text-black'>{items?.hotelName}</h4>
-                                    <p className='font-medium text-lg text-black py-2'>{items?.description}</p>
-                                </div>
+                                <h4 className='font-semibold text-2xl text-black'>{items?.hotelName}</h4>
+                                <p className='font-medium text-lg text-black py-2'>{items?.description}</p>
 
                                 <div className='flex flex-row flex-wrap gap-4 py-2'>
-                                    {items?.amenities?.wifi === true &&
-                                        <div className='cursor-pointer'>
-                                            <FaWifi size={25} color='#3cb7ff' />
-                                        </div>
-                                    }
-                                    {items?.amenities?.tv === true &&
-                                        <div className='cursor-pointer'>
-                                            <FaTv size={25} color='#3cb7ff' />
-                                        </div>
-                                    }
-                                    {items?.amenities?.ac === true &&
-                                        <div className='cursor-pointer'>
-                                            <TbAirConditioning size={25} color='#3cb7ff' />
-                                        </div>
-                                    }
-                                    {items?.amenities?.bathroom === true &&
-                                        <div className='cursor-pointer'>
-                                            <FaShower size={25} color='#3cb7ff' />
-                                        </div>
-                                    }
-                                    {items?.amenities?.miniBar === true &&
-                                        <div className='cursor-pointer'>
-                                            <RiDrinksLine size={25} color='#3cb7ff' />
-                                        </div>
-                                    }
-                                    {items?.amenities?.petsAllowed === true &&
-                                        <div className='cursor-pointer'>
-                                            <MdOutlinePets size={25} color='#3cb7ff' />
-                                        </div>
-                                    }
-                                    {items?.amenities?.disableFacilities === true &&
-                                        <div className='cursor-pointer'>
-                                            <TbDisabled size={25} color='#3cb7ff' />
-                                        </div>
-                                    }
+                                    {amenities.map((amenity, amenityIndex) => (
+                                        amenity.condition && (
+                                            <div
+                                                key={amenityIndex}
+                                                className="relative flex items-center"
+                                                onMouseEnter={() => setHoveredAmenity({ name: amenity.name, index })}
+                                                onMouseLeave={() => setHoveredAmenity({})}
+                                            >
+                                                {amenity.icon}
+                                                {hoveredAmenity.name === amenity.name && hoveredAmenity.index === index && (
+                                                    <div className='absolute top-[25px] py-[6px] px-[8px] text-white bg-black p-1 rounded-md text-sm'>
+                                                        {amenity.name}
+                                                    </div>
+                                                )}
+                                            </div>
+                                        )
+                                    ))}
                                 </div>
                             </div>
 
@@ -177,7 +166,7 @@ const FirstStepsBookingHotel = ({ setIsHotelSelected, onSelectHotel }) => {
                                 <div className='w-fit'>
                                     <button
                                         onClick={() => handleSelectHotel(index)}
-                                        className='bg-red-500 px-4 py-2 rounded-md text-white font-semibold transition-all duration-300 hover:bg-red-600'
+                                        className='bg-red-500 px-4 py-2 rounded-md text-white font-semibold transition-all duration-300 hover:bg-red-700'
                                     >
                                         Select Hotel
                                     </button>
@@ -187,19 +176,18 @@ const FirstStepsBookingHotel = ({ setIsHotelSelected, onSelectHotel }) => {
                     </div>
                 )
             })}
-
-            {itemsToShow < particularHotelListing.length && (
-                <div className='flex justify-center my-4'>
+            <div className='flex flex-row justify-center'>
+                {itemsToShow < particularHotelListing.length && (
                     <button
                         onClick={loadMoreHotels}
-                        className='bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-all duration-300'
+                        className='flex flex-row justify-center bg-blue-500 px-4 py-2 rounded-md text-white font-semibold transition-all duration-300 hover:bg-blue-700 mt-3'
                     >
-                        Load More
+                        Show More
                     </button>
-                </div>
-            )}
+                )}
+            </div>
         </>
-    );
+    )
 };
 
 export default FirstStepsBookingHotel;
