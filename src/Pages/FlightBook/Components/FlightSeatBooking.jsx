@@ -2,38 +2,53 @@ import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useGetFlightSeatQuery } from '../../../Api/Api';
+import { useGetFlightSeatQuery, useLazyGetFlightUpdatedSeatQuery, useUpdateSeatMutation } from '../../../Api/Api';
 import { usePassenger } from '../../../Context/PassengerCountContext';
-import { useFlightTicketsDetailsContext } from '../../../Context/FlightTicketsDetailsContext';
 
 const FlightSeatBooking = () => {
 
     const { id, className } = useParams();
     const { passengerCount } = usePassenger();
-    const { setFlightSeatData } = useFlightTicketsDetailsContext();
     const { data, isError, isSuccess, error } = useGetFlightSeatQuery(id)
     const [selectedSeats, setSelectedSeats] = useState([]);
     const [hoveredSeat, setHoveredSeat] = useState(null);
     const [seats, setSeats] = useState()
     const [selectSeat, setSelectSeat] = useState(false);
+    const [showMessage, setShowMessage] = useState('')
+
+    const [updateSeat, {
+        isSuccess: isUpdateSeatSucessfully,
+        isError: isFetchingErrInSeat,
+        error: fetchingErrInUpdateSeat
+    }] = useUpdateSeatMutation();
+
+    const [fetchedUpdatedSeat, {
+        data: fetchSeatData,
+        isSuccess: successFullyFetchedSeatData,
+        isError: isErrFetchingUpdatedSeatData,
+        error: errFetchingUpdatedSeatData
+    }] = useLazyGetFlightUpdatedSeatQuery();
+
     const navigate = useNavigate();
 
-    const totalPassengers =
-        Number(passengerCount.adult) +
-        Number(passengerCount.children)
+    useEffect(() => {
+        const contactId = localStorage.getItem('contactId');
+        if (contactId) {
+            fetchedUpdatedSeat(contactId)
+        }
+    }, []);
 
-    const handleSeatClick = (seat) => {
-        if (selectedSeats.includes(seat)) {
-            setSelectedSeats(selectedSeats.filter((selectedSeat) => selectedSeat !== seat));
-        } else {
-            if (selectedSeats?.length < totalPassengers) {
-                setSelectedSeats([...selectedSeats, seat]);
-            } else {
-                setSelectSeat(true)
-            }
+    useEffect(() => {
+
+        if (successFullyFetchedSeatData && fetchSeatData) {
+            const preselectedSeats = fetchSeatData?.data.map(seat => seat.seat_number);
+            console.log(preselectedSeats, 'preselectedSeatspreselectedSeatspreselectedSeats')
+            setSelectedSeats(preselectedSeats);
+        } else if (isErrFetchingUpdatedSeatData) {
+            console.log(errFetchingUpdatedSeatData, 'Error fetching updated seat data');
         }
 
-    };
+    }, [fetchSeatData, successFullyFetchedSeatData, isErrFetchingUpdatedSeatData, errFetchingUpdatedSeatData]);
 
     useEffect(() => {
 
@@ -51,23 +66,67 @@ const FlightSeatBooking = () => {
 
     }, [data, isError, isSuccess, error])
 
+    useEffect(() => {
+
+        if (isUpdateSeatSucessfully) {
+            navigate(`/tickets-payment/${className}/${id}`)
+        } else if (isFetchingErrInSeat) {
+            console.log(isFetchingErrInSeat, 'fetching error in update a seat')
+        }
+
+    }, [isUpdateSeatSucessfully, isFetchingErrInSeat, isFetchingErrInSeat])
+
+    const totalPassengers =
+        Number(passengerCount.adult) +
+        Number(passengerCount.children)
+
+     const handleSeatClick = (seat) => {
+        if (selectedSeats.includes(seat)) {
+            setSelectedSeats(selectedSeats.filter((selectedSeat) => selectedSeat !== seat));
+        } else {
+            if (selectedSeats?.length < totalPassengers) {
+                setSelectSeat(false);
+                setSelectedSeats([...selectedSeats, seat]);
+            } else {
+                setSelectSeat(true);
+                setShowMessage('All available seats have been selected! Thank you for your understanding.');
+            }
+        }
+    };
+
     const handleGoToMealPage = () => {
         navigate(`/meal-booking/${className}/${id}`)
     }
 
-    const handlePaymentPage = () => {
+    const handlePaymentPage = async () => {
 
-        const selectedSeatData = selectedSeats.map(seatNumber => {
+
+        const selectedSeatId = selectedSeats.map(seatNumber => {
             const seat = seats.find(s => s.seat_number === seatNumber);
             return {
-                seat_id: seat._id,
-                seat_name: seat.seat_number,
-                seat_price: seat.price,
+                seatId: seat._id,
             };
         });
 
-        setFlightSeatData(selectedSeatData)
-        navigate(`/tickets-payment/${className}/${id}`)
+        if (selectedSeatId.length < totalPassengers) {
+
+            const remainingSeats = totalPassengers - selectedSeatId.length;
+            setSelectSeat(true);
+            setShowMessage(`You're almost there! Please select ${remainingSeats} more seat${remainingSeats > 1 ? 's' : ''} to complete your booking.`);
+
+        } else {
+            const id = localStorage.getItem('contactId');
+
+            const payload = {
+                selectedSeatId,
+                id
+            }
+            setSelectSeat(false);
+            console.log(payload, 'selectedSeatDataselectedSeatDataselectedSeatDataselectedSeatData')
+
+            await updateSeat(payload)
+        }
+
     }
 
     return (
@@ -91,7 +150,7 @@ const FlightSeatBooking = () => {
 
                         {selectSeat ? (
                             <div className='flex justify-center'>
-                                <p className='text-red-600 font-semibold'>Not select more seat</p>
+                                <p className='text-red-600 text-sm font-semibold w-64 text-center'>{showMessage}</p>
                             </div>
                         ) : (
                             <></>
