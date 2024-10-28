@@ -30,6 +30,16 @@ const HotelBookingSearch = ({ onSearch }) => {
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
+        if (name === 'checkinDate' && value) {
+            const nextDay = new Date(value);
+            nextDay.setDate(nextDay.getDate() + 1);
+            setFormData((prev) => ({
+                ...prev,
+                checkoutDate: prev.checkoutDate && new Date(prev.checkoutDate) <= nextDay
+                    ? nextDay.toISOString().split('T')[0]
+                    : prev.checkoutDate,
+            }));
+        }
     };
 
     const handleSubmit = (e) => {
@@ -72,15 +82,15 @@ const HotelBookingSearch = ({ onSearch }) => {
     }, [data, error, isSuccess, isError]);
 
     const handleCitySelectFrom = (city) => {
-        setSearchValueFrom(city.city);
-        setFormData((prev) => ({ ...prev, city: city.city }));
+        setSearchValueFrom(city?.city);
+        setFormData((prev) => ({ ...prev, city: city?.city }));
         setFromCitiesListing([]);
         setSelectedCityFrom(false);
     };
 
     useEffect(() => {
         return () => {
-            clearTimeout(timeoutRef.current);
+            clearTimeout(timeoutRef?.current);
         };
     }, []);
 
@@ -135,6 +145,7 @@ const HotelBookingSearch = ({ onSearch }) => {
                                 value={formData.checkinDate}
                                 onChange={handleChange}
                                 className="w-full px-3 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-400 focus:outline-none"
+                                min={new Date().toISOString().split('T')[0]}
                             />
                         </div>
 
@@ -150,6 +161,7 @@ const HotelBookingSearch = ({ onSearch }) => {
                                 value={formData.checkoutDate}
                                 onChange={handleChange}
                                 className="w-full px-3 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-400 focus:outline-none"
+                                min={formData.checkinDate ? new Date(new Date(formData.checkinDate).setDate(new Date(formData.checkinDate).getDate() + 1)).toISOString().split('T')[0] : ''}
                             />
                         </div>
 
@@ -203,7 +215,7 @@ const HotelBookingSearch = ({ onSearch }) => {
                         <div className="col-span-1 w-fit h-fit mt-6">
                             <button
                                 type="submit"
-                                className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold py-2 px-4 rounded-lg shadow-lg hover:from-indigo-600 hover:to-blue-500 transition-all ease-in-out duration-300 flex items-center justify-center"
+                                className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold py-2 px-4 rounded-lg shadow-lg hover:from-indigo-600 hover:to-blue-500 transition duration-300 flex items-center justify-center"
                             >
                                 <Search className="mr-2" size={16} />
                                 Search

@@ -61,7 +61,6 @@ const Details = () => {
                 <div className='text-gray-400 text-[25px]'>
                     <div className='flex flex-row'>
                         {socialMediaLinkListing && socialMediaLinkListing.map((item, index) => {
-                            console.log("item", item);
                             return (
                                 <div key={index} className='p-1'>
                                     {item.socialMediaName === 'facebook' && (

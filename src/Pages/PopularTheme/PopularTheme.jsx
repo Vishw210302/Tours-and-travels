@@ -1,7 +1,7 @@
 import React from 'react';
-import RippleEffect from '../RippleEffects/RippleEffect';
-import BannerImage from "../../assets/water.jpg";
 import pkgImage from "../../assets/image.jpg";
+import BannerImage from "../../assets/water.jpg";
+import RippleEffect from '../RippleEffects/RippleEffect';
 
 const travelPackages = [
     {

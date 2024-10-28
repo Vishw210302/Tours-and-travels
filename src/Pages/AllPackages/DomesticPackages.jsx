@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useGetPackagesQuery } from '../../Api/Api';
-import BannerImage from "../../assets/waterEffect.png"
-import RippleEffect from '../RippleEffects/RippleEffect';
+import BannerImage from "../../assets/waterEffect.png";
 import NoDataFound from '../NoDataFound';
+import RippleEffect from '../RippleEffects/RippleEffect';
 
 const DomesticPackages = () => {
 
-    const { isError, error, data, isLoading, isSuccess } = useGetPackagesQuery();
+    const { isError, error, data, isSuccess } = useGetPackagesQuery();
     const [domesticPackagesListing, setDomesticPackagesListing] = useState([]);
     const imageUrl = `${import.meta.env.VITE_REACT_APP_IMAGE_URL}/packages-Image/`;
 

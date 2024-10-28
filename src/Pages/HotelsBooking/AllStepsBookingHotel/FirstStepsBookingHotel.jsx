@@ -8,13 +8,14 @@ import { TbAirConditioning, TbDisabled } from "react-icons/tb";
 import { useLocation } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-const FirstStepsBookingHotel = ({ setIsHotelSelected }) => {
+const FirstStepsBookingHotel = ({ setIsHotelSelected, onSelectHotel }) => {
 
     const [selectedHotel, setSelectedHotel] = useState(null);
     const location = useLocation();
     const { formData, hotelCityData } = location.state || {};
-    const [particularHotelListing, setparticularHotelListing] = useState([])
-    const [formInputData, setformInputData] = useState([])
+    const [particularHotelListing, setparticularHotelListing] = useState([]);
+    const [formInputData, setformInputData] = useState([]);
+    const [itemsToShow, setItemsToShow] = useState(5);
 
     useEffect(() => {
         if (hotelCityData?.data && Array.isArray(hotelCityData.data)) {
@@ -29,6 +30,21 @@ const FirstStepsBookingHotel = ({ setIsHotelSelected }) => {
     const handleSelectHotel = (index) => {
         setSelectedHotel(index);
         setIsHotelSelected(true);
+        onSelectHotel(particularHotelListing[index]);
+    };
+
+    const calculateNights = (checkinDate, checkoutDate) => {
+        const checkin = new Date(checkinDate);
+        const checkout = new Date(checkoutDate);
+        const differenceInTime = checkout - checkin;
+        const differenceInDays = differenceInTime / (1000 * 3600 * 24);
+        return differenceInDays;
+    };
+
+    const nights = calculateNights(formInputData?.checkinDate, formInputData?.checkoutDate);
+
+    const loadMoreHotels = () => {
+        setItemsToShow(prev => prev + 5);
     };
 
     return (
@@ -58,7 +74,7 @@ const FirstStepsBookingHotel = ({ setIsHotelSelected }) => {
                             </div>
                             <div className='border-r border-gray-500 pr-3'>
                                 <p className='text-black text-sm font-semibold'>Night</p>
-                                <p className='text-gray-600 text-sm font-semibold'>1</p>
+                                <p className='text-gray-600 text-sm font-semibold'>{nights}</p>
                             </div>
                         </div>
                         <div className='flex flex-row items-center gap-3'>
@@ -67,21 +83,29 @@ const FirstStepsBookingHotel = ({ setIsHotelSelected }) => {
                             </div>
                             <div className='border-r border-gray-500 pr-3'>
                                 <p className='text-black text-sm font-semibold'>Adult</p>
-                                <p className='text-gray-600 text-sm font-semibold'>1</p>
+                                <p className='text-gray-600 text-sm font-semibold'>{formInputData?.adults}</p>
+                            </div>
+                        </div>
+                        <div className='flex flex-row items-center gap-3'>
+                            <div>
+                                <FaPerson size={25} color='#3cb7ff' />
+                            </div>
+                            <div className='border-r border-gray-500 pr-3'>
+                                <p className='text-black text-sm font-semibold'>Children</p>
+                                <p className='text-gray-600 text-sm font-semibold'>{formInputData?.children}</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            {particularHotelListing && particularHotelListing.map((items, index) => {
+            {particularHotelListing && particularHotelListing.slice(0, itemsToShow).map((items, index) => {
                 return (
                     <div
                         key={index + "1"}
                         className={`mt-3 card bg-white rounded-xl shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg w-[95%] h-fit mb-2 ${selectedHotel === index ? 'border-4 border-blue-500' : ''}`}
                     >
                         <div className="grid grid-cols-[25%,55%,auto] gap-5 items-center">
-
                             <div>
                                 <Swiper
                                     spaceBetween={10}
@@ -91,7 +115,7 @@ const FirstStepsBookingHotel = ({ setIsHotelSelected }) => {
                                     {items?.hotelImages && items?.hotelImages.map((image, index) => {
                                         return (
                                             <SwiperSlide key={index + "Hotel"}>
-                                                <img src={image.url} alt="hotel-images" className='w-[100%] h-[230px] rounded-md object-cover' />
+                                                <img src={image.url} alt="hotel-images" className='w-[100%] h-[230px] object-cover' />
                                             </SwiperSlide>
                                         )
                                     })}
@@ -163,6 +187,17 @@ const FirstStepsBookingHotel = ({ setIsHotelSelected }) => {
                     </div>
                 )
             })}
+
+            {itemsToShow < particularHotelListing.length && (
+                <div className='flex justify-center my-4'>
+                    <button
+                        onClick={loadMoreHotels}
+                        className='bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-all duration-300'
+                    >
+                        Load More
+                    </button>
+                </div>
+            )}
         </>
     );
 };

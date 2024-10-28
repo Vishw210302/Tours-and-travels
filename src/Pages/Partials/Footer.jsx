@@ -74,7 +74,7 @@ const Footer = () => {
             <div className='w-fit h-fit'>
               <img src={footerLogo} alt="footer_logo" className='h-24 w-24' />
             </div>
-            <div className='text-justify text-sm font-medium mt-3' style={{ letterSpacing: '-0.4px' }}>
+            <div className='text-sm font-medium mt-3' style={{ letterSpacing: '-0.4px' }}>
               <p>Welcome to Asgard Tours and Travels, your gateway to unforgettable adventures and immersive travel experiences. Explore with us and let your journey begin!</p>
             </div>
             <div className='w-fit bg-[#15304d] rounded-lg p-3 mt-3'>
