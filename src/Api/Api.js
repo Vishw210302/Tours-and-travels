@@ -153,17 +153,28 @@ export const myApi = createApi({
         }),
 
         getUpdatedMealOrder: builder.query({
-            query: (id) => `get-updated-meal-order?id=${id}`
-
-        }),
-
-        getPassengerDetailsByEmail: builder.query({
-            query: (email) => `get-passengers-by-email?email=${email}`,
+            query: (id) => `updated-meal-order?id=${id}`
 
         }),
 
         getFlightSeat: builder.query({
             query: (id) => `get-flights-seats/${id}`,
+        }),
+
+        updateSeat: builder.mutation({
+            query: (seatData) => ({
+                url: "update-seat",
+                method: "POST",
+                body: seatData,
+            })
+        }),
+
+        getFlightUpdatedSeat: builder.query({
+            query: (id) => `get-flights-updated-seat?id=${id}`,
+        }),
+
+        getFlightAllBookingDetails: builder.query({
+            query: (id) => `get-all-flight-booking-details?contactId=${id}`,
         }),
 
         createPaymentIntent: builder.mutation({
@@ -227,7 +238,6 @@ export const {
     useLazyGetPassengerDetailsByContactIdQuery,
     useAddMealDataMutation,
     useLazyGetUpdatedMealOrderQuery,
-    useGetPassengerDetailsByEmailQuery,
     useGetBranchesQuery,
     useLazyGetSubBranchesQuery,
     useGetFlightDetailsMutation,
@@ -241,6 +251,9 @@ export const {
     useLazyGetMealByIdQuery,
     useLazyGetParticularFlightQuery,
     useGetFlightSeatQuery,
+    useUpdateSeatMutation,
+    useLazyGetFlightUpdatedSeatQuery,
+    useGetFlightAllBookingDetailsQuery,
     useCreatePaymentIntentMutation,
     useSubmitFlightTicketDataMutation,
     useGetPackageThemeDataQuery,

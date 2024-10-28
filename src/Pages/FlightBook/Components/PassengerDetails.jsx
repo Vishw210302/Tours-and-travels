@@ -46,7 +46,6 @@ const PassengerDetails = ({ flightId }) => {
   useEffect(() => {
     const contactId = localStorage.getItem('contactId');
     if (contactId) {
-      console.log(contactId, 'contactIdcontactId');
       fetchDetailsByContactId(contactId)
     }
   }, []);
@@ -64,7 +63,6 @@ const PassengerDetails = ({ flightId }) => {
 
     if (isPassengerDataFetched) {
 
-      console.log(storeDPassengerData?.data, "Fetched passenger data");
       const fetchedPassengerData = storeDPassengerData.data.passengerDetails;
       const contactData = {
         id: storeDPassengerData.data._id,

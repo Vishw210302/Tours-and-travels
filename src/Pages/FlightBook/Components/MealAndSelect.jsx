@@ -28,7 +28,7 @@ const MealAndSelect = () => {
     }] = useLazyGetMealByIdQuery();
 
     const [addMealData, {
-        isSuccess: isMealDataAddedSuccessfully,
+        isSuccess: isMealUpdateSuccessfully,
         isError: isMealDataAdditionError,
         error: mealDataAdditionError
     }] = useAddMealDataMutation();
@@ -39,7 +39,7 @@ const MealAndSelect = () => {
         isError: isUpdatedMealDataFetchError,
         error: updatedMealDataFetchError
     }] = useLazyGetUpdatedMealOrderQuery();
-    
+
 
     const mealUrl = `${import.meta.env.VITE_REACT_APP_IMAGE_URL}/meal-items-image/`;
 
@@ -64,32 +64,33 @@ const MealAndSelect = () => {
     }, [errorPasricularMeal, ParticularMealData, isSuccessPasricularMeal, isErrorPasricularMeal]);
 
     useEffect(() => {
-        if (isMealDataAddedSuccessfully) {
-            // navigate(`/flight-seat-booking/${className}/${id}`);
-        } else if (isMealDataAdditionError) {
-            console.log("isLocationError", mealDataAdditionError);
-        }
-    }, [isMealDataAddedSuccessfully, isMealDataAdditionError, mealDataAdditionError]);
-
-    useEffect(() => {
         const contactId = localStorage.getItem('contactId');
         if (contactId) {
-          console.log(contactId, 'contactIdcontactId');
-          getUpdatedMealData(contactId)
+            getUpdatedMealData(contactId)
         }
-      }, []);
+    }, []);
 
-    // const getSelectedMealData = (id) => {
-    //     return selectedMealData.some(value => value.meal_id === id);
-    // }
-    // console.log(getSelectedMealData(), 'getSelectedMealData')
+    useEffect(() => {
+        
+        if (updatedMealData) {
+            const meals = updatedMealData?.data.map((meal) => meal.mealDetails);
+            const counts = {};
+            updatedMealData?.data.forEach((meal) => {
+                counts[meal.mealDetails._id] = parseInt(meal.mealCount);
+            });
 
-    // useEffect(() => {
+            setSelectetParticularMeals(meals);
+            setMealCounts(counts);
+        }
+    }, [updatedMealData]);
 
-    //     console.log(selectedMealData, 'selectedMealData')
-    // }, [selectedMealData])
-
-
+    useEffect(() => {
+        if (isMealDataAdditionError) {
+            console.log("isLocationError", mealDataAdditionError);
+        }else if(isMealUpdateSuccessfully){
+            navigate(`/flight-seat-booking/${className}/${id}`)
+        }
+    }, [isMealDataAdditionError, mealDataAdditionError, isMealUpdateSuccessfully]);
 
     const handlePasengerDetailsPage = () => {
 
@@ -98,12 +99,10 @@ const MealAndSelect = () => {
 
     const handleSelectFlightSeat = async () => {
 
-        const selecteMealData = selecteParticularMeals.map((meal) => {
-            return {
-                meal_id: meal?._id,
-                count: mealCounts[meal?._id] || 1,
-            };
-        });
+        const selecteMealData = selecteParticularMeals.map((meal) => ({
+            meal_id: meal?._id,
+            count: mealCounts[meal?._id] || 1,
+        }));
 
         const id = localStorage.getItem('contactId');
 
@@ -115,7 +114,7 @@ const MealAndSelect = () => {
         console.log(payload, 'selecteMealDataselecteMealData');
 
         await addMealData(payload);
-       
+
     };
 
     const handleSelectMeal = (id) => {
@@ -123,14 +122,21 @@ const MealAndSelect = () => {
         fetchMealByParticularId(id)
     }
 
-    const handleSelectMeals = (mealId) => {
-        setSelectetParticularMeals((prev) => {
-            if (prev.includes(mealId)) {
-                return prev.filter((id) => id !== mealId);
+    const handleSelectMeals = (meal) => {
+        setSelectetParticularMeals((prevSelectedMeals) => {
+          
+            const isMealSelected = prevSelectedMeals.some((m) => m._id === meal._id);
+    
+            if (isMealSelected) {
+              
+                return prevSelectedMeals.filter((m) => m._id !== meal._id);
+            } else {
+                
+                return [...prevSelectedMeals, meal];
             }
-            return [...prev, mealId];
         });
     };
+    
 
     const increaseCount = (id) => {
         setMealCounts((prevCounts) => ({
@@ -197,13 +203,13 @@ const MealAndSelect = () => {
                                             <label className='flex items-center mt-2'>
                                                 <input
                                                     type='checkbox'
-                                                    checked={selecteParticularMeals.includes(meal)}
+                                                    checked={selecteParticularMeals.some((m) => m.mealItems === meal.mealItems)}
                                                     onChange={() => handleSelectMeals(meal)}
                                                     className='mr-2'
                                                 />
                                                 <span>Select</span>
                                             </label>
-                                            {selecteParticularMeals.includes(meal) && (
+                                            {selecteParticularMeals.some(m => m.mealItems == meal.mealItems) && (
                                                 <div className='flex flex-row-reverse items-center  mt-3'>
                                                     <button
                                                         onClick={() => increaseCount(meal._id)}
