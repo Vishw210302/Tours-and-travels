@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import mainLogo from "../../assets/asgradLogo.png"
+import mainLogo from "../../assets/asgradLogo.png";
 
 const NavBar = () => {
 
   const pathname = window.location.pathname.replace('/', '');
   const [activeLink, setActiveLink] = useState(pathname);
-  const [windowHeight, setWindowHeight] = useState(false);
   const [isPackagesOpen, setIsPackagesOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -17,15 +16,6 @@ const NavBar = () => {
       setIsPackagesOpen(false);
     }
   };
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setWindowHeight(window.scrollY);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   const getActiveClass = (link) => (
     activeLink === link || (link === 'holidays' && activeLink === 'holidays')
@@ -44,7 +34,7 @@ const NavBar = () => {
 
   return (
     <>
-      <nav className={`sticky top-0 bg-[#1f2746] ${windowHeight > 55 ? "h-[80px]" : "h-[90px]"} z-50 transition-all duration-300`}>
+      <nav className="sticky top-0 bg-[#1f2746] h-[80px] z-50">
         <div className='h-full container mx-auto grid grid-cols-3 px-4'>
           <div className='flex justify-start items-center cursor-pointer w-fit' onClick={() => {
             handleClickOnDashboard()
@@ -124,7 +114,7 @@ const NavBar = () => {
             </div>
           </div>
         </div>
-      </nav>
+      </nav >
     </>
   );
 };

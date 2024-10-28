@@ -1,7 +1,7 @@
-
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import ScrollToTop from './Api/ScrollToTop';
 import { FlightTicketsDetailsProvider } from './Context/FlightTicketsDetailsContext';
 import { PassengerCountProvider } from './Context/PassengerCountContext';
 import Aboutus from './Pages/AboutUs/Aboutus';
@@ -17,21 +17,23 @@ import PassengerDetails from './Pages/FlightBook/Components/PassengerDetails';
 import FlightBook from './Pages/FlightBook/FlightBook';
 import FlightsPageListing from './Pages/FlightsPagesListing/FlightsPageListing';
 import Home from './Pages/Home/Home';
+import HotelBookingResult from './Pages/HotelsBooking/HotelBookingResult';
+import HotelBookings from './Pages/HotelsBooking/HotelBookings';
 import Itenary from './Pages/Itenary/Itenary';
 import ItenaryDetail from './Pages/Itenary/ItenaryDetails/index';
 import MainLayout from './Pages/MainLayout';
 import PopularTheme from './Pages/PopularTheme/PopularTheme';
-import HotelBookings from './Pages/HotelsBooking/HotelBookings';
-import HotelBookingResult from './Pages/HotelsBooking/HotelBookingResult';
 
 const stripePromise = loadStripe('pk_test_51ON98CSEV9soa2c8CWj7i2O7pHm9b1EXoTi1LBhfICMonxhRKNHPPZU1bQ9FCYPwfcb4BzZ3RF8eTLHEt0ENjI3L00VzfQwTB9');
 
 function App() {
+
   return (
     <PassengerCountProvider>
       <FlightTicketsDetailsProvider>
         <Elements stripe={stripePromise}>
           <Router>
+            <ScrollToTop />
             <Routes>
               <Route path="/" element={<MainLayout />}>
                 <Route index element={<Home />} />

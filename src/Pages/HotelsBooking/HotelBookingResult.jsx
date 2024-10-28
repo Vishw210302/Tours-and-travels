@@ -16,6 +16,7 @@ const HotelBookingResult = () => {
     const [currentStep, setCurrentStep] = useState(1);
     const [isHotelSelected, setIsHotelSelected] = useState(false);
     const [isHotelPriceSelect, setHotelPriceSelect] = useState(false);
+    const [selectedHotel, setSelectedHotel] = useState(null);
 
     const handleNext = () => {
         if (currentStep < steps.length) {
@@ -27,6 +28,10 @@ const HotelBookingResult = () => {
         if (currentStep > 1) {
             setCurrentStep((prev) => prev - 1);
         }
+    };
+
+    const handleSelectHotel = (hotelData) => {
+        setSelectedHotel(hotelData);
     };
 
     return (
@@ -65,18 +70,21 @@ const HotelBookingResult = () => {
                     </ol>
 
                     <div className="py-6">
-                        {currentStep === 1 &&
-                            <FirstStepsBookingHotel setIsHotelSelected={setIsHotelSelected} />
-                        }
-                        {currentStep === 2 &&
-                            <SecondStepsBookingHotel setHotelPriceSelect={setHotelPriceSelect} />
-                        }
-                        {currentStep === 3 &&
-                            <ThirdStepsBookingHotel />
-                        }
-                        {currentStep === 4 &&
-                            <FourthStepsBookingHotel />
-                        }
+                        {currentStep === 1 && (
+                            <FirstStepsBookingHotel
+                                setIsHotelSelected={setIsHotelSelected}
+                                onSelectHotel={handleSelectHotel}
+                            />
+                        )}
+                        {currentStep === 2 && (
+                            <SecondStepsBookingHotel setHotelPriceSelect={setHotelPriceSelect} selectedHotel={selectedHotel} />
+                        )}
+                        {currentStep === 3 && (
+                            <ThirdStepsBookingHotel selectedHotel={selectedHotel} />
+                        )}
+                        {currentStep === 4 && (
+                            <FourthStepsBookingHotel selectedHotel={selectedHotel} />
+                        )}
                     </div>
 
                     <div className="flex justify-between mt-4">

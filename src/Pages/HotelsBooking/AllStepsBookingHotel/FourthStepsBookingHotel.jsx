@@ -139,7 +139,7 @@ const FourthStepsBookingHotel = () => {
                                     className={`w-full mt-1 p-2 border border-gray-300 rounded-md ${errors.firstName ? 'border-red-500' : ''}`}
                                     placeholder="Enter your first name"
                                 />
-                                {errors.firstName && <p className="text-red-500 text-md font-medium">{errors.firstName}</p>}
+                                {errors.firstName && <p className="text-red-500 text-md font-normal">{errors.firstName}</p>}
                             </div>
 
                             <div className="mb-4 w-[100%]">
@@ -155,7 +155,7 @@ const FourthStepsBookingHotel = () => {
                                     className={`w-full mt-1 p-2 border border-gray-300 rounded-md ${errors.lastName ? 'border-red-500' : ''}`}
                                     placeholder="Enter your last name"
                                 />
-                                {errors.lastName && <p className="text-red-500 text-md font-medium">{errors.lastName}</p>}
+                                {errors.lastName && <p className="text-red-500 text-md font-normal">{errors.lastName}</p>}
                             </div>
 
                         </div>
@@ -175,7 +175,7 @@ const FourthStepsBookingHotel = () => {
                                     className={`w-full mt-1 p-2 border border-gray-300 rounded-md ${errors.email ? 'border-red-500' : ''}`}
                                     placeholder="Enter your email"
                                 />
-                                {errors.email && <p className="text-red-500 text-md font-medium">{errors.email}</p>}
+                                {errors.email && <p className="text-red-500 text-md font-normal">{errors.email}</p>}
                             </div>
 
                             <div className="mb-4 w-[100%]">
@@ -191,7 +191,7 @@ const FourthStepsBookingHotel = () => {
                                     className={`w-full mt-1 p-2 border border-gray-300 rounded-md ${errors.phone ? 'border-red-500' : ''}`}
                                     placeholder="Enter your phone number"
                                 />
-                                {errors.phone && <p className="text-red-500 text-md font-medium">{errors.phone}</p>}
+                                {errors.phone && <p className="text-red-500 text-md font-normal">{errors.phone}</p>}
                             </div>
 
                         </div>
@@ -228,7 +228,7 @@ const FourthStepsBookingHotel = () => {
                                     className={`w-full mt-1 p-2 border border-gray-300 rounded-md ${errors.idProof ? 'border-red-500' : ''}`}
                                     accept=".pdf,.jpg,.jpeg,.png"
                                 />
-                                {errors.idProof && <p className="text-red-500 text-md font-medium">{errors.idProof}</p>}
+                                {errors.idProof && <p className="text-red-500 text-md font-normal">{errors.idProof}</p>}
                             </div>
 
                         </div>

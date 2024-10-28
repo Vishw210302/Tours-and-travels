@@ -7,7 +7,7 @@ import { useGetTeamMemberDetailsQuery } from '../../Api/Api';
 import NoDataFound from '../NoDataFound';
 
 const AboutUsPeople = () => {
-    const { isError, error, data, isLoading, isSuccess } = useGetTeamMemberDetailsQuery();
+    const { isError, error, data, isSuccess } = useGetTeamMemberDetailsQuery();
     const [teamMemberListing, setTeamMemberListing] = useState([])
     const teamMemberImage = `${import.meta.env.VITE_REACT_APP_IMAGE_URL}/team-member/`;
 
