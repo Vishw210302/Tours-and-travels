@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, Plane, Users, Coffee, CreditCard, Map, Tag } from 'lucide-react';
-import { useGetFlightAllBookingDetailsQuery, useLazyGetParticularFlightQuery, useSubmitFlightTicketDataMutation } from '../../../Api/Api';
-import { useFlightTicketsDetailsContext } from '../../../Context/FlightTicketsDetailsContext';
+import { useGetFlightAllBookingDetailsQuery, useSubmitFlightTicketDataMutation } from '../../../Api/Api';
 import StripePayment from '../../Payment/PaymentForm';
 import Modal from '../../Modal/Modal';
 import PaymentSuccess from '../../Payment/PaymentSuccess';
+import { ToastContainer, toast } from 'react-toastify';
 
 const ThankYouPage = ({ pdfLink }) => {
     const bookingDetails = {
@@ -110,21 +110,23 @@ const FlightsTicketsPaymentPage = () => {
     const navigate = useNavigate();
     const { id, className } = useParams();
     const [couponCode, setCouponCode] = useState('');
-    const [discount, setDiscount] = useState(0);
-    const [couponError, setCouponError] = useState('');
-    const [couponSuccess, setCouponSuccess] = useState('');
     const [flight, setFlight] = useState();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [showThankYou, setShowThankYou] = useState(false);
     const [showPaymentSucess, setShowPaymnetSucess] = useState(false);
     const [pdfLink, setPdfLink] = useState('');
     const [contactDetails, setContactDetails] = useState('');
-
-    const [fetchFlight, { data, isSuccess, isError, error }] = useLazyGetParticularFlightQuery();
+    const [passengerDetails, setPassengerDetails] = useState('')
+    const [totalSeat, setTotalSeat] = useState([]);
+    const [mealData, setMealData] = useState('')
+    const [discountCoupon, setDiscountCoupon] = useState([]);
+    const [promocode, setPromoCode] = useState([]);
+    const [showSuggestions, setShowSuggestions] = useState(false);
+    const [discountAmount, setDiscountAmount] = useState(0)
 
     const contactId = localStorage.getItem('contactId');
 
-    const { data: fetchBookingData, isSuccess: isSuccessfullyFetchedBookingData, error: fetchingBookingErr, isError: hasFetchingBookingErr } = useGetFlightAllBookingDetailsQuery(contactId);
+    const { data: fetchBookingData, isSuccess: isSuccessfullyFetchedBookingData, error: fetchingBookingErr, isError: hasFetchingBookingErr, refetch } = useGetFlightAllBookingDetailsQuery(contactId);
 
     const [submitFlightTicketData, {
         data: submittedTicketData,
@@ -133,43 +135,31 @@ const FlightsTicketsPaymentPage = () => {
         isError: hasSubmissionError
     }] = useSubmitFlightTicketDataMutation();
 
-    const backend_url = import.meta.env.VITE_REACT_APP_BACKEND_URL;
-
-    const {
-        selectedMealData,
-        setSelectedMealData,
-        passengerPersonalDetails,
-        setPassengerPersonalDetails,
-        flightSeatData,
-        setFlightSeatData,
-        totalTicketPrice,
-        setotalTicketPrice
-    } = useFlightTicketsDetailsContext();
-
-    const handleCouponApply = () => {
-        if (couponCode.toUpperCase() === 'SAVE20') {
-            const discountAmount = totalPrice * 0.20;
-            setDiscount(discountAmount);
-            setCouponSuccess('Coupon applied successfully! You saved ₹' + discountAmount.toFixed(2));
-            setCouponError('');
-        } else {
-            setCouponError('Invalid coupon code');
-            setCouponSuccess('');
-            setDiscount(0);
-        }
-    };
+    // useEffect(() => {
+    //     console.log(seats, 'seatsseatsseatsseats')
+    // }, [seats]);
 
     useEffect(() => {
-        if (id) {
-            fetchFlight({ key: '1', id });
-        }
-    }, [fetchFlight, id]);
+        refetch();
+    }, [refetch]);
+
+    const backend_url = import.meta.env.VITE_REACT_APP_BACKEND_URL;
+
+    const totalSeatPrice = totalSeat?.reduce((acc, seat) => acc + seat.price, 0);
+    const totalMealPrice = mealData && mealData?.reduce((acc, meal) => acc + (meal?.mealCount * meal?.mealPrice), 0);
+    const ticketPrice = (flight?.class_details?.[className]?.prices?.adult) * passengerDetails?.length;
+    const totalPrice = ticketPrice + totalSeatPrice + totalMealPrice;
+    const finalPrice = totalPrice - discountAmount;
 
     useEffect(() => {
         if (fetchBookingData && isSuccessfullyFetchedBookingData) {
-            console.log(fetchBookingData, 'fetchBookingDatafetchBookingDatafetchBookingData')
 
-            setContactDetails(fetchBookingData?.data?.contactDetails)
+            setContactDetails(fetchBookingData?.data?.flightBookDetails?.contactDetails)
+            setPassengerDetails(fetchBookingData?.data?.flightBookDetails?.passengerDetails)
+            setFlight(fetchBookingData?.data?.flightBookDetails?.flightDetails)
+            setMealData(fetchBookingData?.data?.flightBookDetails?.mealDetails)
+            setDiscountCoupon(fetchBookingData?.data?.discountCouponData)
+            setPromoCode(fetchBookingData?.data?.promocodeData)
 
         } else if (hasFetchingBookingErr) {
             console.log(fetchingBookingErr, 'fetchingBookingErrfetchingBookingErrfetchingBookingErrfetchingBookingErrfetchingBookingErr')
@@ -177,10 +167,19 @@ const FlightsTicketsPaymentPage = () => {
     }, [fetchBookingData, isSuccessfullyFetchedBookingData, hasFetchingBookingErr, fetchingBookingErr]);
 
     useEffect(() => {
-        if (isSuccess) {
-            setFlight(data?.data);
+
+        if (passengerDetails) {
+            const seats = passengerDetails?.map((passenger) => {
+                return {
+                    seatNumber: passenger?.seatInfo?.seat_number,
+                    price: passenger?.seatInfo?.price
+                };
+            });
+
+            setTotalSeat(seats)
         }
-    }, [data, isSuccess, isError, error]);
+
+    }, [passengerDetails])
 
     useEffect(() => {
         if (isSubmissionSuccess) {
@@ -219,15 +218,63 @@ const FlightsTicketsPaymentPage = () => {
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
 
-    const totalSeatPrice = flightSeatData.reduce((acc, seat) => acc + seat.seat_price, 0);
-    const totalMealPrice = selectedMealData?.reduce((acc, meal) => acc + (meal?.count * meal?.price), 0);
-    const ticketPrice = flight?.class_details?.[className]?.prices?.adult;
-    const totalPrice = ticketPrice + totalSeatPrice + totalMealPrice;
-    const finalPrice = totalPrice - discount;
+    const convertTime = (timeString) => {
+        const [hours, minutes] = timeString.split(':');
+        return `${parseInt(hours)}h ${parseInt(minutes)}m`;
+    }
 
-    useEffect(() => {
-        setotalTicketPrice(finalPrice);
-    }, [finalPrice]);
+    const handleInputFocus = () => {
+        setShowSuggestions(true);
+    };
+
+    const handleInputBlur = () => {
+        setTimeout(() => setShowSuggestions(false), 150);
+    };
+
+    const handleCouponApply = () => {
+
+        const selectedCoupon = discountCoupon.find(coupon => coupon.discountCouponName === couponCode);
+
+        console.log(selectedCoupon, 'couponCodecouponCodecouponCodecouponCode')
+        if (selectedCoupon) {
+            setDiscountAmount(selectedCoupon?.discountAmount)
+            toast.success(`Coupon applied successfully! You saved ₹${selectedCoupon.discountAmount}`, { autoClose: 3000 });
+        } else {
+
+            const selectedPromoCode = promocode.find(coupon => coupon.promoCode === couponCode);
+
+            if (selectedPromoCode) {
+
+                if (ticketPrice >= 5000 && ticketPrice <= 25000) {
+                   console.log('first if')
+                    if (selectedPromoCode.discountAmount <= 3000) {
+                        console.log('second if')
+                        setDiscountAmount(selectedPromoCode?.discountAmount);
+                        toast.success(`Promocode applied successfully! You saved ₹${selectedPromoCode.discountAmount}`, { autoClose: 3000 });
+                    } else {
+                        console.log('second else')
+                        toast.error('Promo code is not valid for this ticket price range (must be ₹3000 or less)', { autoClose: 3000 });
+                        setDiscountAmount(0);
+                    }
+                } else if (ticketPrice > 25000) {
+                    console.log('first else')
+                    setDiscountAmount(selectedPromoCode?.discountAmount);
+                    toast.success(`Promocode applied successfully! You saved ₹${selectedPromoCode.discountAmount}`, { autoClose: 3000 });
+                }
+
+            } else {
+                toast.error('Invalid promo code', { autoClose: 3000 });
+                setDiscountAmount(0)
+                setCouponCode('')
+            }
+        }
+    };
+
+    const handleCouponClick = (couponCode) => {
+        setCouponCode(couponCode)
+        // document.getElementById('promoCode').value = couponCode;
+        setShowSuggestions(false);
+    };
 
     const handlePaymentSuccess = async () => {
         try {
@@ -275,10 +322,8 @@ const FlightsTicketsPaymentPage = () => {
                 </div>
             </div>
 
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10 relative z-10">
+            <div className="2xl:container 2xl:mx-auto p-5">
                 <div className="bg-white rounded-2xl shadow-xl p-8">
-
-
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                         <div className="lg:col-span-2 space-y-6">
                             <div className="bg-white rounded-xl shadow-lg overflow-hidden">
@@ -290,27 +335,27 @@ const FlightsTicketsPaymentPage = () => {
                                 </div>
                                 <div className="p-6 grid md:grid-cols-2 gap-6">
                                     <div className="bg-gray-50 rounded-lg p-4">
-                                        <h3 className="font-semibold text-gray-800 mb-3">Contact Details</h3>
+                                        <h3 className="font-semibold text-gray-800 text-base mb-3">Contact Details</h3>
                                         <div className="space-y-2">
                                             <p className="text-sm">
                                                 <span className="text-gray-600">Name:</span>
-                                                <span className="ml-2 font-medium">{passengerPersonalDetails?.contactDetails?.fullName}</span>
+                                                <span className="ml-2 font-medium">{contactDetails?.fullName}</span>
                                             </p>
                                             <p className="text-sm">
                                                 <span className="text-gray-600">Email:</span>
-                                                <span className="ml-2 font-medium">{passengerPersonalDetails?.contactDetails?.email}</span>
+                                                <span className="ml-2 font-medium">{contactDetails?.email}</span>
                                             </p>
                                             <p className="text-sm">
                                                 <span className="text-gray-600">Phone:</span>
-                                                <span className="ml-2 font-medium">{passengerPersonalDetails?.contactDetails?.phoneNumber}</span>
+                                                <span className="ml-2 font-medium">{contactDetails?.mobileNumber}</span>
                                             </p>
                                         </div>
                                     </div>
 
                                     <div className="bg-gray-50 rounded-lg p-4">
-                                        <h3 className="font-semibold text-gray-800 mb-3">Passenger List</h3>
+                                        <h3 className="font-semibold text-gray-800 text-base mb-3">Passenger List</h3>
                                         <div className="space-y-3">
-                                            {passengerPersonalDetails?.passengerDetailsData?.map((passenger, index) => (
+                                            {passengerDetails && passengerDetails.map((passenger, index) => (
                                                 <div key={index} className="flex items-center justify-between text-sm">
                                                     <div>
                                                         <span className="font-medium">{passenger.fullName}</span>
@@ -338,8 +383,8 @@ const FlightsTicketsPaymentPage = () => {
                                             <p className="text-sm text-gray-600">{formatDateTime(flight?.departure?.time)}</p>
                                         </div>
                                         <div className="flex-shrink-0 my-4 md:my-0">
-                                            <div className="w-24 h-[2px] bg-gray-300 relative">
-                                                <Plane className="absolute -top-4 -right-2 text-purple-500 transform rotate-90" size={20} />
+                                            <div className=" h-[2px] bg-gray-300 relative">
+                                                <Plane className="absolute -top-4 -right-2 text-purple-500 transform rotate-[45deg]" size={20} />
                                             </div>
                                         </div>
                                         <div className="flex-1 text-right">
@@ -359,50 +404,53 @@ const FlightsTicketsPaymentPage = () => {
                                         <div className="bg-purple-50 rounded-lg p-3">
                                             <p className="text-sm text-purple-600">Seats</p>
                                             <p className="font-semibold">
-                                                {flightSeatData?.map((seat, index) => (
+                                                {totalSeat && totalSeat?.map((seat, index) => (
                                                     <span key={index}>
-                                                        {seat?.seat_name}
-                                                        {index < flightSeatData?.length - 1 ? ', ' : ''}
+                                                        {seat.seatNumber}
+                                                        {index < totalSeat?.length - 1 ? ', ' : ''}
                                                     </span>
                                                 ))}
                                             </p>
                                         </div>
                                         <div className="bg-purple-50 rounded-lg p-3">
                                             <p className="text-sm text-purple-600">Duration</p>
-                                            <p className="font-semibold">2h 30m</p>
+                                            <p className="font-semibold">{flight && convertTime(flight?.duration)}</p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-                                <div className="bg-gradient-to-r from-green-500 to-green-600 px-6 py-4">
-                                    <div className="flex items-center space-x-3">
-                                        <Coffee className="text-white" size={24} />
-                                        <h2 className="text-xl font-semibold text-white">Meal Selection</h2>
+                            {mealData && mealData.length !== 0 && (
+                                <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+                                    <div className="bg-gradient-to-r from-green-500 to-green-600 px-6 py-4">
+                                        <div className="flex items-center space-x-3">
+                                            <Coffee className="text-white" size={24} />
+                                            <h2 className="text-xl font-semibold text-white">Meal Selection</h2>
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="p-6">
-                                    <div className="space-y-4">
-                                        {selectedMealData?.map((meal, index) => (
-                                            <div key={index} className="flex justify-between items-center bg-green-50 rounded-lg p-4">
-                                                <div>
-                                                    <p className="font-medium text-gray-800">{meal?.meal_name}</p>
-                                                    <p className="text-sm text-gray-600">Quantity: {meal?.count}</p>
+                                    <div className="p-6">
+                                        <div className="space-y-4">
+                                            {mealData.map((meal, index) => (
+                                                <div key={index} className="flex justify-between items-center bg-green-50 rounded-lg p-4">
+                                                    <div>
+                                                        <p className="font-medium text-gray-800">{meal.mealItems}</p>
+                                                        <p className="text-sm text-gray-600">Quantity: {meal.mealCount}</p>
+                                                    </div>
+                                                    <p className="font-semibold text-green-600">₹{meal.mealCount * meal.mealPrice}</p>
                                                 </div>
-                                                <p className="font-semibold text-green-600">₹{meal?.count * meal?.price}</p>
+                                            ))}
+                                            <div className="flex justify-end">
+                                                <p className="font-semibold text-lg">Total: ₹{totalMealPrice || 0}</p>
                                             </div>
-                                        ))}
-                                        <div className="flex justify-end">
-                                            <p className="font-semibold text-lg">Total: ₹{totalMealPrice || 0}</p>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            )}
+
                         </div>
 
                         <div className="lg:col-span-1">
-                            <div className="bg-white rounded-xl shadow-lg sticky top-6">
+                            <div className="bg-white rounded-xl shadow-lg top-6">
                                 <div className="bg-gradient-to-r from-indigo-500 to-indigo-600 px-6 py-4 rounded-t-xl">
                                     <div className="flex items-center space-x-3">
                                         <CreditCard className="text-white" size={24} />
@@ -423,10 +471,10 @@ const FlightsTicketsPaymentPage = () => {
                                             <span className="text-gray-600">Meals</span>
                                             <span className="font-medium">₹{totalMealPrice || 0}</span>
                                         </div>
-                                        {discount > 0 && (
+                                        {discountAmount > 0 && (
                                             <div className="flex justify-between text-green-600">
                                                 <span>Discount</span>
-                                                <span>-₹{discount.toFixed(2)}</span>
+                                                <span>-₹{discountAmount}</span>
                                             </div>
                                         )}
                                         <div className="border-t pt-3">
@@ -443,7 +491,9 @@ const FlightsTicketsPaymentPage = () => {
                                             <input
                                                 type="text"
                                                 value={couponCode}
+                                                onFocus={handleInputFocus}
                                                 onChange={(e) => setCouponCode(e.target.value)}
+                                                onBlur={handleInputBlur}
                                                 placeholder="Enter code"
                                                 className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                                             />
@@ -454,12 +504,46 @@ const FlightsTicketsPaymentPage = () => {
                                                 Apply
                                             </button>
                                         </div>
-                                        {couponError && (
-                                            <p className="mt-2 text-sm text-red-600">{couponError}</p>
+
+                                        {showSuggestions && discountCoupon.length > 0 && (
+                                            <div className="absolute z-20 w-[23%] bg-white border border-gray-300 rounded-lg shadow-lg mt-2 max-h-60 overflow-auto scrollbar-hide">
+                                                {discountCoupon.map((coupon, index) => {
+
+                                                    const isDisabled =
+                                                        (totalPrice < 5000) ||
+                                                        (totalPrice >= 5000 && totalPrice < 25000 && coupon.discountAmount >= 2000);
+
+                                                    let validityMessage;
+                                                    if (coupon.discountAmount < 2000) {
+                                                        validityMessage = "Total ₹10K - ₹25K required";
+                                                    } else {
+                                                        validityMessage = "Total ₹25K+ required";
+                                                    }
+
+
+                                                    return (
+                                                        <div
+                                                            key={index}
+                                                            className={`flex justify-between items-center p-3 border-b border-gray-200 last:border-0 transition-all cursor-pointer
+                                                                ${isDisabled ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'hover:bg-blue-50'}`}
+                                                            onClick={() => !isDisabled && handleCouponClick(coupon.discountCouponName)}
+                                                        >
+                                                            <div>
+                                                                <p className="text-gray-900 font-semibold">{coupon.discountCouponName}</p>
+                                                                <p className="text-sm text-gray-500">Discount: {coupon.discountAmount} ₹</p>
+                                                            </div>
+
+                                                            <div className="text-right text-sm text-gray-700 font-medium">
+                                                                <p className={`text-gray-700 ${isDisabled ? 'text-gray-400' : 'text-gray-700'}`}>
+                                                                    {validityMessage}
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    )
+                                                })}
+                                            </div>
                                         )}
-                                        {couponSuccess && (
-                                            <p className="mt-2 text-sm text-green-600">{couponSuccess}</p>
-                                        )}
+
                                     </div>
 
                                     <div className="space-y-4 mt-6">
@@ -484,7 +568,11 @@ const FlightsTicketsPaymentPage = () => {
                     </div>
                 </div>
             </div>
-
+            <ToastContainer
+                position="top-right"
+                className="toast-container"
+                draggable="true"
+            />
             <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
                 <StripePayment onPaymentSuccess={handlePaymentSuccess} />
             </Modal>
