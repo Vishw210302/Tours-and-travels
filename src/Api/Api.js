@@ -185,22 +185,6 @@ export const myApi = createApi({
             }),
         }),
 
-        submitFlightTicketData: builder.mutation({
-            query: (payload) => ({
-                url: "addFlightTicketsData",
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(payload),
-            }),
-            transformResponse: (response) => {
-                const blob = new Blob([response], { type: "application/pdf" });
-
-                return blob;
-            },
-        }),
-
         getPackageThemeData: builder.query({
             query: () => "get-package-theme-active",
         }),
@@ -255,7 +239,6 @@ export const {
     useLazyGetFlightUpdatedSeatQuery,
     useGetFlightAllBookingDetailsQuery,
     useCreatePaymentIntentMutation,
-    useSubmitFlightTicketDataMutation,
     useGetPackageThemeDataQuery,
     useGetHotelCouponCodeDataQuery,
     useGetSocialMediaLinkListingQuery,

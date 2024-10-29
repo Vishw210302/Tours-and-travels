@@ -1,24 +1,19 @@
-import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
-import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useGetFlightSeatQuery, useLazyGetFlightUpdatedSeatQuery, useUpdateSeatMutation } from '../../../Api/Api';
 import { usePassenger } from '../../../Context/PassengerCountContext';
 import { ToastContainer, toast } from 'react-toastify';
-
+import { ArrowLeftCircle, ArrowRightCircle, Plane } from 'lucide-react';
 
 const FlightSeatBooking = () => {
-
     const { id, className } = useParams();
     const { passengerCount } = usePassenger();
-    const { data, isError, isSuccess, error } = useGetFlightSeatQuery(id)
+    const { data, isError, isSuccess, error } = useGetFlightSeatQuery(id);
     const [selectedSeats, setSelectedSeats] = useState([]);
     const [hoveredSeat, setHoveredSeat] = useState(null);
-    const [seats, setSeats] = useState()
+    const [seats, setSeats] = useState();
     const [selectSeat, setSelectSeat] = useState(false);
-    const [showMessage, setShowMessage] = useState('')
-
-    // console.log(selectedSeats?.length, 'selectedSeatsselectedSeatsselectedSeats')
+    const [showMessage, setShowMessage] = useState('');
 
     const [updateSeat, {
         isSuccess: isUpdateSeatSucessfully,
@@ -38,53 +33,40 @@ const FlightSeatBooking = () => {
     useEffect(() => {
         const contactId = localStorage.getItem('contactId');
         if (contactId) {
-            fetchedUpdatedSeat(contactId)
+            fetchedUpdatedSeat(contactId);
         }
     }, []);
 
     useEffect(() => {
-
         if (successFullyFetchedSeatData && fetchSeatData) {
             const preselectedSeats = fetchSeatData?.data.map(seat => seat.seat_number);
-            console.log(preselectedSeats, 'preselectedSeatspreselectedSeatspreselectedSeats')
             setSelectedSeats(preselectedSeats);
         } else if (isErrFetchingUpdatedSeatData) {
-            toast.error('Error fetching updated seat data;', { autoClose: 3000 });
-            console.log(errFetchingUpdatedSeatData, 'Error fetching updated seat data');
+            toast.error('Error fetching updated seat data', { autoClose: 3000 });
         }
-
-    }, [fetchSeatData, successFullyFetchedSeatData, isErrFetchingUpdatedSeatData, errFetchingUpdatedSeatData]);
+    }, [fetchSeatData, successFullyFetchedSeatData, isErrFetchingUpdatedSeatData]);
 
     useEffect(() => {
-
         if (isSuccess) {
-
             const businessSeats = data?.data?.business || [];
             const economySeats = data?.data?.economy || [];
             const firstClassSeats = data?.data?.first_class || [];
-
-            setSeats([...firstClassSeats, ...businessSeats, ...economySeats,]);
-            setSelectSeat(false)
+            setSeats([...firstClassSeats, ...businessSeats, ...economySeats]);
+            setSelectSeat(false);
         } else if (isError) {
-            console.log(error, 'fetching seat')
+            console.log(error, 'fetching seat');
         }
-
-    }, [data, isError, isSuccess, error])
+    }, [data, isError, isSuccess, error]);
 
     useEffect(() => {
-
         if (isUpdateSeatSucessfully) {
-            navigate(`/tickets-payment/${className}/${id}`)
+            navigate(`/tickets-payment/${className}/${id}`);
         } else if (isFetchingErrInSeat) {
-            toast.error('fetching error in update a seat', { autoClose: 3000 });
-            console.log(isFetchingErrInSeat, 'fetching error in update a seat')
+            toast.error('Error updating seat', { autoClose: 3000 });
         }
+    }, [isUpdateSeatSucessfully, isFetchingErrInSeat, navigate, className, id]);
 
-    }, [isUpdateSeatSucessfully, isFetchingErrInSeat, isFetchingErrInSeat])
-
-    const totalPassengers =
-        Number(passengerCount.adult) +
-        Number(passengerCount.children)
+    const totalPassengers = Number(passengerCount.adult) + Number(passengerCount.children);
 
     const handleSeatClick = (seat) => {
         if (selectedSeats.includes(seat)) {
@@ -95,170 +77,166 @@ const FlightSeatBooking = () => {
                 setSelectedSeats([...selectedSeats, seat]);
             } else {
                 setSelectSeat(true);
-                toast.error('All available seats have been selected! Thank you for your understanding.', { autoClose: 3000 });
-                // setShowMessage('All available seats have been selected! Thank you for your understanding.');
+                toast.error('All available seats have been selected!', { autoClose: 3000 });
             }
         }
     };
 
     const handleGoToMealPage = () => {
-        navigate(`/meal-booking/${className}/${id}`)
-    }
+        navigate(`/meal-booking/${className}/${id}`);
+    };
 
     const handlePaymentPage = async () => {
-
-
         const selectedSeatId = selectedSeats.map(seatNumber => {
             const seat = seats.find(s => s.seat_number === seatNumber);
-            return {
-                seatId: seat._id,
-            };
+            return { seatId: seat._id };
         });
 
         if (selectedSeatId.length < totalPassengers) {
-
             const remainingSeats = totalPassengers - selectedSeatId.length;
             setSelectSeat(true);
-            toast.error(`You're almost there! Please select ${remainingSeats} more seat${remainingSeats > 1 ? 's' : ''} to complete your booking.`, { autoClose: 3000 });
-            // setShowMessage(`You're almost there! Please select ${remainingSeats} more seat${remainingSeats > 1 ? 's' : ''} to complete your booking.`);
-
+            toast.error(`Please select ${remainingSeats} more seat${remainingSeats > 1 ? 's' : ''}`, { autoClose: 3000 });
         } else {
             const id = localStorage.getItem('contactId');
-
-            const payload = {
-                selectedSeatId,
-                id
-            }
+            const payload = { selectedSeatId, id };
             setSelectSeat(false);
-            console.log(payload, 'selectedSeatDataselectedSeatDataselectedSeatDataselectedSeatData')
-
-            await updateSeat(payload)
+            await updateSeat(payload);
         }
-
-    }
+    };
 
     return (
-        <>
-            <div className='bg-[#f7f7f7]'>
-                <div className="relative h-[400px] w-full bg-[url('https://assets.gqindia.com/photos/6540e2ba4622f7146b12b76b/16:9/w_2560%2Cc_limit/best-time-to-book-flights.jpg')] bg-cover bg-center flex justify-center items-center">
-                    <div
-                        className="absolute top-0 bottom-0 left-0 right-0"
-                        style={{
-                            background: 'linear-gradient(0deg, rgba(0, 0, 0, 0.6) 0%, transparent 100%)',
-                            zIndex: 0
-                        }}
-                    />
-                    <h1 className="relative text-white text-3xl font-bold z-10">Flight Seat Booking</h1>
+        <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
+            {/* Hero Section */}
+            <div className="relative h-64 bg-blue-600 overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-blue-800" />
+                <div className="absolute inset-0 opacity-20 bg-[url('https://assets.gqindia.com/photos/6540e2ba4622f7146b12b76b/16:9/w_2560%2Cc_limit/best-time-to-book-flights.jpg')] bg-cover bg-center" />
+                <div className="relative flex flex-col items-center justify-center h-full text-white space-y-4">
+                    <Plane className="w-16 h-16 mb-2" />
+                    <h1 className="text-4xl font-bold">Select Your Seats</h1>
+                    <p className="text-lg opacity-90">Choose your preferred seating arrangement</p>
                 </div>
-                <div className='bg-[#f7f7f7] flex justify-center items-center'>
-                    <div className='m-5 w-[360px] card bg-white rounded-xl shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] p-3 transition-all duration-300 hover:shadow-lg rounded-tl-[50%] rounded-tr-[50%]'>
-                        <div className='h-[220px] relative overflow-hidden text-center'>
-                            <h3 className='mt-[53px] text-lg text-black font-semibold'>Please Select a Seat</h3>
+            </div>
+
+            {/* Main Content */}
+            <div className="max-w-[33rem] mx-auto px-4 py-8">
+                {/* Cabin Layout */}
+                <div className="bg-white rounded-t-full shadow-xl p-8 transform -mt-16">
+                    {/* Plane Nose */}
+                    <div className="w-32 h-32 bg-gray-200 rounded-t-full mx-auto mb-8 flex items-center justify-center">
+                        <Plane className="w-12 h-12 text-gray-500 transform -rotate-90" />
+                    </div>
+
+                    {/* Seat Legend */}
+                    <div className="flex justify-center gap-6 mb-8">
+                        <div className="flex items-center gap-2">
+                            <div className="w-6 h-6 bg-blue-300 rounded-lg" />
+                            <span className="text-sm text-gray-600">Available</span>
                         </div>
-
-                        {selectSeat ? (
-                            <div className='flex justify-center'>
-                                <p className='text-red-600 text-sm font-semibold w-64 text-center'>{showMessage}</p>
-                            </div>
-                        ) : (
-                            <></>
-                        )}
-
-                        <div className="relative flex flex-row justify-between p-5">
-                            <p className='text-white font-semibold text-sm bg-green-500 p-2 rounded-lg m-0 text-center'>Exit</p>
-                            <p className='text-white font-semibold text-sm bg-green-500 p-2 rounded-lg m-0 text-center'>Exit</p>
+                        <div className="flex items-center gap-2">
+                            <div className="w-6 h-6 bg-blue-500 rounded-lg border-2 border-blue-600" />
+                            <span className="text-sm text-gray-600">Selected</span>
                         </div>
+                    </div>
 
+                    {/* Emergency Exits */}
+                    <div className="flex justify-between mb-6">
+                        <div className="px-4 py-2 bg-green-500 text-white text-sm font-medium rounded-lg">Exit</div>
+                        <div className="px-4 py-2 bg-green-500 text-white text-sm font-medium rounded-lg">Exit</div>
+                    </div>
 
+                    {/* Seat Grid */}
+                    <div className="space-y-4">
                         {Array.from({ length: Math.ceil(seats?.length / 6) }, (_, rowIndex) => {
-                            const rowSeats = seats.slice(rowIndex * 6, rowIndex * 6 + 6);
+                            const rowSeats = seats?.slice(rowIndex * 6, rowIndex * 6 + 6);
                             return (
-                                <div key={rowIndex} className='p-3 flex flex-row justify-between'>
-                                    <div className='flex flex-row justify-between gap-2'>
-
-                                        {rowSeats.slice(0, 3).map((seat) => (
-                                            <div
+                                <div key={rowIndex} className="flex justify-between">
+                                    <div className="flex gap-2">
+                                        {rowSeats?.slice(0, 3).map((seat) => (
+                                            <button
                                                 key={seat.seat_number}
-                                                className={`border border-blue-300 rounded-lg p-2 cursor-pointer ${selectedSeats.includes(seat.seat_number) ? 'border-blue-600 border-2' : 'border-blue-300'} bg-blue-300 hover:bg-blue-400 relative`}
+                                                className={`relative w-12 h-12 rounded-lg flex items-center justify-center transition-all duration-200
+                                                    ${selectedSeats.includes(seat.seat_number)
+                                                        ? 'bg-blue-500 border-2 border-blue-600 text-white'
+                                                        : 'bg-blue-300 hover:bg-blue-400 text-gray-700'
+                                                    }`}
                                                 onClick={() => handleSeatClick(seat.seat_number)}
                                                 onMouseEnter={() => setHoveredSeat(seat)}
                                                 onMouseLeave={() => setHoveredSeat(null)}
                                             >
-                                                <p>{seat.seat_number}</p>
+                                                <span className="font-medium">{seat.seat_number}</span>
                                                 {hoveredSeat && hoveredSeat.seat_number === seat.seat_number && (
-                                                    <div className='absolute top-[-20px] left-[-10px] text-white bg-black p-1 rounded-md'>
+                                                    <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-2 py-1 rounded text-sm">
                                                         ₹{seat.price}
                                                     </div>
                                                 )}
-                                            </div>
+                                            </button>
                                         ))}
                                     </div>
-                                    <div className='flex flex-row justify-between gap-2'>
-
-                                        {rowSeats.slice(3).map((seat) => (
-                                            <div
+                                    <div className="flex gap-2">
+                                        {rowSeats?.slice(3).map((seat) => (
+                                            <button
                                                 key={seat.seat_number}
-                                                className={`border rounded-lg p-2 cursor-pointer ${selectedSeats.includes(seat.seat_number) ? 'border-blue-600 border-2' : 'border-blue-300'} bg-blue-300 hover:bg-blue-400 relative`}
+                                                className={`relative w-12 h-12 rounded-lg flex items-center justify-center transition-all duration-200
+                                                    ${selectedSeats.includes(seat.seat_number)
+                                                        ? 'bg-blue-500 border-2 border-blue-600 text-white'
+                                                        : 'bg-blue-300 hover:bg-blue-400 text-gray-700'
+                                                    }`}
                                                 onClick={() => handleSeatClick(seat.seat_number)}
                                                 onMouseEnter={() => setHoveredSeat(seat)}
                                                 onMouseLeave={() => setHoveredSeat(null)}
                                             >
-                                                <p>{seat.seat_number}</p>
+                                                <span className="font-medium">{seat.seat_number}</span>
                                                 {hoveredSeat && hoveredSeat.seat_number === seat.seat_number && (
-                                                    <div className='absolute top-[-20px] left-[-10px] text-white bg-black p-1 rounded-md'>
+                                                    <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-2 py-1 rounded text-sm">
                                                         ₹{seat.price}
                                                     </div>
                                                 )}
-                                            </div>
+                                            </button>
                                         ))}
                                     </div>
                                 </div>
                             );
                         })}
+                    </div>
 
-                        <div className="relative flex flex-row justify-between p-5">
-                            <p className='text-white font-semibold text-sm bg-green-500 p-2 rounded-lg m-0 text-center'>Exit</p>
-                            <p className='text-white font-semibold text-sm bg-green-500 p-2 rounded-lg m-0 text-center'>Exit</p>
-                        </div>
+                    {/* Emergency Exits */}
+                    <div className="flex justify-between mt-6">
+                        <div className="px-4 py-2 bg-green-500 text-white text-sm font-medium rounded-lg">Exit</div>
+                        <div className="px-4 py-2 bg-green-500 text-white text-sm font-medium rounded-lg">Exit</div>
+                    </div>
 
-                        <div className='p-5 text-center'>
-                            <h4 className='text-lg font-semibold'>Selected Seats:</h4>
-                            {selectedSeats?.length > 0 ? (
-                                <p className='text-blue-500 font-bold'>{selectedSeats.join(', ')}</p>
-                            ) : (
-                                <p className='text-red-500 font-semibold'>No seats selected</p>
-                            )}
-                        </div>
+                    {/* Selected Seats Display */}
+                    <div className="mt-8 p-6 bg-gray-50 rounded-xl">
+                        <h4 className="text-lg font-semibold text-gray-700 mb-2">Selected Seats</h4>
+                        {selectedSeats?.length > 0 ? (
+                            <p className="text-blue-600 font-bold text-lg">{selectedSeats.join(', ')}</p>
+                        ) : (
+                            <p className="text-red-500 font-medium">No seats selected</p>
+                        )}
+                    </div>
+
+                    {/* Navigation Buttons */}
+                    <div className="flex justify-center gap-4 mt-8">
+                        <button
+                            onClick={handleGoToMealPage}
+                            className="flex items-center gap-2 px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-200"
+                        >
+                            <ArrowLeftCircle className="w-5 h-5" />
+                            <span>Previous</span>
+                        </button>
+                        <button
+                            onClick={handlePaymentPage}
+                            className="flex items-center gap-2 px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-200"
+                        >
+                            <span>Continue</span>
+                            <ArrowRightCircle className="w-5 h-5" />
+                        </button>
                     </div>
                 </div>
-                <div className='flex flex-row justify-center items-center gap-4 mb-3'>
-                    <button
-                        className="mt-8 w-1/7 bg-blue-400 text-white font-semibold py-3 rounded-lg hover:bg-blue-500 transition duration-300 shadow-md hover:shadow-lg p-2"
-                        onClick={handleGoToMealPage}
-                    >
-                        <p className='text-sm flex flex-1 gap-2 items-center'>
-                            <ArrowCircleLeftIcon />
-                            Go to previous form
-                        </p>
-                    </button>
-                    <button
-                        className="mt-8 w-1/7 bg-red-400 text-white font-semibold py-3 rounded-lg hover:bg-red-500 transition duration-300 shadow-md hover:shadow-lg p-2"
-                        onClick={handlePaymentPage}
-                    >
-                        <p className='text-sm flex flex-1 gap-2 items-center'>
-                            Go to next form
-                            <ArrowCircleRightIcon />
-                        </p>
-                    </button>
-                </div>
-                <ToastContainer
-                    position="top-right"
-                    className="toast-container"
-                    draggable="true"
-                />
             </div>
 
-        </>
+            <ToastContainer position="top-right" />
+        </div>
     );
 };
 

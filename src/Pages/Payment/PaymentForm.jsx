@@ -3,6 +3,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import { CardElement, useStripe, useElements, Elements } from '@stripe/react-stripe-js';
 import { useCreatePaymentIntentMutation } from '../../Api/Api';
 import { useFlightTicketsDetailsContext } from '../../Context/FlightTicketsDetailsContext';
+import { ToastContainer, toast } from 'react-toastify';
 
 const stripePromise = loadStripe('pk_test_51ON98CSEV9soa2c8CWj7i2O7pHm9b1EXoTi1LBhfICMonxhRKNHPPZU1bQ9FCYPwfcb4BzZ3RF8eTLHEt0ENjI3L00VzfQwTB9');
 
@@ -58,57 +59,58 @@ const PaymentForm = ({ onPaymentSuccess }) => {
                 },
             }
 
-            // setTimeout(() => {
-                onPaymentSuccess({
-                    payload
-                })      
-            // }, 5000);
+            // // setTimeout(() => {
+            //     onPaymentSuccess({
+            //         payload
+            //     })      
+            // // }, 5000);
 
           
 
-            // const response = await createPaymentIntent(payload).unwrap()
+            const response = await createPaymentIntent(payload).unwrap()
 
-            // if (response && response?.paymentIntent?.client_secret) {
+            if (response && response?.paymentIntent?.client_secret) {
 
-            //     const clientSecret = response?.paymentIntent.client_secret
+                const clientSecret = response?.paymentIntent.client_secret
 
-            //     const result = await stripe.confirmCardPayment(clientSecret, {
-            //         payment_method: {
-            //             card: cardElement,
-            //             billing_details: {
-            //                 name: cardholderName,
-            //                 address: billingAddress,
-            //             },
-            //         },
-            //     });
+                const result = await stripe.confirmCardPayment(clientSecret, {
+                    payment_method: {
+                        card: cardElement,
+                        billing_details: {
+                            name: cardholderName,
+                            address: billingAddress,
+                        },
+                    },
+                });
 
-            //     if (result.error) {
-            //         setError(result.error.message);
-            //     } else {
-            //         if (result.paymentIntent.status === 'succeeded') {
-            //             onPaymentSuccess({
-            //                 id: result.paymentIntent.id,
-            //                 amount: result.paymentIntent.amount,
-            //                 status: result.paymentIntent.status,
-            //             });
-            //         }
-            //     }
+                if (result.error) {
+                    toast.error(result.error.message, { autoClose: 3000 });
+                    // setError(result.error.message);
+                } else {
+                    if (result.paymentIntent.status === 'succeeded') {
+                        onPaymentSuccess({
+                            id: result.paymentIntent.id,
+                            amount: result.paymentIntent.amount,
+                            status: result.paymentIntent.status,
+                        });
+                    }
+                }
 
-            // } else {
-            //     console.error('Invalid response from createPaymentIntent:', response);
-            //     alert('Something went wrong while creating the payment intent.');
-            //     return;
-            // }
+            } else {
+                console.error('Invalid response from createPaymentIntent:', response);
+                alert('Something went wrong while creating the payment intent.');
+                return;
+            }
 
 
         } catch (err) {
-            setError(err.message || 'An error occurred during payment processing.');
+            toast.error(err.message, { autoClose: 3000 });
+            // setError(err.message || 'An error occurred during payment processing.');
         } finally {
             setLoading(false);
         }
     };
 
-    const formattedPrice = (totalTicketPrice / 100).toFixed(2);
 
     return (
         <>
@@ -247,7 +249,11 @@ const PaymentForm = ({ onPaymentSuccess }) => {
                     </button>
                 </form>
             </div>
-              
+            <ToastContainer
+                position="top-right"
+                className="toast-container"
+                draggable="true"
+            />
         </>
 
     );
