@@ -82,7 +82,7 @@ const PassengerDetails = ({ flightId }) => {
       });
 
     } else if (isError) {
-      toast.error('Error occure while getting a passnger details ;', { autoClose: 3000 });
+      toast.error('Error occure while getting a passnger details ', { autoClose: 3000 });
       // alert('Error ocuure while storing a mail :', error)
     }
 

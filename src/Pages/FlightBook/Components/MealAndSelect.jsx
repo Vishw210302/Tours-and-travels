@@ -111,8 +111,6 @@ const MealAndSelect = () => {
             id
         }
 
-        console.log(payload, 'selecteMealDataselecteMealData');
-
         await addMealData(payload);
 
     };

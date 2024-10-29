@@ -138,16 +138,24 @@ const FlightsPageListing = () => {
         localStorage.removeItem('contactId');
         e.preventDefault();
         try {
+
+            const [year, month, day] = departuredDate.split("-");
+
+            // Convert to the desired format MM/DD/YYYY
+            const formattedDate = `${month}/${day}/${year}`;
+
             const payload = {
-                from: 'Ahmedabad',
-                to: 'Patna',
-                flightClass: 'economy',
-                departure_Date: '10/15/2024',
+                from: searchValueFrom,
+                to: searchValueTo,
+                flightClass: selectedClass,
+                departure_Date: formattedDate,
                 adlut: adlutValue,
                 children: childrenValue,
                 infant: infantValue,
                 oneWay: directChecked
             }
+
+            console.log(payload, 'payloadpayloadpayloadpayloadpayload')
 
             const totalPassengerCount = {
                 adult: adlutValue,

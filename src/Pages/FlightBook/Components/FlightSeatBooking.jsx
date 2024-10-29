@@ -4,6 +4,8 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useGetFlightSeatQuery, useLazyGetFlightUpdatedSeatQuery, useUpdateSeatMutation } from '../../../Api/Api';
 import { usePassenger } from '../../../Context/PassengerCountContext';
+import { ToastContainer, toast } from 'react-toastify';
+
 
 const FlightSeatBooking = () => {
 
@@ -15,6 +17,8 @@ const FlightSeatBooking = () => {
     const [seats, setSeats] = useState()
     const [selectSeat, setSelectSeat] = useState(false);
     const [showMessage, setShowMessage] = useState('')
+
+    // console.log(selectedSeats?.length, 'selectedSeatsselectedSeatsselectedSeats')
 
     const [updateSeat, {
         isSuccess: isUpdateSeatSucessfully,
@@ -45,6 +49,7 @@ const FlightSeatBooking = () => {
             console.log(preselectedSeats, 'preselectedSeatspreselectedSeatspreselectedSeats')
             setSelectedSeats(preselectedSeats);
         } else if (isErrFetchingUpdatedSeatData) {
+            toast.error('Error fetching updated seat data;', { autoClose: 3000 });
             console.log(errFetchingUpdatedSeatData, 'Error fetching updated seat data');
         }
 
@@ -71,6 +76,7 @@ const FlightSeatBooking = () => {
         if (isUpdateSeatSucessfully) {
             navigate(`/tickets-payment/${className}/${id}`)
         } else if (isFetchingErrInSeat) {
+            toast.error('fetching error in update a seat', { autoClose: 3000 });
             console.log(isFetchingErrInSeat, 'fetching error in update a seat')
         }
 
@@ -80,7 +86,7 @@ const FlightSeatBooking = () => {
         Number(passengerCount.adult) +
         Number(passengerCount.children)
 
-     const handleSeatClick = (seat) => {
+    const handleSeatClick = (seat) => {
         if (selectedSeats.includes(seat)) {
             setSelectedSeats(selectedSeats.filter((selectedSeat) => selectedSeat !== seat));
         } else {
@@ -89,7 +95,8 @@ const FlightSeatBooking = () => {
                 setSelectedSeats([...selectedSeats, seat]);
             } else {
                 setSelectSeat(true);
-                setShowMessage('All available seats have been selected! Thank you for your understanding.');
+                toast.error('All available seats have been selected! Thank you for your understanding.', { autoClose: 3000 });
+                // setShowMessage('All available seats have been selected! Thank you for your understanding.');
             }
         }
     };
@@ -112,7 +119,8 @@ const FlightSeatBooking = () => {
 
             const remainingSeats = totalPassengers - selectedSeatId.length;
             setSelectSeat(true);
-            setShowMessage(`You're almost there! Please select ${remainingSeats} more seat${remainingSeats > 1 ? 's' : ''} to complete your booking.`);
+            toast.error(`You're almost there! Please select ${remainingSeats} more seat${remainingSeats > 1 ? 's' : ''} to complete your booking.`, { autoClose: 3000 });
+            // setShowMessage(`You're almost there! Please select ${remainingSeats} more seat${remainingSeats > 1 ? 's' : ''} to complete your booking.`);
 
         } else {
             const id = localStorage.getItem('contactId');
@@ -243,6 +251,11 @@ const FlightSeatBooking = () => {
                         </p>
                     </button>
                 </div>
+                <ToastContainer
+                    position="top-right"
+                    className="toast-container"
+                    draggable="true"
+                />
             </div>
 
         </>
