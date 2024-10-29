@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import CopyAllIcon from '@mui/icons-material/CopyAll';
+import { useFlightTicketsDetailsContext } from '../../Context/FlightTicketsDetailsContext';
 
-const PaymentSuccess = ({ openThankYouPage }) => {
+const PaymentSuccess = ({ openThankYouPage, paymentId }) => {
 
     const [countdown, setCountdown] = useState(5);
     const [showContent, setShowContent] = useState(false);
     const [animationClass, setAnimationClass] = useState('translate-y-full opacity-0');
+    const {totalTicketPrice} = useFlightTicketsDetailsContext();
 
     const formatDate = (date) => {
         const options = { month: 'short', day: '2-digit', year: 'numeric' };
@@ -19,7 +21,7 @@ const PaymentSuccess = ({ openThankYouPage }) => {
     };
 
     const now = new Date();
-    const walletAddress = 'pay_654sadsa54sf5s4s';
+    const walletAddress = paymentId;
 
     const copyToClipboard = () => {
         navigator.clipboard.writeText(walletAddress)
@@ -71,7 +73,7 @@ const PaymentSuccess = ({ openThankYouPage }) => {
                     </div>
 
                     <div className='text-white text-2xl font-semibold mt-6'>
-                        ₹500
+                        ₹{totalTicketPrice}
                     </div>
                 </div>
             </div>

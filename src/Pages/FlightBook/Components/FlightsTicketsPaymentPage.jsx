@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, Plane, Users, Coffee, CreditCard, Map, Tag } from 'lucide-react';
-import { useGetFlightAllBookingDetailsQuery, useSubmitFlightTicketDataMutation } from '../../../Api/Api';
+import { useGetFlightAllBookingDetailsQuery } from '../../../Api/Api';
 import StripePayment from '../../Payment/PaymentForm';
 import Modal from '../../Modal/Modal';
 import PaymentSuccess from '../../Payment/PaymentSuccess';
 import { ToastContainer, toast } from 'react-toastify';
+import { useFlightTicketsDetailsContext } from '../../../Context/FlightTicketsDetailsContext';
 
 const ThankYouPage = ({ pdfLink }) => {
     const bookingDetails = {
@@ -27,7 +28,7 @@ const ThankYouPage = ({ pdfLink }) => {
     };
 
     return (
-        <div className="w-full mx-auto bg-white rounded-lg p-8">
+        <div className="w-full mx-auto h-[800px] bg-white rounded-lg p-8">
             <div className="relative">
                 <div className="absolute -top-16 left-1/2 transform -translate-x-1/2">
                     <div className="w-24 h-24 bg-green-500 rounded-full flex items-center justify-center">
@@ -79,29 +80,7 @@ const ThankYouPage = ({ pdfLink }) => {
                 </button>
             </div>
 
-            <div className="bg-gray-50 rounded-xl p-6">
-                <h4 className="font-semibold text-lg mb-4 text-gray-800">Important Information:</h4>
-                <ul className="space-y-3 text-gray-600">
-                    <li className="flex items-center">
-                        <svg className="w-5 h-5 mr-2 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        Please arrive at the airport at least 2 hours before departure.
-                    </li>
-                    <li className="flex items-center">
-                        <svg className="w-5 h-5 mr-2 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        Check our website for baggage allowance and policies.
-                    </li>
-                    <li className="flex items-center">
-                        <svg className="w-5 h-5 mr-2 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                        </svg>
-                        For any changes or queries, please contact our customer support.
-                    </li>
-                </ul>
-            </div>
+           
         </div>
     );
 };
@@ -123,17 +102,13 @@ const FlightsTicketsPaymentPage = () => {
     const [promocode, setPromoCode] = useState([]);
     const [showSuggestions, setShowSuggestions] = useState(false);
     const [discountAmount, setDiscountAmount] = useState(0)
+    const [paymentId, setPaymentId] = useState('');
+    const { setotalTicketPrice } = useFlightTicketsDetailsContext()
 
     const contactId = localStorage.getItem('contactId');
 
     const { data: fetchBookingData, isSuccess: isSuccessfullyFetchedBookingData, error: fetchingBookingErr, isError: hasFetchingBookingErr, refetch } = useGetFlightAllBookingDetailsQuery(contactId);
 
-    const [submitFlightTicketData, {
-        data: submittedTicketData,
-        isSuccess: isSubmissionSuccess,
-        error: submissionError,
-        isError: hasSubmissionError
-    }] = useSubmitFlightTicketDataMutation();
 
     // useEffect(() => {
     //     console.log(seats, 'seatsseatsseatsseats')
@@ -150,6 +125,11 @@ const FlightsTicketsPaymentPage = () => {
     const ticketPrice = (flight?.class_details?.[className]?.prices?.adult) * passengerDetails?.length;
     const totalPrice = ticketPrice + totalSeatPrice + totalMealPrice;
     const finalPrice = totalPrice - discountAmount;
+
+    useEffect(() => {
+        setotalTicketPrice(finalPrice)
+    }, [finalPrice])
+
 
     useEffect(() => {
         if (fetchBookingData && isSuccessfullyFetchedBookingData) {
@@ -180,15 +160,6 @@ const FlightsTicketsPaymentPage = () => {
         }
 
     }, [passengerDetails])
-
-    useEffect(() => {
-        if (isSubmissionSuccess) {
-            const pdfUrl = `${backend_url}${submittedTicketData?.pdfUrl}`;
-            setPdfLink(pdfUrl);
-            setIsModalOpen(false);
-            setShowPaymnetSucess(true);
-        }
-    }, [submittedTicketData, isSubmissionSuccess, submissionError, hasSubmissionError]);
 
     const handleSeatBookingPage = () => {
         navigate(`/flight-seat-booking/${className}/${id}`);
@@ -246,7 +217,7 @@ const FlightsTicketsPaymentPage = () => {
             if (selectedPromoCode) {
 
                 if (ticketPrice >= 5000 && ticketPrice <= 25000) {
-                   console.log('first if')
+                    console.log('first if')
                     if (selectedPromoCode.discountAmount <= 3000) {
                         console.log('second if')
                         setDiscountAmount(selectedPromoCode?.discountAmount);
@@ -272,24 +243,24 @@ const FlightsTicketsPaymentPage = () => {
 
     const handleCouponClick = (couponCode) => {
         setCouponCode(couponCode)
-        // document.getElementById('promoCode').value = couponCode;
         setShowSuggestions(false);
     };
 
-    const handlePaymentSuccess = async () => {
+    const handlePaymentSuccess = async (payment) => {
         try {
+            console.log(payment, 'paymentpaymentpaymentpayment')
+
             const payload = {
-                flightId: id,
-                passengerPersonalDetails,
-                selectedMealData,
-                flightSeatData,
-                paymentId: 'sfsdfdnsfndfnsdf'
+                paymentId: payment.id,
+                contactId: localStorage.getItem('contactId')
             };
+
+            setPaymentId(payment.id)
 
             const response = await fetch('http://localhost:7781/api/addFlightTicketsData', {
                 method: "POST",
                 headers: {
-                    'Content-Type': 'application/pdf'
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(payload),
             });
@@ -305,6 +276,7 @@ const FlightsTicketsPaymentPage = () => {
         } catch (error) {
             console.log('flightSubmission_error:', error);
         }
+
     };
 
     const handleThankYouPage = () => {
@@ -568,20 +540,22 @@ const FlightsTicketsPaymentPage = () => {
                     </div>
                 </div>
             </div>
+
             <ToastContainer
                 position="top-right"
                 className="toast-container"
                 draggable="true"
             />
-            <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+
+            {/* <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
                 <StripePayment onPaymentSuccess={handlePaymentSuccess} />
-            </Modal>
+            </Modal> */}
 
             <Modal isOpen={showPaymentSucess} onClose={() => setShowPaymnetSucess(false)} hideCloseButton={true}>
-                <PaymentSuccess openThankYouPage={handleThankYouPage} />
+                <PaymentSuccess paymentId={paymentId} openThankYouPage={handleThankYouPage} />
             </Modal>
 
-            <Modal isOpen={showThankYou} onClose={() => setShowThankYou(false)}>
+            <Modal isOpen={isModalOpen} onClose={() => setShowThankYou(false)}>
                 <ThankYouPage pdfLink={pdfLink} />
             </Modal>
         </div>
