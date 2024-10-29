@@ -50,7 +50,7 @@ const Blogs = () => {
                         <div key={index + "key"} className='2xl:container 2xl:mx-auto px-5 py-3'>
                             <div className='grid grid-cols-3 gap-4 my-5'>
                                 <div
-                                    className='card bg-white shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg relative rounded-xl'
+                                    className='card bg-white shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg relative rounded-xl cursor-pointer'
                                     onClick={() => handleDetailsBlogPage(items._id, items)}
                                 >
                                     <img src={items?.blogImage ? `${vlogBannerImage}${items?.blogImage}` : `${vlogBannerImage}${items?.blogImage}`} alt='Blog_Image' width={570} height={400} className='rounded-tl-xl rounded-tr-xl relative' />

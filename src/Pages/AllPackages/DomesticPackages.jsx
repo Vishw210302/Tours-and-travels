@@ -73,7 +73,7 @@ const DomesticPackages = () => {
                             {travelPackages && travelPackages.map((packageItem) => (
                                 <div
                                     key={packageItem.id}
-                                    className='relative bg-white rounded-3xl shadow-lg overflow-hidden'>
+                                    className='relative bg-white rounded-3xl shadow-lg overflow-hidden cursor-pointer'>
 
                                     <div className='absolute -top-8 -right-12 w-36 h-36 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-full opacity-40 transition-all duration-500'></div>
                                     <div className='absolute -bottom-16 -left-16 w-48 h-48 bg-gradient-to-tl from-green-500 to-yellow-500 rounded-full opacity-30 transition-all duration-500'></div>
