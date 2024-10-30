@@ -169,16 +169,18 @@ const PassengerDetails = () => {
   };
 
   const handleMealAndFlightSeatPage = async () => {
-    if (validateForm()) {
-      setPassengerPersonalDetails(details);
-    }
+   
 
     const payload = {
       flightId: id,
       details,
     }
 
-    await submitPassengerDetails(payload)
+    if (validateForm()) {
+      setPassengerPersonalDetails(details);
+      await submitPassengerDetails(payload)
+    }
+    
   };
 
   return (

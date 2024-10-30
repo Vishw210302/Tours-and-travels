@@ -282,7 +282,7 @@ const FlightsPageListing = () => {
                                         <option defaultValue="" disabled>Select Class</option>
                                         <option value="economy">Economy</option>
                                         <option value="business">Business</option>
-                                        <option value="firstClass">First Class</option>
+                                        <option value="first_class">First Class</option>
                                     </select>
                                 </div>
                             </div>
