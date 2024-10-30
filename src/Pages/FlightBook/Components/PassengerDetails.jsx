@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useFlightTicketsDetailsContext } from '../../../Context/FlightTicketsDetailsContext';
 import { usePassenger } from '../../../Context/PassengerCountContext';
 import { useAddPassengerDetailsMutation, useLazyGetPassengerDetailsByContactIdQuery } from '../../../Api/Api';
 import { ToastContainer, toast } from 'react-toastify';
 
-const PassengerDetails = ({ flightId }) => {
+const PassengerDetails = () => {
 
   const { id, className } = useParams();
   const navigate = useNavigate();
   const { passengerCount } = usePassenger();
-  const { passengerPersonalDetails, setPassengerPersonalDetails } = useFlightTicketsDetailsContext();
+  const [passengerPersonalDetails, setPassengerPersonalDetails ] = useState('');
 
   const [submitPassengerDetails, {
     data,
@@ -170,16 +169,18 @@ const PassengerDetails = ({ flightId }) => {
   };
 
   const handleMealAndFlightSeatPage = async () => {
-    if (validateForm()) {
-      setPassengerPersonalDetails(details);
-    }
+   
 
     const payload = {
       flightId: id,
       details,
     }
 
-    await submitPassengerDetails(payload)
+    if (validateForm()) {
+      setPassengerPersonalDetails(details);
+      await submitPassengerDetails(payload)
+    }
+    
   };
 
   return (

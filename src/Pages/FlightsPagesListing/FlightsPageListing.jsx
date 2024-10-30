@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useGetFlightDetailsMutation, useGetSpecialFlightsQuery, useLazyGetCitiesListingQuery } from '../../Api/Api';
-import { useFlightTicketsDetailsContext } from '../../Context/FlightTicketsDetailsContext';
 import { usePassenger } from '../../Context/PassengerCountContext';
 import Airlinesname from '../Home/components/Airlinesname';
 import TopSearchFlights from './TopSearchFlights';
@@ -28,7 +27,6 @@ const FlightsPageListing = () => {
     const [classMatch, setClassMatch] = useState('economy');
     const timeoutRef = useRef(null);
     const { setPassengerCount } = usePassenger();
-    const { setPassengerPersonalDetails } = useFlightTicketsDetailsContext();
 
     useEffect(() => {
         if (specialFlghtSucess) {
@@ -155,8 +153,6 @@ const FlightsPageListing = () => {
                 oneWay: directChecked
             }
 
-            console.log(payload, 'payloadpayloadpayloadpayloadpayload')
-
             const totalPassengerCount = {
                 adult: adlutValue,
                 children: childrenValue,
@@ -164,8 +160,6 @@ const FlightsPageListing = () => {
             };
 
             setPassengerCount(totalPassengerCount)
-
-            setPassengerPersonalDetails();
 
             await searchFlight(payload);
 
@@ -289,7 +283,7 @@ const FlightsPageListing = () => {
                                         <option defaultValue="" disabled>Select Class</option>
                                         <option value="economy">Economy</option>
                                         <option value="business">Business</option>
-                                        <option value="firstClass">First Class</option>
+                                        <option value="first_class">First Class</option>
                                     </select>
                                 </div>
                             </div>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ArrowLeft, Plane, Users, Coffee, CreditCard, Map, Tag } from 'lucide-react';
+import { ArrowLeft, Calendar, Plane, Users, User, MapPin, X, Download, Ticket, Coffee, CreditCard, Map, Tag } from 'lucide-react';
 import { useGetFlightAllBookingDetailsQuery } from '../../../Api/Api';
 import StripePayment from '../../Payment/PaymentForm';
 import Modal from '../../Modal/Modal';
@@ -8,80 +8,171 @@ import PaymentSuccess from '../../Payment/PaymentSuccess';
 import { ToastContainer, toast } from 'react-toastify';
 import { useFlightTicketsDetailsContext } from '../../../Context/FlightTicketsDetailsContext';
 
-const ThankYouPage = ({ pdfLink }) => {
-    const bookingDetails = {
-        flightNumber: 'FL123',
-        departure: 'New York (JFK)',
-        arrival: 'London (LHR)',
-        date: '2024-10-15',
-        passengerName: 'John Doe'
-    };
+const BookingConfirmPage = ({ pdfLink, bookingData, isSuccess }) => {
+
+    const [passengerDetails, setPassengerDetails] = useState('')
+    const [totalSeat, setTotalSeat] = useState([]);
+    const [flight, setFlight] = useState();
+    const [passengerName, setPassengerName] = useState('')
+    const { className } = useParams();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+
+        if (isSuccess) {
+            setPassengerDetails(bookingData?.data?.flightBookDetails?.passengerDetails)
+            setFlight(bookingData?.data?.flightBookDetails?.flightDetails)
+        }
+
+    }, [bookingData, isSuccess])
+
+    useEffect(() => {
+
+        if (passengerDetails) {
+            const seats = passengerDetails?.map((passenger) => {
+                return passenger?.seatInfo?.seat_number
+            });
+
+            const passengerNames = passengerDetails.map((passenger) => {
+                return passenger?.fullName
+            })
+
+            setTotalSeat(seats.join(','))
+
+            setPassengerName(passengerNames)
+        }
+
+    }, [passengerDetails])
+
+    function capitalizeFirstLetter(string) {
+        if (!string) return '';
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+
+    const extractDate = (timeStamp) => {
+        console.log(timeStamp, 'timeStamptimeStamp')
+        const date = new Date(timeStamp);
+        const formattedDate = date.toISOString().split("T")[0];
+        return formattedDate
+    }
+
+    const extractBoardingTime = (timeStamp) => {
+        const date = new Date(timeStamp);
+        return date.toLocaleTimeString("en-US", {
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: true,
+        });
+    }
 
     const handleDownload = () => {
         const a = document.createElement('a');
         a.href = pdfLink;
-        a.download = 'ticket.pdf';
+        a.download = `ticket-${flight?.flightCode}-${flight?.departure?.time}.pdf`;
         document.body.appendChild(a);
         a.click();
         a.remove();
         window.URL.revokeObjectURL(pdfLink);
+
+        // setTimeout(() => {
+        //     navigate('/flights')
+        // }, 2000);
     };
 
     return (
-        <div className="w-full mx-auto h-[800px] bg-white rounded-lg p-8">
-            <div className="relative">
-                <div className="absolute -top-16 left-1/2 transform -translate-x-1/2">
-                    <div className="w-24 h-24 bg-green-500 rounded-full flex items-center justify-center">
-                        <svg className="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                        </svg>
+        bookingData && (
+            <div className="z-0 flex items-center h-full justify-center">
+
+                <div className="relative w-full max-w-3xl overflow-hidden bg-white rounded-lg shadow-2xl">
+
+                    <div className="relative h-48 bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 p-8 overflow-hidden">
+                        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0iZ3JpZCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLW9wYWNpdHk9IjAuMSIgc3Ryb2tlLXdpZHRoPSIxIi8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyaWQpIi8+PC9zdmc+')] opacity-20" />
+                        <div className="relative z-10">
+                            <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mb-4">
+                                <Plane className="w-8 h-8 text-indigo-600 rotate-45" />
+                            </div>
+                            <h2 className="text-3xl font-bold text-white mb-2">Booking Confirmed!</h2>
+                            <p className="text-indigo-100">Get ready for your journey</p>
+                        </div>
+                    </div>
+
+                    <div className="p-8">
+
+                        <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-6 mb-8">
+                            <div className="flex items-center justify-between mb-6">
+                                <div>
+                                    <p className="text-sm text-gray-500 mb-1">From</p>
+                                    <h3 className="text-xl font-bold text-gray-900">{flight?.departure?.city} ({flight?.departure?.airport})</h3>
+                                </div>
+                                <Plane className="w-8 h-8 text-indigo-600 rotate-45" />
+                                <div className="text-right">
+                                    <p className="text-sm text-gray-500 mb-1">To</p>
+                                    <h3 className="text-xl font-bold text-gray-900">{flight?.arrival?.city} ({flight?.arrival?.airport})</h3>
+                                </div>
+                            </div>
+
+                            {flight?.departure?.time != undefined && (
+                                <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                                    {[
+                                        { icon: <Calendar className="w-8 h-5" />, label: 'Date', value: extractDate(flight?.departure?.time) },
+                                        { icon: <Ticket className="w-8 h-5" />, label: 'Flight', value: flight?.flightCode },
+                                        { icon: <User className="w-8 h-5" />, label: 'Passenger', value: passengerName },
+                                    ].map((item, index) => (
+                                        <div key={index} className="bg-white rounded-xl p-2 shadow-sm">
+                                            <div className="flex items-center space-x-1 text-indigo-600 mb-2">
+                                                {item.icon}
+                                                <span className="text-sm font-medium">{item.label}</span>
+                                            </div>
+                                            {Array.isArray(item.value) ? (
+                                                item.value.map((name, i) => (
+                                                    <p key={i} className="text-gray-900 font-semibold">{name}</p>
+                                                ))
+                                            ) : (
+                                                <p className="text-gray-900 font-semibold">{item.value}</p>
+                                            )}
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+
+                        </div>
+
+                        {/* Additional Info */}
+                        <div className="mb-8">
+                            <div className="flex items-center justify-between py-3 border-b border-gray-100">
+                                <span className="text-gray-600">Class</span>
+                                <span className="font-medium text-gray-900">{capitalizeFirstLetter(className)}</span>
+                            </div>
+                            <div className="flex items-center justify-between py-3 border-b border-gray-100">
+                                <span className="text-gray-600">Seat</span>
+                                <span className="font-medium text-gray-900">{totalSeat}</span>
+
+                            </div>
+                            {flight?.departure?.time && (
+                                <div className="flex items-center justify-between py-3">
+                                    <span className="text-gray-600">Boarding Time</span>
+                                    <span className="font-medium text-gray-900">{extractBoardingTime(flight?.departure?.time)}</span>
+                                </div>
+                            )}
+                        </div>
+
+                        <div className="flex justify-center">
+                            <button
+                                onClick={handleDownload}
+                                className="group relative overflow-hidden px-8 py-4 bg-gradient-to-r from-indigo-600 to-blue-600 rounded-xl text-white font-medium shadow-lg hover:shadow-xl transition-all duration-300"
+                            >
+                                <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity" />
+                                <div className="relative flex items-center space-x-2">
+                                    <Download className="w-5 h-5" />
+                                    <span>Download Ticket</span>
+                                </div>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
+        )
 
-            <h1 className="text-4xl font-bold text-center text-green-500 mb-6 mt-12">Booking Confirmed!</h1>
-            <p className="text-center text-gray-700 mb-8 text-lg">Thank you for choosing us. Your journey awaits!</p>
-
-            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-8 rounded-xl shadow-lg mb-8">
-                <h3 className="text-2xl font-semibold mb-6 text-indigo-900">Booking Summary:</h3>
-                <div className="space-y-4">
-                    <p className="flex justify-between items-center border-b border-indigo-100 pb-2">
-                        <span className="font-medium text-gray-700">Flight</span>
-                        <span className="text-indigo-600">{bookingDetails.flightNumber}</span>
-                    </p>
-                    <p className="flex justify-between items-center border-b border-indigo-100 pb-2">
-                        <span className="font-medium text-gray-700">From</span>
-                        <span className="text-indigo-600">{bookingDetails.departure}</span>
-                    </p>
-                    <p className="flex justify-between items-center border-b border-indigo-100 pb-2">
-                        <span className="font-medium text-gray-700">To</span>
-                        <span className="text-indigo-600">{bookingDetails.arrival}</span>
-                    </p>
-                    <p className="flex justify-between items-center border-b border-indigo-100 pb-2">
-                        <span className="font-medium text-gray-700">Date</span>
-                        <span className="text-indigo-600">{bookingDetails.date}</span>
-                    </p>
-                    <p className="flex justify-between items-center">
-                        <span className="font-medium text-gray-700">Passenger</span>
-                        <span className="text-indigo-600">{bookingDetails.passengerName}</span>
-                    </p>
-                </div>
-            </div>
-
-            <div className="text-center mb-8">
-                <button
-                    onClick={handleDownload}
-                    className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-indigo-600 to-blue-500 text-white font-semibold rounded-full shadow-lg hover:from-indigo-700 hover:to-blue-600 transition duration-300 transform hover:scale-105"
-                >
-                    <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                    </svg>
-                    Download Ticket (PDF)
-                </button>
-            </div>
-
-           
-        </div>
     );
 };
 
@@ -91,7 +182,7 @@ const FlightsTicketsPaymentPage = () => {
     const [couponCode, setCouponCode] = useState('');
     const [flight, setFlight] = useState();
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [showThankYou, setShowThankYou] = useState(false);
+    const [bookingConfirm, setShowBookingConfirm] = useState(false);
     const [showPaymentSucess, setShowPaymnetSucess] = useState(false);
     const [pdfLink, setPdfLink] = useState('');
     const [contactDetails, setContactDetails] = useState('');
@@ -279,9 +370,9 @@ const FlightsTicketsPaymentPage = () => {
 
     };
 
-    const handleThankYouPage = () => {
+    const handleBookingConfirmPage = () => {
         setShowPaymnetSucess(false);
-        setShowThankYou(true);
+        setShowBookingConfirm(true);
     };
 
     return (
@@ -547,16 +638,16 @@ const FlightsTicketsPaymentPage = () => {
                 draggable="true"
             />
 
-            {/* <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+            <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
                 <StripePayment onPaymentSuccess={handlePaymentSuccess} />
-            </Modal> */}
-
-            <Modal isOpen={showPaymentSucess} onClose={() => setShowPaymnetSucess(false)} hideCloseButton={true}>
-                <PaymentSuccess paymentId={paymentId} openThankYouPage={handleThankYouPage} />
             </Modal>
 
-            <Modal isOpen={isModalOpen} onClose={() => setShowThankYou(false)}>
-                <ThankYouPage pdfLink={pdfLink} />
+            <Modal isOpen={showPaymentSucess} onClose={() => setShowPaymnetSucess(false)} hideCloseButton={true}>
+                <PaymentSuccess paymentId={paymentId} openBookingConfirmPage={handleBookingConfirmPage} />
+            </Modal>
+
+            <Modal isOpen={bookingConfirm} onClose={() => setShowBookingConfirm(false)}>
+                <BookingConfirmPage bookingData={fetchBookingData} isSuccess={isSuccessfullyFetchedBookingData} pdfLink={pdfLink} />
             </Modal>
         </div>
     );

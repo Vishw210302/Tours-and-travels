@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import CopyAllIcon from '@mui/icons-material/CopyAll';
 import { useFlightTicketsDetailsContext } from '../../Context/FlightTicketsDetailsContext';
 
-const PaymentSuccess = ({ openThankYouPage, paymentId }) => {
+const PaymentSuccess = ({ openBookingConfirmPage, paymentId }) => {
 
     const [countdown, setCountdown] = useState(5);
     const [showContent, setShowContent] = useState(false);
@@ -44,7 +44,7 @@ const PaymentSuccess = ({ openThankYouPage, paymentId }) => {
             setCountdown(prev => {
                 if (prev <= 1) {
                     clearInterval(timer);
-                    openThankYouPage()
+                    openBookingConfirmPage()
                     return 0;
                 }
                 return prev - 1;
