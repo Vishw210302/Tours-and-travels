@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { usePassenger } from '../../../Context/PassengerCountContext';
-import { useAddPassengerDetailsMutation, useLazyGetPassengerDetailsByContactIdQuery } from '../../../Api/Api';
 import { ToastContainer, toast } from 'react-toastify';
+import { useAddPassengerDetailsMutation, useLazyGetPassengerDetailsByContactIdQuery } from '../../../Api/Api';
+import { useFlightTicketsDetailsContext } from '../../../Context/FlightTicketsDetailsContext';
+import { usePassenger } from '../../../Context/PassengerCountContext';
 
 const PassengerDetails = () => {
 
   const { id, className } = useParams();
   const navigate = useNavigate();
   const { passengerCount } = usePassenger();
-  const [passengerPersonalDetails, setPassengerPersonalDetails ] = useState('');
+  const [passengerPersonalDetails, setPassengerPersonalDetails] = useState("")
 
   const [submitPassengerDetails, {
     data,
     isSuccess,
-    isLoading,
     isError,
     error
   }] = useAddPassengerDetailsMutation();
@@ -49,7 +49,7 @@ const PassengerDetails = () => {
     }
   }, []);
 
-  const [fetchDetailsByContactId,{
+  const [fetchDetailsByContactId, {
 
     data: storeDPassengerData,
     isSuccess: isPassengerDataFetched,

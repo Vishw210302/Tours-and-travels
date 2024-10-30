@@ -93,6 +93,10 @@ export const myApi = createApi({
             query: () => "get-about-us-content",
         }),
 
+        getSettingListing: builder.query({
+            query: () => "get-setting-listing",
+        }),
+
         inqueriesPost: builder.mutation({
             query: (inqueriesData) => ({
                 url: "inquery-post",
@@ -216,6 +220,7 @@ export const {
     useTestimonialHotelReviewPostMutation,
     useGetItenariesDetailsQuery,
     useLazyGetCitiesListingQuery,
+    useGetSettingListingQuery,
     useContactUsPostMutation,
     useContactUsHotelPostMutation,
     useAddPassengerDetailsMutation,

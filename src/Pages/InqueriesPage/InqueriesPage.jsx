@@ -69,7 +69,6 @@ const InqueriesPage = ({ itenaryPriceData, itenatyDataListing }) => {
                 setNumberOfChildrenWithBed(0);
                 setNumberOfChildrenWithoutBed(0);
                 setDepartureDate('');
-                console.log('Form submitted successfully:', result);
             }
         } catch (error) {
             console.error('Failed to submit form:', error);
@@ -85,8 +84,7 @@ const InqueriesPage = ({ itenaryPriceData, itenatyDataListing }) => {
     };
 
     const handleDateSelect = (selectedDate) => {
-        setDepartureDate(selectedDate); // Set selected date
-        console.log("Selected date to send:", selectedDate);
+        setDepartureDate(selectedDate);
     };
 
     return (

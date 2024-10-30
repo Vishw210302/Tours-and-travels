@@ -11,10 +11,10 @@ import SimilarPackage from './Components/SimilarPackage';
 import Testimonialform from '../../TestimonialForm/Testimonialform';
 
 const Index = () => {
+
   const { id } = useParams();
   const { isLoading, isSuccess, isError, data, error } = useGetItenariesDetailsQuery(id);
   const [itenatyDataListing, setItenaryDataListing] = useState({});
-  console.log("itenatyDataListingitenatyDataListing", itenatyDataListing)
   const [itenaryPriceData, setItenaryPriceData] = useState({});
   const imageUrl = `${import.meta.env.VITE_REACT_APP_IMAGE_URL}/itenary-package/`;
 

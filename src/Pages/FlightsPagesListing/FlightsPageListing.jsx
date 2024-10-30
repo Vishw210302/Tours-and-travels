@@ -139,7 +139,6 @@ const FlightsPageListing = () => {
 
             const [year, month, day] = departuredDate.split("-");
 
-            // Convert to the desired format MM/DD/YYYY
             const formattedDate = `${month}/${day}/${year}`;
 
             const payload = {
