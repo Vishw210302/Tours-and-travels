@@ -1,14 +1,14 @@
+import { ArrowLeft, Coffee, CreditCard, Plane, Users } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ArrowLeft, Plane, Users, Coffee, CreditCard, Map, Tag } from 'lucide-react';
+import { ToastContainer, toast } from 'react-toastify';
 import { useGetFlightAllBookingDetailsQuery } from '../../../Api/Api';
-import StripePayment from '../../Payment/PaymentForm';
+import { useFlightTicketsDetailsContext } from '../../../Context/FlightTicketsDetailsContext';
 import Modal from '../../Modal/Modal';
 import PaymentSuccess from '../../Payment/PaymentSuccess';
-import { ToastContainer, toast } from 'react-toastify';
-import { useFlightTicketsDetailsContext } from '../../../Context/FlightTicketsDetailsContext';
 
 const ThankYouPage = ({ pdfLink }) => {
+
     const bookingDetails = {
         flightNumber: 'FL123',
         departure: 'New York (JFK)',
@@ -80,7 +80,7 @@ const ThankYouPage = ({ pdfLink }) => {
                 </button>
             </div>
 
-           
+
         </div>
     );
 };
@@ -108,11 +108,6 @@ const FlightsTicketsPaymentPage = () => {
     const contactId = localStorage.getItem('contactId');
 
     const { data: fetchBookingData, isSuccess: isSuccessfullyFetchedBookingData, error: fetchingBookingErr, isError: hasFetchingBookingErr, refetch } = useGetFlightAllBookingDetailsQuery(contactId);
-
-
-    // useEffect(() => {
-    //     console.log(seats, 'seatsseatsseatsseats')
-    // }, [seats]);
 
     useEffect(() => {
         refetch();
@@ -142,7 +137,7 @@ const FlightsTicketsPaymentPage = () => {
             setPromoCode(fetchBookingData?.data?.promocodeData)
 
         } else if (hasFetchingBookingErr) {
-            console.log(fetchingBookingErr, 'fetchingBookingErrfetchingBookingErrfetchingBookingErrfetchingBookingErrfetchingBookingErr')
+            console.log(fetchingBookingErr, 'fetchingBookingErr')
         }
     }, [fetchBookingData, isSuccessfullyFetchedBookingData, hasFetchingBookingErr, fetchingBookingErr]);
 
@@ -206,7 +201,6 @@ const FlightsTicketsPaymentPage = () => {
 
         const selectedCoupon = discountCoupon.find(coupon => coupon.discountCouponName === couponCode);
 
-        console.log(selectedCoupon, 'couponCodecouponCodecouponCodecouponCode')
         if (selectedCoupon) {
             setDiscountAmount(selectedCoupon?.discountAmount)
             toast.success(`Coupon applied successfully! You saved ₹${selectedCoupon.discountAmount}`, { autoClose: 3000 });
@@ -217,18 +211,14 @@ const FlightsTicketsPaymentPage = () => {
             if (selectedPromoCode) {
 
                 if (ticketPrice >= 5000 && ticketPrice <= 25000) {
-                    console.log('first if')
                     if (selectedPromoCode.discountAmount <= 3000) {
-                        console.log('second if')
                         setDiscountAmount(selectedPromoCode?.discountAmount);
                         toast.success(`Promocode applied successfully! You saved ₹${selectedPromoCode.discountAmount}`, { autoClose: 3000 });
                     } else {
-                        console.log('second else')
                         toast.error('Promo code is not valid for this ticket price range (must be ₹3000 or less)', { autoClose: 3000 });
                         setDiscountAmount(0);
                     }
                 } else if (ticketPrice > 25000) {
-                    console.log('first else')
                     setDiscountAmount(selectedPromoCode?.discountAmount);
                     toast.success(`Promocode applied successfully! You saved ₹${selectedPromoCode.discountAmount}`, { autoClose: 3000 });
                 }
@@ -248,7 +238,6 @@ const FlightsTicketsPaymentPage = () => {
 
     const handlePaymentSuccess = async (payment) => {
         try {
-            console.log(payment, 'paymentpaymentpaymentpayment')
 
             const payload = {
                 paymentId: payment.id,

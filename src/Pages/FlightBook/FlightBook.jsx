@@ -46,9 +46,7 @@ const FlightBook = () => {
     useEffect(() => {
         if (isSuccess) {
             setFlight(data?.data)
-            // console.log(flight?.class_details?.[className]?.prices?.adult, 'flightflight')
         }
-
     }, [data, isSuccess, isError, error])
 
 

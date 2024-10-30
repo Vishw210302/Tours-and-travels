@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useGetFlightDetailsMutation, useGetSpecialFlightsQuery, useLazyGetCitiesListingQuery } from '../../Api/Api';
-import { useFlightTicketsDetailsContext } from '../../Context/FlightTicketsDetailsContext';
 import { usePassenger } from '../../Context/PassengerCountContext';
 import Airlinesname from '../Home/components/Airlinesname';
 import TopSearchFlights from './TopSearchFlights';
@@ -28,7 +27,6 @@ const FlightsPageListing = () => {
     const [classMatch, setClassMatch] = useState('economy');
     const timeoutRef = useRef(null);
     const { setPassengerCount } = usePassenger();
-    const { setPassengerPersonalDetails } = useFlightTicketsDetailsContext();
 
     useEffect(() => {
         if (specialFlghtSucess) {
@@ -141,7 +139,6 @@ const FlightsPageListing = () => {
 
             const [year, month, day] = departuredDate.split("-");
 
-            // Convert to the desired format MM/DD/YYYY
             const formattedDate = `${month}/${day}/${year}`;
 
             const payload = {
@@ -155,8 +152,6 @@ const FlightsPageListing = () => {
                 oneWay: directChecked
             }
 
-            console.log(payload, 'payloadpayloadpayloadpayloadpayload')
-
             const totalPassengerCount = {
                 adult: adlutValue,
                 children: childrenValue,
@@ -164,8 +159,6 @@ const FlightsPageListing = () => {
             };
 
             setPassengerCount(totalPassengerCount)
-
-            setPassengerPersonalDetails();
 
             await searchFlight(payload);
 

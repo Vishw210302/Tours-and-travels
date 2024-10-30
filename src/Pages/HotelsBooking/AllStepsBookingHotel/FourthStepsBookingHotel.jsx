@@ -61,7 +61,6 @@ const FourthStepsBookingHotel = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (validate()) {
-            console.log('Form data:', formData);
             alert('Booking Confirmed');
 
             setFormData({

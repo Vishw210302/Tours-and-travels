@@ -9,15 +9,16 @@ import { FaCcPaypal } from "react-icons/fa";
 import { FaCcDiscover } from "react-icons/fa6";
 import { RiVisaLine } from "react-icons/ri";
 import { useNavigate } from 'react-router-dom';
-import footerLogo from "../../assets/asgradLogo.png";
-import recentTours from "../../assets/image.jpg";
 import { useGetSocialMediaLinkListingQuery } from '../../Api/Api';
+import recentTours from "../../assets/image.jpg";
 
-const Footer = () => {
+const Footer = ({ settingData, settingIsSuccess, settingIsError, settingError }) => {
 
   const navigate = useNavigate();
   const { isError, error, data, isLoading, isSuccess } = useGetSocialMediaLinkListingQuery();
   const [socialMediaLinkListing, setSocialMediaLinkListing] = useState([]);
+  const [websiteLogo, setWebsiteLogo] = useState(false);
+  const mainLogoImage = `${import.meta.env.VITE_REACT_APP_IMAGE_URL}/setting-image/`
 
   useEffect(() => {
     if (isSuccess) {
@@ -56,9 +57,18 @@ const Footer = () => {
     navigate("hotels");
   }
 
+  useEffect(() => {
+    if (settingIsSuccess) {
+      setWebsiteLogo(settingData?.data)
+    } else {
+      console.log("error", settingIsError);
+    }
+  }, [settingData, settingIsSuccess, settingIsError])
+
   return (
 
     <footer className="relative bg-[#1f2746] text-white overflow-hidden mt-8">
+
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute left-0 top-0 w-full h-full">
           <Plane className="absolute text-white/10 w-24 h-24 animate-plane-fly" style={{ top: '10%', left: '25%' }} />
@@ -69,55 +79,78 @@ const Footer = () => {
 
       <div className="2xl:container 2xl:mx-auto px-8 py-16 relative z-10">
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 w-full'>
-
           <div>
+
             <div className='w-fit h-fit'>
-              <img src={footerLogo} alt="footer_logo" className='h-24 w-24' />
-            </div>
-            <div className='text-sm font-medium mt-3' style={{ letterSpacing: '-0.4px' }}>
-              <p>Welcome to Asgard Tours and Travels, your gateway to unforgettable adventures and immersive travel experiences. Explore with us and let your journey begin!</p>
-            </div>
-            <div className='w-fit bg-[#15304d] rounded-lg p-3 mt-3'>
-              <p className='text-sm font-semibold'>Social Networks:</p>
-              <div className='text-gray-400 text-[25px] flex flex-row gap-2'>
-                {socialMediaLinkListing && socialMediaLinkListing.map((item, index) => {
+              {websiteLogo && websiteLogo.map((items, index) => {
+                if (items?.keyName == "Main_Logo") {
                   return (
-                    <div key={index}>
-                      {item.socialMediaName === 'facebook' && (
-                        <a href={`https://${item.socialMediaLink}`} target="_blank" rel="noopener noreferrer">
-                          <FacebookIcon fontSize='medium' />
-                        </a>
-                      )}
-                      {item.socialMediaName === 'Instagram' && (
-                        <a href={`https://${item.socialMediaLink}`} target="_blank" rel="noopener noreferrer">
-                          <InstagramIcon fontSize='medium' />
-                        </a>
-                      )}
-                      {item.socialMediaName === 'linkedin' && (
-                        <a href={`https://${item.socialMediaLink}`} target="_blank" rel="noopener noreferrer">
-                          <LinkedInIcon fontSize='medium' />
-                        </a>
-                      )}
-                      {item.socialMediaName === 'youtube' && (
-                        <a href={`https://${item.socialMediaLink}`} target="_blank" rel="noopener noreferrer">
-                          <YouTubeIcon fontSize='medium' />
-                        </a>
-                      )}
-                      {item.socialMediaName === 'twitter' && (
-                        <a href={`https://${item.socialMediaLink}`} target="_blank" rel="noopener noreferrer">
-                          <XIcon fontSize='medium' />
-                        </a>
-                      )}
+                    <div key={index + "key"}>
+                      <img src={`${mainLogoImage}${items?.valueContent}`} alt={items?.keyName} className='h-[78px]' />
                     </div>
-                  );
-                })}
-              </div>
+                  )
+                }
+              })}
             </div>
+
+            <div className='text-sm font-medium mt-3' style={{ letterSpacing: '-0.4px' }}>
+              {websiteLogo && websiteLogo.map((items, index) => {
+                if (items?.keyName == "Footer_Description") {
+                  return (
+                    <p key={index + "key"}>{items?.valueContent}</p>
+                  )
+                }
+              })}
+            </div>
+
+            {socialMediaLinkListing && socialMediaLinkListing.length > 0 ?
+              <div className='w-fit bg-[#15304d] rounded-lg p-3 mt-3'>
+                <p className='text-sm font-semibold'>Social Networks:</p>
+                <div className='text-gray-400 text-[25px] flex flex-row gap-2'>
+                  {socialMediaLinkListing && socialMediaLinkListing.map((item, index) => {
+                    return (
+                      <div key={index}>
+                        {item.socialMediaName === 'facebook' && (
+                          <a href={`https://${item.socialMediaLink}`} target="_blank" rel="noopener noreferrer">
+                            <FacebookIcon fontSize='medium' />
+                          </a>
+                        )}
+                        {item.socialMediaName === 'Instagram' && (
+                          <a href={`https://${item.socialMediaLink}`} target="_blank" rel="noopener noreferrer">
+                            <InstagramIcon fontSize='medium' />
+                          </a>
+                        )}
+                        {item.socialMediaName === 'linkedin' && (
+                          <a href={`https://${item.socialMediaLink}`} target="_blank" rel="noopener noreferrer">
+                            <LinkedInIcon fontSize='medium' />
+                          </a>
+                        )}
+                        {item.socialMediaName === 'youtube' && (
+                          <a href={`https://${item.socialMediaLink}`} target="_blank" rel="noopener noreferrer">
+                            <YouTubeIcon fontSize='medium' />
+                          </a>
+                        )}
+                        {item.socialMediaName === 'twitter' && (
+                          <a href={`https://${item.socialMediaLink}`} target="_blank" rel="noopener noreferrer">
+                            <XIcon fontSize='medium' />
+                          </a>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+              :
+              <>
+              </>
+            }
+
           </div>
 
           <div>
             <p className='text-base font-semibold border-b-2 border-red-500 w-fit'>Company</p>
             <div className='mt-2 space-y-2'>
+
               <div onClick={() => {
                 handleNavigateAboutUs()
               }}>
@@ -125,6 +158,7 @@ const Footer = () => {
                   About Us
                 </p>
               </div>
+
               <div onClick={() => {
                 handleNavigateContactUs()
               }}>
@@ -132,6 +166,7 @@ const Footer = () => {
                   Contact Us
                 </p>
               </div>
+
               <div onClick={() => {
                 handleNavigateBlogs()
               }}>
@@ -139,6 +174,7 @@ const Footer = () => {
                   Blogs
                 </p>
               </div>
+
             </div>
           </div>
 
@@ -150,24 +186,29 @@ const Footer = () => {
               }}>
                 <p className='text-sm relative inline-block hover:text-red-500 hover:cursor-pointer after:content-[""] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-red-500 hover:after:w-full after:transition-all after:duration-300'>International Package</p>
               </div>
+
               <div onClick={() => {
                 handleNavigateDomesticPackages()
               }}>
                 <p className='text-sm relative inline-block hover:text-red-500 hover:cursor-pointer after:content-[""] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-red-500 hover:after:w-full after:transition-all after:duration-300'>Domestic Package</p>
               </div>
+
               <div onClick={() => {
                 handleNavigateFlightBooking()
               }}>
                 <p className='text-sm relative inline-block hover:text-red-500 hover:cursor-pointer after:content-[""] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-red-500 hover:after:w-full after:transition-all after:duration-300'>Flight Booking</p>
               </div>
+
               <div onClick={() => {
                 handleNavigateHotelBooking()
               }}>
                 <p className='text-sm relative inline-block hover:text-red-500 hover:cursor-pointer after:content-[""] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-red-500 hover:after:w-full after:transition-all after:duration-300'>Hotel Booking</p>
               </div>
+
               <div>
                 <p className='text-sm relative inline-block hover:text-red-500 hover:cursor-pointer after:content-[""] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-red-500 hover:after:w-full after:transition-all after:duration-300'>Visa Services</p>
               </div>
+
             </div>
           </div>
 

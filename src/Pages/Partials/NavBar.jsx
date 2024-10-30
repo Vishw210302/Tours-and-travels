@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import mainLogo from "../../assets/asgradLogo.png";
 
-const NavBar = () => {
+const NavBar = ({ settingData, settingIsSuccess, settingIsError, settingError }) => {
 
   const pathname = window.location.pathname.replace('/', '');
   const [activeLink, setActiveLink] = useState(pathname);
   const [isPackagesOpen, setIsPackagesOpen] = useState(false);
+  const [websiteLogo, setWebsiteLogo] = useState(false);
+  const mainLogoImage = `${import.meta.env.VITE_REACT_APP_IMAGE_URL}/setting-image/`
+
   const navigate = useNavigate();
 
   const handleLinkClick = (link, isDropdownItem = false) => {
@@ -32,16 +34,36 @@ const NavBar = () => {
     navigate("/");
   }
 
+  useEffect(() => {
+    if (settingIsSuccess) {
+      setWebsiteLogo(settingData?.data)
+    } else {
+      console.log("error", settingIsError);
+    }
+  }, [settingData, settingIsSuccess, settingIsError])
+
   return (
     <>
+
       <nav className="sticky top-0 bg-[#1f2746] h-[80px] z-50">
         <div className='h-full container mx-auto grid grid-cols-3 px-4'>
+
           <div className='flex justify-start items-center cursor-pointer w-fit' onClick={() => {
             handleClickOnDashboard()
           }}>
-            <img src={mainLogo} alt="Logo" className='h-[78px]' />
+            {websiteLogo && websiteLogo.map((items, index) => {
+              if (items?.keyName == "Main_Logo") {
+                return (
+                  <div key={index + "key"}>
+                    <img src={`${mainLogoImage}${items?.valueContent}`} alt={items?.keyName} className='h-[78px]' />
+                  </div>
+                )
+              }
+            })}
           </div>
+
           <div className='col-span-2'>
+
             <div className='grid grid-cols-7 gap-4 items-center h-full'>
 
               <button

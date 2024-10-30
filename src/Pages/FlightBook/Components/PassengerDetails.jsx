@@ -1,21 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import { useAddPassengerDetailsMutation, useLazyGetPassengerDetailsByContactIdQuery } from '../../../Api/Api';
 import { useFlightTicketsDetailsContext } from '../../../Context/FlightTicketsDetailsContext';
 import { usePassenger } from '../../../Context/PassengerCountContext';
-import { useAddPassengerDetailsMutation, useLazyGetPassengerDetailsByContactIdQuery } from '../../../Api/Api';
-import { ToastContainer, toast } from 'react-toastify';
 
-const PassengerDetails = ({ flightId }) => {
+const PassengerDetails = () => {
 
   const { id, className } = useParams();
   const navigate = useNavigate();
   const { passengerCount } = usePassenger();
-  const { passengerPersonalDetails, setPassengerPersonalDetails } = useFlightTicketsDetailsContext();
+  const [passengerPersonalDetails, setPassengerPersonalDetails] = useState("")
 
   const [submitPassengerDetails, {
     data,
     isSuccess,
-    isLoading,
     isError,
     error
   }] = useAddPassengerDetailsMutation();
@@ -50,7 +49,7 @@ const PassengerDetails = ({ flightId }) => {
     }
   }, []);
 
-  const [fetchDetailsByContactId,{
+  const [fetchDetailsByContactId, {
 
     data: storeDPassengerData,
     isSuccess: isPassengerDataFetched,

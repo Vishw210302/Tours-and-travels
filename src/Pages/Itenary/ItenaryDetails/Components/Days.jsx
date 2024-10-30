@@ -89,7 +89,6 @@ const Days = ({ data }) => {
 
     useEffect(() => {
         if (data) {
-            console.log(data, 'adta')
             setAllDaysViseItenary(data)
         } else {
             console.error("Expected data to be an array, but got:", data);

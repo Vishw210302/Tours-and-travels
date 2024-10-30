@@ -20,7 +20,6 @@ const TestimonialForm = () => {
 
         try {
             const result = await testimonialPost(testimonialData).unwrap();
-            console.log('Testimonial submitted:', result);
             setReviewPersonName('');
             setReviewDescription('');
             setRating(1);

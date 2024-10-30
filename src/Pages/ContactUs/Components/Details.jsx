@@ -55,9 +55,13 @@ const Details = () => {
                 </p>
             </div>
             <div className='mt-3'>
-                <p className='text-red-400 text-[18px] font-bold'>
-                    Follow us on
-                </p>
+                {socialMediaLinkListing && socialMediaLinkListing.length > 0 ?
+                    <p className='text-red-400 text-[18px] font-bold'>
+                        Follow us on
+                    </p>
+                    : <></>
+                }
+
                 <div className='text-gray-400 text-[25px]'>
                     <div className='flex flex-row'>
                         {socialMediaLinkListing && socialMediaLinkListing.map((item, index) => {
