@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { CgCalendarDates } from "react-icons/cg";
 import { FaPerson } from "react-icons/fa6";
 import { MdOutlineLogin } from "react-icons/md";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { useGetHotelCouponCodeDataQuery } from '../../../Api/Api';
 import HotelTestimonialForm from '../HotelTestimonialForm';
 
@@ -40,6 +42,21 @@ const ThirdStepsBookingHotel = () => {
     const handleCouponClick = (couponCode) => {
         document.getElementById('promoCode').value = couponCode;
         setShowSuggestions(false);
+        toast.success(`Coupon code ${couponCode} applied successfully!`);
+    };
+
+    const handleApplyCoupon = () => {
+        const couponCode = document.getElementById('promoCode').value;
+        if (couponCode) {
+            const coupon = hotelCouponCodeListing.find(coupon => coupon.promoCode === couponCode);
+            if (coupon) {
+                toast.success(`Coupon code ${couponCode} applied successfully! Discount: ₹${coupon.discountAmount}`);
+            } else {
+                toast.error(`Invalid coupon code: ${couponCode}`);
+            }
+        } else {
+            toast.error("Please enter a coupon code.");
+        }
     };
 
     return (
@@ -117,7 +134,7 @@ const ThirdStepsBookingHotel = () => {
             </div>
 
             <div className='flex flex-row gap-2 w-full'>
-                <div className='card bg-white shadow-lg transition-all duration-300 hover:shadow-xl p-5 my-2 rounded-md w-full h-fit'>
+                <div className='card bg-white shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg p-5 my-2 w-full h-fit rounded-md'>
                     <p className='text-gray-400 font-semibold text-lg w-fit'>Enter your coupon code</p>
 
                     <div className="mt-4 relative">
@@ -133,6 +150,7 @@ const ThirdStepsBookingHotel = () => {
                             />
                             <button
                                 type="button"
+                                onClick={handleApplyCoupon}
                                 className="bg-blue-600 text-white rounded-r-md hover:bg-blue-700 transition-all h-fit px-[23px] py-[7px]"
                             >
                                 Apply
@@ -157,9 +175,21 @@ const ThirdStepsBookingHotel = () => {
                 <div className='w-full'>
                     <HotelTestimonialForm />
                 </div>
+                <ToastContainer
+                    position="top-right"
+                    autoClose={3000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                    theme="light"
+                />
             </div>
         </>
-    )
-}
+    );
+};
 
-export default ThirdStepsBookingHotel
+export default ThirdStepsBookingHotel;

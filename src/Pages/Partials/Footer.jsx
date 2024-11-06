@@ -17,17 +17,8 @@ const Footer = ({ settingData, settingIsSuccess, settingIsError, settingError })
   const navigate = useNavigate();
   const { isError, error, data, isLoading, isSuccess } = useGetSocialMediaLinkListingQuery();
   const [socialMediaLinkListing, setSocialMediaLinkListing] = useState([]);
-  const [websiteLogo, setWebsiteLogo] = useState(false);
+  const [websiteLogo, setWebsiteLogo] = useState("");
   const mainLogoImage = `${import.meta.env.VITE_REACT_APP_IMAGE_URL}/setting-image/`
-
-  useEffect(() => {
-    if (isSuccess) {
-      setSocialMediaLinkListing(data?.data);
-    } else if (isError) {
-      console.log("error", isError);
-    }
-  }, [error, data, isSuccess, isError]);
-
 
   const handleNavigateAboutUs = () => {
     navigate("aboutUs");
@@ -56,6 +47,14 @@ const Footer = ({ settingData, settingIsSuccess, settingIsError, settingError })
   const handleNavigateHotelBooking = () => {
     navigate("hotels");
   }
+
+  useEffect(() => {
+    if (isSuccess) {
+      setSocialMediaLinkListing(data?.data);
+    } else if (isError) {
+      console.log("error", isError);
+    }
+  }, [error, data, isSuccess, isError]);
 
   useEffect(() => {
     if (settingIsSuccess) {

@@ -16,7 +16,7 @@ const MainLayout = () => {
     return (
         <>
             <NavBar settingData={settingData} settingIsSuccess={settingIsSuccess} settingError={settingError} settingIsError={settingIsError} />
-            <Outlet settingData={settingData} settingIsSuccess={settingIsSuccess} settingError={settingError} settingIsError={settingIsError} />
+            <Outlet />
             <Footer settingData={settingData} settingIsSuccess={settingIsSuccess} settingError={settingError} settingIsError={settingIsError} />
         </>
     )

@@ -9,6 +9,7 @@ import { useLocation } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 const FirstStepsBookingHotel = ({ setIsHotelSelected, onSelectHotel }) => {
+
     const [selectedHotel, setSelectedHotel] = useState(null);
     const location = useLocation();
     const { formData, hotelCityData } = location.state || {};

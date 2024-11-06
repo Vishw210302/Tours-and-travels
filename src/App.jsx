@@ -23,6 +23,7 @@ import Itenary from './Pages/Itenary/Itenary';
 import ItenaryDetail from './Pages/Itenary/ItenaryDetails/index';
 import MainLayout from './Pages/MainLayout';
 import PopularTheme from './Pages/PopularTheme/PopularTheme';
+import { AllApiProvider } from './Context/allApiContext';
 
 const stripePromise = loadStripe('pk_test_51ON98CSEV9soa2c8CWj7i2O7pHm9b1EXoTi1LBhfICMonxhRKNHPPZU1bQ9FCYPwfcb4BzZ3RF8eTLHEt0ENjI3L00VzfQwTB9');
 
@@ -31,33 +32,35 @@ function App() {
   return (
     <PassengerCountProvider>
       <FlightTicketsDetailsProvider>
-        <Elements stripe={stripePromise}>
-          <Router>
-            <ScrollToTop />
-            <Routes>
-              <Route path="/" element={<MainLayout />}>
-                <Route index element={<Home />} />
-                <Route path="aboutUs" element={<Aboutus />} />
-                <Route path="Blogs" element={<Blogs />} />
-                <Route path="International" element={<InternationalPackages />} />
-                <Route path="Domestic" element={<DomesticPackages />} />
-                <Route path="itenary/:id" element={<Itenary />} />
-                <Route path="contact" element={<ContactUs />} />
-                <Route path="flights" element={<FlightsPageListing />} />
-                <Route path="hotels" element={<HotelBookings />} />
-                <Route path="booking-results" element={<HotelBookingResult />} />
-                <Route path="itenary-details/:id" element={<ItenaryDetail />} />
-                <Route path="blog-details/:id" element={<BlogDetailsPage />} />
-                <Route path="flight-book/:className/:key/:id" element={<FlightBook />} />
-                <Route path="meal-booking/:className/:id" element={<MealAndSelect />} />
-                <Route path="flight-seat-booking/:className/:id" element={<FlightSeatBooking />} />
-                <Route path="tickets-payment/:className/:id" element={<FlightsTicketsPaymentPage />} />
-                <Route path="passenger-details/:className/:id" element={<PassengerDetails />} />
-                <Route path="popularTheme" element={<PopularTheme />} />
-              </Route>
-            </Routes>
-          </Router>
-        </Elements>
+        <AllApiProvider>
+          <Elements stripe={stripePromise}>
+            <Router>
+              <ScrollToTop />
+              <Routes>
+                <Route path="/" element={<MainLayout />}>
+                  <Route index element={<Home />} />
+                  <Route path="aboutUs" element={<Aboutus />} />
+                  <Route path="Blogs" element={<Blogs />} />
+                  <Route path="International" element={<InternationalPackages />} />
+                  <Route path="Domestic" element={<DomesticPackages />} />
+                  <Route path="itenary/:id" element={<Itenary />} />
+                  <Route path="contact" element={<ContactUs />} />
+                  <Route path="flights" element={<FlightsPageListing />} />
+                  <Route path="hotels" element={<HotelBookings />} />
+                  <Route path="booking-results" element={<HotelBookingResult />} />
+                  <Route path="itenary-details/:id" element={<ItenaryDetail />} />
+                  <Route path="blog-details/:id" element={<BlogDetailsPage />} />
+                  <Route path="flight-book/:className/:key/:id" element={<FlightBook />} />
+                  <Route path="meal-booking/:className/:id" element={<MealAndSelect />} />
+                  <Route path="flight-seat-booking/:className/:id" element={<FlightSeatBooking />} />
+                  <Route path="tickets-payment/:className/:id" element={<FlightsTicketsPaymentPage />} />
+                  <Route path="passenger-details/:className/:id" element={<PassengerDetails />} />
+                  <Route path="popularTheme" element={<PopularTheme />} />
+                </Route>
+              </Routes>
+            </Router>
+          </Elements>
+        </AllApiProvider>
       </FlightTicketsDetailsProvider>
     </PassengerCountProvider>
   )
