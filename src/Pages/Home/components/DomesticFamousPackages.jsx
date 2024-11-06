@@ -14,8 +14,8 @@ const DomesticFamousPackages = () => {
 
     return (
         <>
+            <div className='flex flex-row justify-center items-center pt-5 w-full font-bold text-[30px] text-red-500'>Top Domestic Packages</div>
             <div className='2xl:container 2xl:mx-auto p-5'>
-                <div className='flex flex-row justify-center items-center p-10 w-full font-bold text-[30px] text-red-500'>Top Domestic Packages</div>
                 <div className='grid grid-cols-2 gap-8 w-full'>
                     <div className='relative w-full h-[400px]'>
                         <Swiper

@@ -15,7 +15,7 @@ const Destinations = () => {
     return (
         <>
             <div>
-                <div className='flex flex-row justify-center items-center p-10 w-full font-bold text-[30px] text-red-500'>Top International Packages</div>
+                <div className='flex flex-row justify-center items-center pt-5 w-full font-bold text-[30px] text-red-500'>Top International Packages</div>
                 <div className='2xl:container 2xl:mx-auto p-5'>
                     <div className='grid grid-cols-2 gap-8 w-full'>
 
