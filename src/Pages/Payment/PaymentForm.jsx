@@ -1,12 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { loadStripe } from '@stripe/stripe-js';
 import { CardElement, useStripe, useElements, Elements } from '@stripe/react-stripe-js';
 import { useCreatePaymentIntentMutation } from '../../Api/Api';
 import { useFlightTicketsDetailsContext } from '../../Context/FlightTicketsDetailsContext';
 import { ToastContainer, toast } from 'react-toastify';
-
-const stripePromise = loadStripe('pk_test_51ON98CSEV9soa2c8CWj7i2O7pHm9b1EXoTi1LBhfICMonxhRKNHPPZU1bQ9FCYPwfcb4BzZ3RF8eTLHEt0ENjI3L00VzfQwTB9');
-
 
 const PaymentForm = ({ onPaymentSuccess }) => {
 
@@ -65,7 +61,7 @@ const PaymentForm = ({ onPaymentSuccess }) => {
             //     })      
             // // }, 5000);
 
-          
+
 
             const response = await createPaymentIntent(payload).unwrap()
 
@@ -259,10 +255,22 @@ const PaymentForm = ({ onPaymentSuccess }) => {
     );
 };
 
-const StripePayment = ({ onPaymentSuccess }) => (
-    <Elements stripe={stripePromise}>
-        <PaymentForm onPaymentSuccess={onPaymentSuccess} />
-    </Elements>
-);
+const StripePayment = ({ onPaymentSuccess }) => {
+    const [stripePromise, setStripePromise] = useState(null);
+
+    useEffect(() => {
+        import('@stripe/stripe-js').then(({ loadStripe }) => {
+            setStripePromise(loadStripe('pk_test_51ON98CSEV9soa2c8CWj7i2O7pHm9b1EXoTi1LBhfICMonxhRKNHPPZU1bQ9FCYPwfcb4BzZ3RF8eTLHEt0ENjI3L00VzfQwTB9'));
+        });
+    }, []);
+
+    return (
+        stripePromise && (
+            <Elements stripe={stripePromise}>
+                <PaymentForm onPaymentSuccess={onPaymentSuccess} />
+            </Elements>
+        )
+    );
+};
 
 export default StripePayment;
