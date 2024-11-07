@@ -249,4 +249,3 @@ export const {
     useGetSocialMediaLinkListingQuery,
     useGetParticularHotelListingQuery,
 } = myApi;
-
