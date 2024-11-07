@@ -15,7 +15,7 @@ const Home = () => {
       <Airlinesname />
       <Destinations />
       <DomesticFamousPackages />
-      <YoutubeVideos />
+      {/* <YoutubeVideos /> */}
       <Testimonials />
       <TourTheme />
       {/* <RippleEffect /> */}
