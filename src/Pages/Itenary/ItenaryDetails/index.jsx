@@ -42,7 +42,7 @@ const Index = () => {
 
         <div className='2xl:container 2xl:mx-auto p-5'>
           <div className='flex justify-between w-[100%]'>
-            <Days data={itenatyDataListing?.days} />
+            <Days days={itenatyDataListing?.days} inclusionExclusion = {itenatyDataListing?.inclusionExclusion}/>
             <div className='w-[35%] h-[100%]'>
               <FlightsDetails />
               <SimilarPackage />

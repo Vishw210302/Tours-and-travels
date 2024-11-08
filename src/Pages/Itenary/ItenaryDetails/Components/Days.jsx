@@ -47,7 +47,7 @@ const Modal = ({ isOpen, onClose, siteDetails }) => {
     };
 
     return (
-        <div className='modal z-10 fixed inset-0 flex items-center justify-center bg-black bg-opacity-50'>
+        <div className='modal z-20 fixed inset-0 flex items-center justify-center bg-black bg-opacity-50'>
             <div className='modal-content bg-white rounded-lg p-5 w-[40%]'>
                 <div className='flex justify-between'>
                     <p className='font-semibold text-lg'>{siteDetails?.SiteseenName}</p>
@@ -78,22 +78,24 @@ const Modal = ({ isOpen, onClose, siteDetails }) => {
     );
 };
 
-const Days = ({ data }) => {
+const Days = ({ days, inclusionExclusion }) => {
 
     const [allDaysViseItenary, setAllDaysViseItenary] = useState([]);
+    const [inclusion, setInclusion] = useState([]);
+    const [exclusion, setExclusion] = useState([]);
     const [isModalOpen, setModalOpen] = useState(false);
     const [selectedSiteSeen, setSelectedSiteSeen] = useState(null);
 
     const siteSeenImage = `${import.meta.env.VITE_REACT_APP_IMAGE_URL}/siteseen-image/`
-    const defultImage = `${import.meta.env.VITE_REACT_APP_IMAGE_URL}/itenary-package/`;
+    const defultImage = `${import.meta.env.VITE_REACT_APP_IMAGE_URL}/packages-Image/`;
 
     useEffect(() => {
-        if (data) {
-            setAllDaysViseItenary(data)
-        } else {
-            console.error("Expected data to be an array, but got:", data);
+        if (days) {
+            setAllDaysViseItenary(days)
+            setInclusion(inclusionExclusion?.inclusion)
+            setExclusion(inclusionExclusion?.exclusion)
         }
-    }, [data])
+    }, [days, inclusionExclusion])
 
     const handleSiteseenModel = (siteSeen) => {
         setSelectedSiteSeen(siteSeen);
@@ -154,19 +156,22 @@ const Days = ({ data }) => {
                                 <div>
                                     <Description description={daysItenary?.description} />
                                 </div>
-                                <div className='text-black font-semibold text-[15px] mt-2'>
-                                    <p>Sight Seeing Included:</p>
-                                </div>
-                                <div className='flex'>
-                                    {daysItenary?.siteseens && daysItenary.siteseens.map((siteseen, index) => {
-                                        return (
-                                            <div key={index} className='mt-1 cursor-pointer' onClick={() => handleSiteseenModel(siteseen)}>
-                                                <span className='text-red-500 mx-1 font-semibold'>{siteseen?.SiteseenName}</span>
-                                                {index < daysItenary?.siteseens?.length - 1 && '/'}
-                                            </div>
-                                        );
-                                    })}
-                                </div>
+                                {daysItenary?.siteseens && daysItenary.siteseens.length > 0 && (
+                                    <div>
+                                        <div className='text-black font-semibold text-[15px] mt-2'>
+                                            <p>Sight Seeing Included:</p>
+                                        </div>
+                                        <div className='flex'>
+                                            {daysItenary.siteseens.map((siteseen, index) => (
+                                                <div key={index} className='mt-1 cursor-pointer' onClick={() => handleSiteseenModel(siteseen)}>
+                                                    <span className='text-red-500 mx-1 font-semibold'>{siteseen?.SiteseenName}</span>
+
+                                                    {index < daysItenary.siteseens.length - 1 && '/'}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
 
                                 <div>
                                     <div className='flex items-center gap-2'>
@@ -190,27 +195,44 @@ const Days = ({ data }) => {
                 )
             })}
 
-            <div className='grid grid-cols-2 gap-4 w-[100%]'>
-                <div className='card bg-white rounded-xl shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg my-2 p-3'>
-                    <p className='text-center text-[18px] font-semibold'>Inclusions</p>
-                    <div className='mt-3 px-3'>
-                        <p className='text-gray-800 mb-1'>Return Economy class Airfare Ex-Ahmedabad</p>
-                        <p className='text-gray-800 mb-1'>3 Nights Stay in 4* Hotel - Singapore</p>
-                        <p className='text-gray-800 mb-1'>2 Nights Stay in 4* Hotel - Genting Highland</p>
-                        <p className='text-gray-800 mb-1'>1 Night Stay in 5* Hotel - Kuala Lumpur</p>
-                        <p className='text-gray-800 mb-1'>Normal Visa Charges (Only Singapore Visa)</p>
-                        <p className='text-gray-800 mb-1'>English Speaking Guide + Tour Manager</p>
+            <div className="grid grid-cols-2 gap-4 w-[100%]">
+                <div className="card bg-white rounded-xl shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg my-2 p-3">
+                    <p className="text-center text-[18px] font-semibold">Inclusions</p>
+                    <div className="mt-3 px-3">
+                        {inclusion.map((item, index) => (
+                            <div key={index} className="flex items-center gap-2 mb-1">
+                                <div>
+                                    <span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-green-500" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                        </svg>
+                                    </span>
+                                </div>
+                                <div>
+                                    <p className="text-gray-800">{item}</p>
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 </div>
 
-                <div className='card bg-white rounded-xl shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg my-2 p-3'>
-                    <p className='text-center text-[18px] font-semibold'>Exclusions</p>
-                    <div className='mt-3'>
-                        <p className='text-gray-800 mb-1'>GST & TCS</p>
-                        <p className='text-gray-800 mb-1'>All personal expenses like tips, laundry, telephone calls/fax, alcoholic beverages, camera/video camera fees at monuments, medical expenses, airport departure tax, etc.</p>
-                        <p className='text-gray-800 mb-1'>Anything not mentioned under Package Inclusions.</p>
-                        <p className='text-gray-800 mb-1'>Travel Insurance</p>
-                        <p className='text-gray-800 mb-1'>Cruise upgradation</p>
+                <div className="card bg-white rounded-xl shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg my-2 p-3">
+                    <p className="text-center text-[18px] font-semibold">Exclusions</p>
+                    <div className="mt-3">
+                        {exclusion.map((item, index) => (
+                            <div key={index} className="flex items-center gap-2 mb-1">
+                                <div>
+                                    <span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-green-500" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                        </svg>
+                                    </span>
+                                </div>
+                                <div>
+                                    <p className="text-gray-800">{item}</p>
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 </div>
             </div>
