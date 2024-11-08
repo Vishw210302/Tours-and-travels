@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ChevronDownIcon } from 'lucide-react';
 
 const NavBar = ({ settingData, settingIsSuccess, settingIsError, settingError }) => {
-
   const pathname = window.location.pathname.replace('/', '');
   const [activeLink, setActiveLink] = useState(pathname);
   const [isPackagesOpen, setIsPackagesOpen] = useState(false);
-  const [websiteLogo, setWebsiteLogo] = useState(false);
-  const mainLogoImage = `${import.meta.env.VITE_REACT_APP_IMAGE_URL}/setting-image/`
+  const [websiteLogo, setWebsiteLogo] = useState(null);
+  const mainLogoImage = `${import.meta.env.VITE_REACT_APP_IMAGE_URL}/setting-image/`;
 
   const navigate = useNavigate();
 
@@ -21,8 +21,8 @@ const NavBar = ({ settingData, settingIsSuccess, settingIsError, settingError })
 
   const getActiveClass = (link) => (
     activeLink === link || (link === 'holidays' && activeLink === 'holidays')
-      ? "bg-[#161b31] border-t-4 border-t-[#c62a82]"
-      : ""
+      ? 'bg-[#161b31] border-b-4 border-b-[#c62a82]'
+      : 'hover:bg-[#161b31] hover:border-b-4 hover:border-b-[#c62a82]'
   );
 
   const togglePackagesDropdown = () => {
@@ -31,113 +31,107 @@ const NavBar = ({ settingData, settingIsSuccess, settingIsError, settingError })
   };
 
   const handleClickOnDashboard = () => {
-    navigate("/");
-  }
+    navigate('/');
+  };
 
   useEffect(() => {
     if (settingIsSuccess) {
-      setWebsiteLogo(settingData?.data)
-    } else {
-      console.log("error", settingIsError);
+      setWebsiteLogo(settingData?.data);
+    } else if (settingIsError) {
+      console.log('error', settingError);
     }
-  }, [settingData, settingIsSuccess, settingIsError])
+  }, [settingData, settingIsSuccess, settingIsError]);
 
   return (
-    <>
-
-      <nav className="sticky top-0 bg-[#1f2746] h-[80px] z-50">
-        <div className='h-full container mx-auto grid grid-cols-3 px-4'>
-
-          <div className='flex justify-start items-center cursor-pointer w-fit' onClick={() => {
-            handleClickOnDashboard()
-          }}>
-            {websiteLogo && websiteLogo.map((items, index) => {
-              if (items?.keyName == "Main_Logo") {
+    <nav className="sticky top-0 bg-[#1f2746] shadow-lg z-50">
+      <div className="container mx-auto px-6 py-6 flex items-center justify-between">
+        <div
+          className="flex items-center cursor-pointer"
+          onClick={() => {
+            handleClickOnDashboard();
+          }}
+        >
+          {websiteLogo &&
+            websiteLogo.map((item, index) => {
+              if (item?.keyName === 'Main_Logo') {
                 return (
-                  <div key={index + "key"}>
-                    <img src={`${mainLogoImage}${items?.valueContent}`} alt={items?.keyName} className='h-[78px]' />
-                  </div>
-                )
+                  <img
+                    key={index + 'key'}
+                    src={`${mainLogoImage}${item?.valueContent}`}
+                    alt={item?.keyName}
+                    className="h-12"
+                  />
+                );
               }
+              return null;
             })}
-          </div>
-
-          <div className='col-span-2'>
-
-            <div className='grid grid-cols-7 gap-4 items-center h-full'>
-
-              <button
-                className={`flex justify-center items-center h-full ${getActiveClass('')}`}
-                onClick={() => handleLinkClick('')}
-              >
-                <div className='font-semibold text-lg text-white'>HOME</div>
-              </button>
-
-              <button
-                className={`flex justify-center items-center h-full ${getActiveClass('aboutUs')}`}
-                onClick={() => handleLinkClick('aboutUs')}
-              >
-                <div className='font-semibold text-lg text-white'>About Us</div>
-              </button>
-
-
-              <div className="relative h-full">
-                <button
-                  className={`flex justify-center items-center h-full w-full ${getActiveClass('holidays')}`}
-                  onClick={togglePackagesDropdown}
-                >
-                  <div className='font-semibold text-lg text-white mr-2'>PACKAGES</div>
-                  <span className="text-white text-lg">&#9662;</span>
-                </button>
-                {isPackagesOpen && (
-                  <div className="absolute top-full left-0 mt-1 w-full bg-white rounded-md shadow-lg">
-                    <button
-                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-200"
-                      onClick={() => handleLinkClick('International', true)}
-                    >
-                      International
-                    </button>
-                    <button
-                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-200"
-                      onClick={() => handleLinkClick('Domestic', true)}
-                    >
-                      Domestic
-                    </button>
-                  </div>
-                )}
-              </div>
-
-              <button
-                className={`flex justify-center items-center h-full ${getActiveClass('flights')}`}
-                onClick={() => handleLinkClick('flights')}
-              >
-                <div className='font-semibold text-lg text-white'>Flights Booking</div>
-              </button>
-
-              <button
-                className={`flex justify-center items-center h-full ${getActiveClass('hotels')}`}
-                onClick={() => handleLinkClick('hotels')}
-              >
-                <div className='font-semibold text-lg text-white'>Hotels Booking</div>
-              </button>
-
-              <button
-                className={`flex justify-center items-center h-full ${getActiveClass('Blogs')}`}
-                onClick={() => handleLinkClick('Blogs')}
-              >
-                <div className='font-semibold text-lg text-white'>Blogs</div>
-              </button>
-              <button
-                className={`flex justify-center items-center h-full ${getActiveClass('contact')}`}
-                onClick={() => handleLinkClick('contact')}
-              >
-                <div className='font-semibold text-lg text-white'>CONTACTS</div>
-              </button>
-            </div>
-          </div>
         </div>
-      </nav >
-    </>
+
+        <div className="flex items-center space-x-8">
+          <button
+            className={`font-semibold text-white ${getActiveClass('')}`}
+            onClick={() => handleLinkClick('')}
+          >
+            Home
+          </button>
+          <button
+            className={`font-semibold text-white ${getActiveClass('aboutUs')}`}
+            onClick={() => handleLinkClick('aboutUs')}
+          >
+            About Us
+          </button>
+          <div className="relative">
+            <button
+              className={`font-semibold text-white flex items-center ${getActiveClass('holidays')}`}
+              onClick={togglePackagesDropdown}
+            >
+              Packages
+              <ChevronDownIcon className="ml-2 text-white" />
+            </button>
+            {isPackagesOpen && (
+              <div className="absolute top-full right-0 mt-2 w-48 bg-white rounded-md shadow-lg">
+                <button
+                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-200"
+                  onClick={() => handleLinkClick('International', true)}
+                >
+                  International
+                </button>
+                <button
+                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-200"
+                  onClick={() => handleLinkClick('Domestic', true)}
+                >
+                  Domestic
+                </button>
+              </div>
+            )}
+          </div>
+          <button
+            className={`font-semibold text-white ${getActiveClass('flights')}`}
+            onClick={() => handleLinkClick('flights')}
+          >
+            Flights Booking
+          </button>
+          <button
+            className={`font-semibold text-white ${getActiveClass('hotels')}`}
+            onClick={() => handleLinkClick('hotels')}
+          >
+            Hotels Booking
+          </button>
+          <button
+            className={`font-semibold text-white ${getActiveClass('Blogs')}`}
+            onClick={() => handleLinkClick('Blogs')}
+          >
+            Blogs
+          </button>
+          <button
+            className={`font-semibold text-white ${getActiveClass('contact')}`}
+            onClick={() => handleLinkClick('contact')}
+          >
+            Contacts
+          </button>
+        </div>
+      </div>
+    </nav>
   );
 };
 
