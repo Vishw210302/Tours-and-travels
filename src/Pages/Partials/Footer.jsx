@@ -52,15 +52,15 @@ const Footer = ({ settingData, settingIsSuccess, settingIsError, settingError })
     if (isSuccess) {
       setSocialMediaLinkListing(data?.data);
     } else if (isError) {
-      console.log("error", isError);
+      console.log("error", error);
     }
   }, [error, data, isSuccess, isError]);
 
   useEffect(() => {
     if (settingIsSuccess) {
       setWebsiteLogo(settingData?.data)
-    } else {
-      console.log("error", settingIsError);
+    } else if(settingIsError) {
+      console.log("error", settingErrors);
     }
   }, [settingData, settingIsSuccess, settingIsError])
 
