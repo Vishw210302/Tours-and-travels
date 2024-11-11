@@ -66,7 +66,7 @@ const Footer = ({ settingData, settingIsSuccess, settingIsError, settingError })
 
   return (
 
-    <footer className="relative bg-[#1f2746] text-white overflow-hidden mt-8">
+    <footer className="relative bg-[#1f2746] text-white overflow-hidden">
 
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute left-0 top-0 w-full h-full">
