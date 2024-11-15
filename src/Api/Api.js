@@ -33,6 +33,10 @@ export const myApi = createApi({
             query: (id) => `get-particular-itenary/${id}`,
         }),
 
+        getAllItenaries: builder.query({
+            query: (key) => `get-itenary-by-categories/${key}`,
+        }),
+
         getItenariesDetails: builder.query({
             query: (id) => `get-all-details-itenary/${id}`,
         }),
@@ -216,6 +220,7 @@ export const {
     useGetTestimonialQuery,
     useGetTestimonialHotelQuery,
     useGetItenriesQuery,
+    useGetAllItenariesQuery,
     useTestimonialReviewPostMutation,
     useTestimonialHotelReviewPostMutation,
     useGetItenariesDetailsQuery,
