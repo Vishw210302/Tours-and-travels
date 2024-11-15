@@ -57,11 +57,16 @@ const About = ({ data, allData }) => {
         setAllItenaryData(allData?.itenaryData);
     }, [allData]);
 
-    const handleBrochureDownload = (fileUrl) => {
-        if (fileUrl) {
+    const imageUrl = `${import.meta.env.VITE_REACT_APP_IMAGE_URL}/itenary-package/`;
+
+    const handleBrochureDownload = (basePath, fileUrl) => {
+
+        const pdfUrl = basePath + fileUrl
+
+        if (pdfUrl) {
             const link = document.createElement('a');
-            link.href = fileUrl;
-            link.download = fileUrl.split('/').pop();
+            link.href = pdfUrl;
+            link.download = pdfUrl.split('/').pop();
             link.target = '_blank';
             document.body.appendChild(link);
             link.click();
@@ -122,7 +127,7 @@ const About = ({ data, allData }) => {
                     <ReadMoreText text={longText} />
                     <div>
                         <button
-                            onClick={() => handleBrochureDownload(allData?.itenaryData?.fileUpload)}
+                            onClick={() => handleBrochureDownload(imageUrl, allData?.itenaryData?.fileUpload)}
                             className='bg-red-300 hover:bg-red-500 text-white font-bold py-2 px-4 rounded-md shadow-lg transition-all duration-300 mt-2'
                         >
                             Brochure <i className="fa-solid fa-download"></i>
