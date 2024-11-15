@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import { useCreatePaymentIntentMutation } from '../../Api/Api';
 import { useFlightTicketsDetailsContext } from '../../Context/FlightTicketsDetailsContext';
+import PlaneLoader from '../PlaneLoader';
 
 const PaymentForm = ({ onPaymentSuccess, description }) => {
 
@@ -216,12 +217,7 @@ const PaymentForm = ({ onPaymentSuccess, description }) => {
                         className={`w-full p-3 text-lg font-semibold text-white rounded-lg shadow-md ${loading ? 'bg-gray-400' : 'bg-blue-600 hover:bg-blue-700'} transition duration-200`}
                     >
                         {loading ? (
-                            <span className="flex items-center justify-center">
-                                <svg className="animate-spin h-5 w-5 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4.75v14.5M19.25 12H4.75" />
-                                </svg>
-                                Processing...
-                            </span>
+                            <PlaneLoader />
                         ) : (
                             `Pay ₹${totalTicketPrice}`
                         )}

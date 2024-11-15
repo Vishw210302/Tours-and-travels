@@ -14,7 +14,7 @@ const HotelTestimonial = () => {
         if (isSuccess) {
             setTestimonialHotelListing(data?.data);
         } else if (isError) {
-            console.log("error", isError);
+            console.log("isError", isError);
         }
     }, [error, data, isSuccess, isError]);
 

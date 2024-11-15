@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useTestimonialReviewPostMutation } from '../../Api/Api';
+import PlaneLoader from '../PlaneLoader';
 
 const TestimonialForm = () => {
 
@@ -35,10 +36,13 @@ const TestimonialForm = () => {
     return (
         <>
             <div className="card bg-white rounded-xl shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg p-3 my-2">
+
                 <div className="flex flex-1 justify-center">
                     <p className="text-red-500 text-xl font-bold border-b-2 border-red-400">Give Us Your Review</p>
                 </div>
+
                 <form onSubmit={handleSubmit} className="p-4">
+
                     <div className="mb-4">
                         <label htmlFor="name" className="block text-sm font-medium text-gray-700">Your Name :</label>
                         <input
@@ -84,17 +88,23 @@ const TestimonialForm = () => {
                             ))}
                         </div>
                     </div>
+
                     <div className='flex justify-center'>
                         <button
                             type="submit"
                             className="bg-red-400 hover:bg-red-500 text-white font-bold py-2 px-4 rounded-md shadow-lg transition-all duration-300"
                             disabled={isLoading}
                         >
-                            {isLoading ? 'Submitting...' : 'Submit Testimonial'}
+                            {isLoading ?
+                                <PlaneLoader />
+                                : 'Submit Testimonial'
+                            }
                         </button>
                     </div>
+
                 </form>
             </div>
+
             <ToastContainer
                 position="top-right"
                 autoClose={3000}

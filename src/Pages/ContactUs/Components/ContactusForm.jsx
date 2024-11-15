@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useContactUsPostMutation } from '../../../Api/Api';
+import PlaneLoader from '../../PlaneLoader';
 
 const ContactusForm = () => {
 
@@ -76,7 +77,10 @@ const ContactusForm = () => {
                                 className="bg-red-400 text-white font-bold py-2 px-4 rounded-lg shadow hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-opacity-50"
                                 disabled={isLoading}
                             >
-                                {isLoading ? "Submitting..." : "Submit"}
+                                {isLoading ?
+                                    <PlaneLoader /> :
+                                    "Submit"
+                                }
                             </button>
                         </div>
                     </form>

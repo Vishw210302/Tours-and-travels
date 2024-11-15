@@ -50,7 +50,7 @@ function App() {
                 <Route path="meal-booking/:className/:id" element={<MealAndSelect />} />
                 <Route path="flight-seat-booking/:className/:id" element={<FlightSeatBooking />} />
                 <Route path="passenger-details/:className/:id" element={<PassengerDetails />} />
-                <Route path="popularTheme" element={<PopularTheme />} />
+                <Route path="popularTheme/:id" element={<PopularTheme />} />
                 <Route path="tickets-payment/:className/:id" element={<FlightsTicketsPaymentPage />} />
               </Route>
             </Routes>

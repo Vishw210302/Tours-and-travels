@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { ChevronDownIcon } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 import { IoCartOutline } from "react-icons/io5";
+import { useNavigate } from 'react-router-dom';
 import { useAllApiContext } from '../../Context/allApiContext';
 import AddToCartDrawer from '../AddToCartDrawer/AddToCartDrawer';
 
@@ -14,12 +14,11 @@ const NavBar = ({ settingData, settingIsSuccess, settingIsError, settingError })
   const mainLogoImage = `${import.meta.env.VITE_REACT_APP_IMAGE_URL}/setting-image/`;
   const { addToCart } = useAllApiContext();
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
 
   const toggleDrawer = () => {
     setIsOpen(!isOpen);
   };
-
-  const navigate = useNavigate();
 
   const handleLinkClick = (link, isDropdownItem = false) => {
     setActiveLink(isDropdownItem ? 'holidays' : link);
@@ -48,7 +47,7 @@ const NavBar = ({ settingData, settingIsSuccess, settingIsError, settingError })
     if (settingIsSuccess) {
       setWebsiteLogo(settingData?.data);
     } else if (settingIsError) {
-      console.log('error', settingError);
+      console.log('settingIsError', settingError);
     }
   }, [settingData, settingIsSuccess, settingIsError]);
 

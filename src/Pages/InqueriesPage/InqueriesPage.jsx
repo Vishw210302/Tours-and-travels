@@ -3,6 +3,7 @@ import Modal from '@mui/material/Modal';
 import { Box } from '@mui/system';
 import React, { useState } from 'react';
 import { useInqueriesPostMutation } from '../../Api/Api';
+import PlaneLoader from '../PlaneLoader';
 
 const InqueriesPage = ({ itenaryPriceData, itenatyDataListing }) => {
 
@@ -191,7 +192,7 @@ const InqueriesPage = ({ itenaryPriceData, itenatyDataListing }) => {
                                             className='w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-300'
                                             onChange={(e) => handleDateSelect(e.target.value)}
                                         >
-                                            <option disabled value="">Select a date</option>
+                                            <option value="">Select a date</option>
                                             {itenatyDataListing?.departureDates && itenatyDataListing.departureDates.map((departureDate, index) => {
                                                 const formattedDate = formatDate(departureDate);
                                                 return (
@@ -274,7 +275,10 @@ const InqueriesPage = ({ itenaryPriceData, itenatyDataListing }) => {
                                         className='bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-md shadow-lg transition-all duration-300'
                                         disabled={isLoading}
                                     >
-                                        {isLoading ? 'Submitting...' : 'Submit Inquiry'}
+                                        {isLoading ?
+                                            <PlaneLoader />
+                                            : 'Submit Inquiry'
+                                        }
                                     </button>
                                 </form>
                             </div>

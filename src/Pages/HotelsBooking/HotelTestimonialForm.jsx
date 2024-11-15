@@ -1,18 +1,31 @@
-import React, { useState } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { useTestimonialHotelReviewPostMutation } from '../../Api/Api';
+import React, { useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useTestimonialHotelReviewPostMutation } from "../../Api/Api";
 
 const HotelTestimonialForm = () => {
 
     const [testimonialHotelPost] = useTestimonialHotelReviewPostMutation();
-    const [reviewPersonName, setReviewPersonName] = useState('');
-    const [reviewDescription, setReviewDescription] = useState('');
+    const [reviewPersonName, setReviewPersonName] = useState("");
+    const [reviewDescription, setReviewDescription] = useState("");
     const [numberOfReview, setRating] = useState(1);
-    const [status] = useState('Inactive');
+    const [status] = useState("Inactive");
 
     const handleSubmit = async (e) => {
+
         e.preventDefault();
+        if (!reviewPersonName.trim() || !reviewDescription.trim()) {
+            toast.error("Please fill in all required fields.", {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                theme: "light",
+            });
+            return;
+        }
 
         const testimonialHotelData = {
             reviewPersonName,
@@ -22,34 +35,31 @@ const HotelTestimonialForm = () => {
         };
 
         try {
+
             await testimonialHotelPost(testimonialHotelData).unwrap();
-
-            toast.success('Review sent successfully', {
+            toast.success("Review sent successfully", {
                 position: "top-right",
                 autoClose: 3000,
                 hideProgressBar: false,
                 closeOnClick: true,
                 pauseOnHover: true,
                 draggable: true,
-                progress: undefined,
                 theme: "light",
             });
-
-            setReviewPersonName('');
-            setReviewDescription('');
+            setReviewPersonName("");
+            setReviewDescription("");
             setRating(1);
+
         } catch (error) {
-            toast.error('Please fill up review form.', {
+            toast.error("Error submitting review. Please try again.", {
                 position: "top-right",
                 autoClose: 3000,
                 hideProgressBar: false,
                 closeOnClick: true,
                 pauseOnHover: true,
                 draggable: true,
-                progress: undefined,
                 theme: "light",
             });
-            console.error('Error submitting testimonial:', error);
         }
     };
 
@@ -59,9 +69,11 @@ const HotelTestimonialForm = () => {
                 <div className="flex flex-1 justify-center">
                     <p className="text-red-400 text-xl font-bold">Give us your hotel review</p>
                 </div>
-                <form onSubmit={handleSubmit} className="p-4">
+                <form className="p-4" onSubmit={handleSubmit}>
                     <div className="mb-4">
-                        <label htmlFor="name" className="block text-lg font-medium text-gray-700">Your Name:</label>
+                        <label htmlFor="name" className="block text-lg font-medium text-gray-700">
+                            Your Name:
+                        </label>
                         <input
                             type="text"
                             id="name"
@@ -73,7 +85,9 @@ const HotelTestimonialForm = () => {
                     </div>
 
                     <div className="mb-4">
-                        <label htmlFor="description" className="block text-lg font-medium text-gray-700">Your Review:</label>
+                        <label htmlFor="description" className="block text-lg font-medium text-gray-700">
+                            Your Review:
+                        </label>
                         <textarea
                             id="description"
                             value={reviewDescription}
@@ -87,22 +101,25 @@ const HotelTestimonialForm = () => {
                     <div className="mb-4">
                         <label className="block text-lg font-medium text-gray-700">Rating:</label>
                         <div className="grid grid-cols-5 gap-2 mt-2">
-                            {[1, 2, 3, 4, 5].map((star) => (
-                                <label key={star} className="relative">
-                                    <input
-                                        type="radio"
-                                        value={star}
-                                        checked={numberOfReview === star}
-                                        onChange={() => setRating(star)}
-                                        className="hidden"
-                                    />
-                                    <span
-                                        className={`cursor-pointer text-4xl ${star <= numberOfReview ? 'text-yellow-400' : 'text-gray-300'}`}
-                                    >
-                                        ★
-                                    </span>
-                                </label>
-                            ))}
+                            {[1, 2, 3, 4, 5].map((star) => {
+                                return (
+                                    <label key={star} className="relative">
+                                        <input
+                                            type="radio"
+                                            value={star}
+                                            checked={numberOfReview === star}
+                                            onChange={() => setRating(star)}
+                                            className="hidden"
+                                        />
+                                        <span
+                                            className={`cursor-pointer text-4xl ${star <= numberOfReview ? "text-yellow-400" : "text-gray-300"
+                                                }`}
+                                        >
+                                            ★
+                                        </span>
+                                    </label>
+                                )
+                            })}
                         </div>
                     </div>
 
