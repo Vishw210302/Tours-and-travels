@@ -54,7 +54,7 @@ const FlightSeatBooking = () => {
             setSeats([...firstClassSeats, ...businessSeats, ...economySeats]);
             setSelectSeat(false);
         } else if (isError) {
-            console.log(error, 'fetching seat');
+            console.log(error, 'error');
         }
     }, [data, isError, isSuccess, error]);
 

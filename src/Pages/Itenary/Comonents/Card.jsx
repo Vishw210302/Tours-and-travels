@@ -1,103 +1,209 @@
-import React from 'react';
-import Skeleton from 'react-loading-skeleton';
+import { ArrowRight, Calendar, Heart, MapPin, Users } from 'lucide-react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import NoDataFound from '../../NoDataFound';
+import { useAllApiContext } from "../../../Context/allApiContext";
 
-const Card = ({ isLoading, data }) => {
+const TravelPackageCard = ({ isLoading, data }) => {
 
     const imageUrl = `${import.meta.env.VITE_REACT_APP_IMAGE_URL}/itenary-package/`;
     const navigate = useNavigate();
+    const { setaddToCart } = useAllApiContext();
 
-    const handleItenatyDetails = (itenatyId) => {
-        navigate(`/itenary-details/${itenatyId}`)
-    }
+    const [favorites, setFavorites] = useState(() => {
+        const savedFavorites = localStorage.getItem('favorites');
+        return new Set(savedFavorites ? JSON.parse(savedFavorites) : []);
+    });
 
-    const truncateText = (text, maxLength) => {
-        if (text.length > maxLength) {
-            return text.substring(0, maxLength) + '...';
+    useEffect(() => {
+        localStorage.setItem('favorites', JSON.stringify(Array.from(favorites)));
+    }, [favorites]);
+
+    useEffect(() => {
+        const savedCart = localStorage.getItem('cart');
+        if (savedCart) {
+            setaddToCart(JSON.parse(savedCart));
         }
-        return text;
-    };
+    }, [setaddToCart]);
 
-    if (!isLoading && (!data?.itenaries || data?.itenaries?.length === 0)) {
-        return (
-            <div className='w-[66%]'>
-                <NoDataFound message={"No packages found"} />
+    const handleItineraryDetails = useCallback((itineraryId) => {
+        navigate(`/itenary-details/${itineraryId}`);
+    }, [navigate]);
+
+    const truncateText = useCallback((text, maxLength) => {
+        if (!text) return '';
+        return text.length > maxLength ? `${text.substring(0, maxLength)}...` : text;
+    }, []);
+
+    const toggleFavorite = useCallback((e, id, item) => {
+        e.stopPropagation();
+        e.preventDefault();
+
+        setFavorites(prev => {
+            const newFavorites = new Set(prev);
+
+            if (newFavorites.has(id)) {
+                newFavorites.delete(id);
+
+                setaddToCart(prevCart => {
+                    const currentCart = Array.isArray(prevCart) ? prevCart : [];
+                    const updatedCart = currentCart.filter(cartItem => cartItem?._id !== id);
+                    localStorage.setItem('cart', JSON.stringify(updatedCart));
+                    return updatedCart;
+                });
+            } else {
+                newFavorites.add(id);
+
+                setaddToCart(prevCart => {
+                    const currentCart = Array.isArray(prevCart) ? prevCart : [];
+                    const itemExists = currentCart.some(cartItem => cartItem?._id === id);
+
+                    if (!itemExists) {
+                        const updatedCart = [...currentCart, item];
+                        localStorage.setItem('cart', JSON.stringify(updatedCart));
+                        return updatedCart;
+                    }
+                    return currentCart;
+                });
+            }
+
+            return newFavorites;
+        });
+    }, [setaddToCart]);
+
+    const EmptyState = useMemo(() => (
+        <div className="w-full max-w-4xl mx-auto p-8">
+            <div className="flex flex-col items-center justify-center h-80 bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl shadow-lg backdrop-blur-sm">
+                <MapPin className="w-20 h-20 text-red-400 mb-6 animate-bounce" />
+                <h3 className="text-2xl font-bold text-gray-800 mb-2">No Packages Found</h3>
+                <p className="text-gray-600 text-lg">Try adjusting your search criteria</p>
+                <div className="mt-8">
+                    <button className="px-6 py-3 bg-red-500 text-white rounded-full hover:bg-red-600 transition-all duration-300 transform hover:scale-105">
+                        Explore Other Destinations
+                    </button>
+                </div>
             </div>
-        );
+        </div>
+    ), []);
+
+    if (!isLoading && (!data?.itenaries || data.itenaries.length === 0)) {
+        return EmptyState;
     }
 
-    return (
-        <div className='card w-[75%]'>
-            <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 w-full'>
-                {isLoading ? (
-                    <>
-                        {[...Array(3)].map((_, index) => (
-                            <div key={index} className='card w-[390px] h-[390px] packages rounded-2xl shadow-2xl transition-all duration-300 hover:shadow-lg'>
-                                <Skeleton borderRadius={10} className="shadow-xl w-full h-full" />
-                            </div>
-                        ))}
-                    </>
-                ) : (
-                    data?.itenaries?.map((value, index) => {
-                        return (
+    const PackageCard = ({ item, index }) => {
+        return (
+            <div key={`${item?._id}-${index}`} className="card bg-white shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 my-2 flex flex-col hover:shadow-2xl">
+                <div className="relative flex-1">
+                    <div className="w-full h-[40%]">
+                        <img
+                            src={`${imageUrl}${item?.bannerImage}`}
+                            alt={item?.packageTitle}
+                            className="h-[220px] w-full rounded-tl-lg rounded-tr-lg object-cover"
+                            loading="lazy"
+                        />
+                    </div>
+
+                    <div className="absolute top-3 right-3 z-10">
+                        <button
+                            onClick={(e) => toggleFavorite(e, item?._id, item)}
+                            className="h-fit p-2 bg-white rounded-full shadow-lg hover:shadow-xl"
+                            aria-label={favorites.has(item?._id) ? "Remove from favorites" : "Add to favorites"}
+                        >
+                            <Heart
+                                className={`transition-colors duration-300 h-fit ${favorites.has(item?._id)
+                                    ? 'fill-red-500 text-red-500'
+                                    : 'text-gray-600'
+                                    }`}
+                            />
+                        </button>
+                    </div>
+
+                    <div className="absolute top-[82%]">
+                        <div className="bg-red-500 px-3 py-1 rounded-[9px] ml-2">
+                            <p className="text-white capitalize">
+                                {item?.categories}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="p-2 flex flex-col flex-grow">
+                    <h2 className="text-xl mb-2 font-bold text-red-500">
+                        {item?.packageTitle}
+                    </h2>
+                    <p className="text-base font-normal text-gray-600">
+                        {truncateText(item?.smallDescription, 120)}
+                    </p>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4 p-4 border-y border-gray-100">
+
+                    <div className="grid grid-cols-[auto_1fr] gap-2 items-center">
+                        <div className="p-2 bg-red-50 rounded-lg">
+                            <Calendar className="w-5 h-5 text-red-500" />
+                        </div>
+                        <div className="flex flex-col">
+                            <span className="text-sm text-gray-500">Duration</span>
+                            <span className="font-semibold text-gray-800">{item?.days?.length} days</span>
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-[auto_1fr] gap-2 items-center">
+                        <div className="p-2 bg-blue-50 rounded-lg">
+                            <Users className="w-5 h-5 text-blue-500" />
+                        </div>
+                        <div className="flex flex-col">
+                            <span className="text-sm text-gray-500">Price</span>
+                            <span className="font-semibold text-gray-800">₹ {item?.perPersonCost?.toLocaleString()}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="bg-white rounded-lg shadow-lg p-4">
+                    <h3 className="text-lg font-medium mb-2">Departure Dates:</h3>
+                    <div className="grid grid-cols-3 gap-3">
+                        {item?.departureDates?.map((date, index) => (
                             <div
                                 key={index}
-                                onClick={() => {
-                                    handleItenatyDetails(value?._id)
-                                }}
-                                className='card packages rounded-2xl shadow-2xl transition-all duration-300 hover:shadow-lg'
+                                className="bg-gray-100 rounded-md p-3 text-center hover:bg-gray-200 transition-colors"
                             >
-                                <img
-                                    src={`${imageUrl}${value?.bannerImage}`}
-                                    alt='banner'
-                                    className='rounded-tl-2xl rounded-tr-2xl w-full h-[200px] object-cover'
-                                />
-                                <div className='p-4'>
-                                    <div className='flex flex-row justify-between items-center mb-3'>
-                                        <div className='flex items-center border rounded-full overflow-hidden border-red-200'>
-                                            <div className='bg-red-500 px-4 py-1 text-center text-white'>
-                                                {value?.days?.length} days
-                                            </div>
-                                            <div className='px-4 py-1 text-center text-black'>
-                                                {value?.days?.length - 1} Nights
-                                            </div>
-                                        </div>
-                                        <div className='w-[50%] py-1'>
-                                            <div className='flex items-center gap-1 mb-1'>
-                                                <div className='font-bold text-base text-red-500'>Categories :-</div>
-                                                <div className='text-gray-700 text-base font-semibold'>{value?.categories}</div>
-                                            </div>
-                                            <div className='flex items-center gap-1'>
-                                                <div className='font-bold text-base text-red-500'>Price :-</div>
-                                                <div className='text-gray-700 text-base font-semibold'>{value?.perPersonCost}</div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <p className='font-extrabold text-red-500'>{value.packageTitle}</p>
-
-                                    <p className='text-sm text-justify text-gray-600 font-medium'>
-                                        {truncateText(value?.smallDescription, 100)}
-                                    </p>
-                                </div>
+                                <p className="text-gray-700 font-medium">
+                                    {new Date(date).toLocaleDateString('en-GB', {
+                                        day: '2-digit',
+                                        month: '2-digit',
+                                        year: 'numeric'
+                                    })}
+                                </p>
                             </div>
-                        )
-                    })
-                )}
-            </div>
+                        ))}
+                    </div>
+                </div>
 
-            <style>{`
-                .packages:hover {
-                    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, 
-                                rgba(0, 0, 0, 0.12) 0px -12px 30px, 
-                                rgba(0, 0, 0, 0.12) 0px 4px 6px, 
-                                rgba(0, 0, 0, 0.17) 0px 12px 13px, 
-                                rgba(0, 0, 0, 0.09) 0px -3px 5px;
-                }
-            `}</style>
+                <div className="p-3">
+                    <button
+                        className="w-full bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg flex items-center justify-center group"
+                        onClick={() => handleItineraryDetails(item?._id)}
+                    >
+                        <span className="mr-2">View Details</span>
+                        <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" />
+                    </button>
+                </div>
+
+            </div>
+        )
+    };
+
+    return (
+        <div className="w-full mx-auto bg-gradient-to-br from-gray-50 to-white min-h-screen rounded-xl">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                {data?.itenaries?.map((item, index) => {
+                    return (
+                        <PackageCard key={item?._id} item={item} index={index} />
+                    )
+                })}
+            </div>
         </div>
     );
-}
 
-export default Card;
+};
+
+export default TravelPackageCard;

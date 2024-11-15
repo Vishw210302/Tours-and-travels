@@ -1,4 +1,4 @@
-import React, { createContext, useContext } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 import { useGetSettingListingQuery } from '../Api/Api';
 
 const AllApiContext = createContext();
@@ -11,9 +11,10 @@ export const AllApiProvider = ({ children }) => {
         data: settingData,
         isSuccess: settingIsSuccess
     } = useGetSettingListingQuery();
+    const [addToCart, setaddToCart] = useState("")
 
     return (
-        <AllApiContext.Provider value={{ settingIsError, settingError, settingData, settingIsSuccess }}>
+        <AllApiContext.Provider value={{ settingIsError, settingError, settingData, settingIsSuccess, addToCart, setaddToCart }}>
             {children}
         </AllApiContext.Provider>
     );

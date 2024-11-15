@@ -183,7 +183,7 @@ const FlightsPageListing = () => {
             }
         } else if (flightIsErr) {
             setSearchErr(true)
-            console.log("isLocationError", flightErr);
+            console.log("flight error", flightErr);
         }
     }, [flightData, flightErr, flightSuccess, flightIsErr]);
 
@@ -194,14 +194,28 @@ const FlightsPageListing = () => {
                     <div className="bg-[#1f2746] p-6 rounded-lg shadow-lg w-auto">
                         <h1 className="text-2xl text-white mb-4 font-semibold text-center">Search Flights</h1>
 
-                        <form className="p-2" onSubmit={handleSearchFlight}>
+                        <form
+                            className="p-2"
+                            onSubmit={() => {
+                                handleSearchFlight()
+                            }}>
+
                             <div className='mb-2'>
                                 <label className="inline-flex items-center">
-                                    <input type="checkbox" checked={directChecked} onChange={handleCheckedValue} className="form-checkbox h-5 w-5 text-blue-600" />
+                                    <input
+                                        type="checkbox"
+                                        checked={directChecked}
+                                        onChange={() => {
+                                            handleCheckedValue()
+                                        }}
+                                        className="form-checkbox h-5 w-5 text-blue-600"
+                                    />
                                     <span className="ml-2 text-white">Direct Flight</span>
                                 </label>
                             </div>
+
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+
                                 <div className="mb-4 relative">
                                     <label className="text-white text-sm flex gap-3 font-bold mb-2" htmlFor="fromCity">
                                         From
@@ -222,15 +236,17 @@ const FlightsPageListing = () => {
                                     />
                                     {fromCitiesListing?.length > 0 && (
                                         <ul className="absolute z-10 bg-white border border-gray-300 rounded-md mt-1 w-full max-h-60 overflow-auto">
-                                            {fromCitiesListing.map((city) => (
-                                                <li
-                                                    key={city._id}
-                                                    className="px-4 py-2 hover:bg-blue-500 hover:text-white cursor-pointer"
-                                                    onClick={() => handleCitySelectFrom(city)}
-                                                >
-                                                    {city.city}
-                                                </li>
-                                            ))}
+                                            {fromCitiesListing && fromCitiesListing.map((city) => {
+                                                return (
+                                                    <li
+                                                        key={city._id}
+                                                        className="px-4 py-2 hover:bg-blue-500 hover:text-white cursor-pointer"
+                                                        onClick={() => handleCitySelectFrom(city)}
+                                                    >
+                                                        {city.city}
+                                                    </li>
+                                                )
+                                            })}
                                         </ul>
                                     )}
                                 </div>
@@ -255,15 +271,17 @@ const FlightsPageListing = () => {
                                     />
                                     {toCitiesListing?.length > 0 && (
                                         <ul className="absolute z-10 bg-white border border-gray-300 rounded-md mt-1 w-full max-h-60 overflow-auto">
-                                            {toCitiesListing.map((city) => (
-                                                <li
-                                                    key={city._id}
-                                                    className="px-4 py-2 hover:bg-blue-500 hover:text-white cursor-pointer"
-                                                    onClick={() => handleCitySelectTo(city)}
-                                                >
-                                                    {city.city}
-                                                </li>
-                                            ))}
+                                            {toCitiesListing && toCitiesListing.map((city) => {
+                                                return (
+                                                    <li
+                                                        key={city._id}
+                                                        className="px-4 py-2 hover:bg-blue-500 hover:text-white cursor-pointer"
+                                                        onClick={() => handleCitySelectTo(city)}
+                                                    >
+                                                        {city.city}
+                                                    </li>
+                                                )
+                                            })}
                                         </ul>
                                     )}
                                 </div>
@@ -285,9 +303,11 @@ const FlightsPageListing = () => {
                                         <option value="first_class">First Class</option>
                                     </select>
                                 </div>
+
                             </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-5 gap-4 items-center">
+
                                 <div className="mb-4">
                                     <label className="block text-white text-sm font-bold mb-2" htmlFor="departureDate">
                                         Departure Date
@@ -340,6 +360,7 @@ const FlightsPageListing = () => {
                                         <option value="4">4 Children</option>
                                     </select>
                                 </div>
+
                                 <div className="mb-4">
                                     <label className="block text-white text-sm font-bold mb-2" htmlFor="children">
                                         Infant (below 2 years)
@@ -368,6 +389,7 @@ const FlightsPageListing = () => {
                                         Search Flights
                                     </button>
                                 </div>
+
                             </div>
                         </form>
                     </div>

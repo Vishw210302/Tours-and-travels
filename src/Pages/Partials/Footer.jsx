@@ -59,8 +59,8 @@ const Footer = ({ settingData, settingIsSuccess, settingIsError, settingError })
   useEffect(() => {
     if (settingIsSuccess) {
       setWebsiteLogo(settingData?.data)
-    } else if(settingIsError) {
-      console.log("error", settingErrors);
+    } else if (settingIsError) {
+      console.log("settingIsError", settingIsError);
     }
   }, [settingData, settingIsSuccess, settingIsError])
 

@@ -15,7 +15,7 @@ const InqueriesPage = ({ itenaryPriceData, itenatyDataListing }) => {
     const [numberOfChildrenWithBed, setNumberOfChildrenWithBed] = useState(0);
     const [numberOfChildrenWithoutBed, setNumberOfChildrenWithoutBed] = useState(0);
     const [departureDate, setDepartureDate] = useState('');
-    const [inqueriesPost, { isLoading, isSuccess, isError }] = useInqueriesPostMutation();
+    const [inqueriesPost, { isLoading, isSuccess }] = useInqueriesPostMutation();
 
     const handleInqueryModalOpen = () => {
         setOpenInqueryModal(true);
@@ -130,7 +130,7 @@ const InqueriesPage = ({ itenaryPriceData, itenatyDataListing }) => {
                         />
                         <div className='border rounded-lg shadow-md p-4 bg-white'>
                             <div className='p-3 border-b-2 flex flex-1 items-center gap-2'>
-                                <p className='font-semibold text-lg text-gray-800'>{itenatyDataListing?.packageTitle}</p>
+                                <p className='font-semibold text-lg text-red-500'>{itenatyDataListing?.packageTitle}</p>
                                 <p>Tour Pricing Inquiry</p>
                             </div>
                             <div className='p-4'>
@@ -144,7 +144,7 @@ const InqueriesPage = ({ itenaryPriceData, itenatyDataListing }) => {
                                             id='name'
                                             value={name}
                                             onChange={(e) => setName(e.target.value)}
-                                            className='w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#ef4444]'
+                                            className='w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-300'
                                             placeholder='Enter your full name'
                                             required
                                         />
@@ -159,7 +159,7 @@ const InqueriesPage = ({ itenaryPriceData, itenatyDataListing }) => {
                                             id='mobile'
                                             value={mobile}
                                             onChange={(e) => setMobile(e.target.value)}
-                                            className='w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#ef4444]'
+                                            className='w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-300'
                                             placeholder='Enter your mobile number'
                                             pattern='[0-9]*'
                                             inputMode='numeric'
@@ -176,7 +176,7 @@ const InqueriesPage = ({ itenaryPriceData, itenatyDataListing }) => {
                                             id='email'
                                             value={email}
                                             onChange={(e) => setEmail(e.target.value)}
-                                            className='w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#ef4444]'
+                                            className='w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-300'
                                             placeholder='Enter your email address'
                                             required
                                         />
@@ -188,7 +188,7 @@ const InqueriesPage = ({ itenaryPriceData, itenatyDataListing }) => {
                                         </label>
                                         <select
                                             id='departureDates'
-                                            className='w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#ef4444]'
+                                            className='w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-300'
                                             onChange={(e) => handleDateSelect(e.target.value)}
                                         >
                                             <option disabled value="">Select a date</option>
@@ -213,7 +213,7 @@ const InqueriesPage = ({ itenaryPriceData, itenatyDataListing }) => {
                                             value={numberOfAdults}
                                             min={1}
                                             onChange={(e) => setNumberOfAdults(e.target.value)}
-                                            className='w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#ef4444]'
+                                            className='w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-300'
                                             required
                                         />
                                     </div>
@@ -228,7 +228,7 @@ const InqueriesPage = ({ itenaryPriceData, itenatyDataListing }) => {
                                             value={numberOfChildrenWithBed}
                                             min={0}
                                             onChange={(e) => setNumberOfChildrenWithBed(e.target.value)}
-                                            className='w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#ef4444]'
+                                            className='w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-300'
                                             required
                                         />
                                     </div>
@@ -243,7 +243,7 @@ const InqueriesPage = ({ itenaryPriceData, itenatyDataListing }) => {
                                             value={numberOfChildrenWithoutBed}
                                             min={0}
                                             onChange={(e) => setNumberOfChildrenWithoutBed(e.target.value)}
-                                            className='w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#ef4444]'
+                                            className='w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-300'
                                             required
                                         />
                                     </div>

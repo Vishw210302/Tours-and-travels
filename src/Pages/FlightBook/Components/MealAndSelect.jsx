@@ -51,7 +51,7 @@ const MealAndSelect = () => {
                 fetchMealByParticularId(data?.data[0]._id)
             }
         } else if (isError) {
-            console.log("isLocationError", isError);
+            console.log("isError", isError);
         }
     }, [error, data, isSuccess, isError]);
 
@@ -59,7 +59,7 @@ const MealAndSelect = () => {
         if (isSuccessPasricularMeal) {
             setParticularMeal(ParticularMealData?.data);
         } else if (isErrorPasricularMeal) {
-            console.log("isLocationError", isErrorPasricularMeal);
+            console.log("isErrorPasricularMeal", isErrorPasricularMeal);
         }
     }, [errorPasricularMeal, ParticularMealData, isSuccessPasricularMeal, isErrorPasricularMeal]);
 
@@ -71,7 +71,7 @@ const MealAndSelect = () => {
     }, []);
 
     useEffect(() => {
-        
+
         if (updatedMealData) {
             const meals = updatedMealData?.data.map((meal) => meal.mealDetails);
             const counts = {};
@@ -86,8 +86,8 @@ const MealAndSelect = () => {
 
     useEffect(() => {
         if (isMealDataAdditionError) {
-            console.log("isLocationError", mealDataAdditionError);
-        }else if(isMealUpdateSuccessfully){
+            console.log("mealDataAdditionError", mealDataAdditionError);
+        } else if (isMealUpdateSuccessfully) {
             navigate(`/flight-seat-booking/${className}/${id}`)
         }
     }, [isMealDataAdditionError, mealDataAdditionError, isMealUpdateSuccessfully]);
@@ -122,19 +122,19 @@ const MealAndSelect = () => {
 
     const handleSelectMeals = (meal) => {
         setSelectetParticularMeals((prevSelectedMeals) => {
-          
+
             const isMealSelected = prevSelectedMeals.some((m) => m._id === meal._id);
-    
+
             if (isMealSelected) {
-              
+
                 return prevSelectedMeals.filter((m) => m._id !== meal._id);
             } else {
-                
+
                 return [...prevSelectedMeals, meal];
             }
         });
     };
-    
+
 
     const increaseCount = (id) => {
         setMealCounts((prevCounts) => ({
