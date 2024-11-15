@@ -1,15 +1,24 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { ChevronDownIcon } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { IoCartOutline } from "react-icons/io5";
+import { useNavigate } from 'react-router-dom';
+import { useAllApiContext } from '../../Context/allApiContext';
+import AddToCartDrawer from '../AddToCartDrawer/AddToCartDrawer';
 
 const NavBar = ({ settingData, settingIsSuccess, settingIsError, settingError }) => {
+
   const pathname = window.location.pathname.replace('/', '');
   const [activeLink, setActiveLink] = useState(pathname);
   const [isPackagesOpen, setIsPackagesOpen] = useState(false);
   const [websiteLogo, setWebsiteLogo] = useState(null);
   const mainLogoImage = `${import.meta.env.VITE_REACT_APP_IMAGE_URL}/setting-image/`;
-
+  const { addToCart } = useAllApiContext();
+  const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
+
+  const toggleDrawer = () => {
+    setIsOpen(!isOpen);
+  };
 
   const handleLinkClick = (link, isDropdownItem = false) => {
     setActiveLink(isDropdownItem ? 'holidays' : link);
@@ -38,7 +47,7 @@ const NavBar = ({ settingData, settingIsSuccess, settingIsError, settingError })
     if (settingIsSuccess) {
       setWebsiteLogo(settingData?.data);
     } else if (settingIsError) {
-      console.log('error', settingError);
+      console.log('settingIsError', settingError);
     }
   }, [settingData, settingIsSuccess, settingIsError]);
 
@@ -130,6 +139,19 @@ const NavBar = ({ settingData, settingIsSuccess, settingIsError, settingError })
             Contacts
           </button>
         </div>
+        <div className='cursor-pointer' onClick={toggleDrawer}>
+          <div className='relative'>
+            <div>
+              <IoCartOutline size={35} color='#ef4444' />
+            </div>
+            <div className='absolute bottom-5 left-7 py-[1px] px-[7px] bg-yellow-500 rounded-full h-fit'>
+              <p className='text-black h-fit'>{addToCart?.length}</p>
+            </div>
+          </div>
+        </div>
+
+        <AddToCartDrawer toggleDrawer={toggleDrawer} isOpen={isOpen} />
+
       </div>
     </nav>
   );

@@ -20,9 +20,11 @@ const TourTheme = () => {
         }
     }, [error, data, isSuccess, isError]);
 
-    const handlePopularThemeOpen = () => {
-        navigate("popularTheme");
-    }
+    const handlePopularThemeOpen = (themeId) => {
+        console.log("themeId", themeId);
+        navigate(`popularTheme/${themeId}`);
+    };
+
 
     const settings = {
         dots: false,
@@ -71,25 +73,29 @@ const TourTheme = () => {
                         </p>
                         <div className='my-3'>
                             <Slider {...settings}>
-                                {packageListing.map((theme, index) => (
-                                    <div className='w-fit cursor-pointer' key={index + "1"}>
-                                        <div
-                                            onClick={() => handlePopularThemeOpen()}>
-                                            <div className='w-[200px] h-[200px]'>
-                                                <img
-                                                    src={`${imageUrl}${theme?.packageThemeImage}`}
-                                                    alt={theme?.name}
-                                                    className='object-fill w-full h-full rounded-full border-dotted border-red-400 p-1 border-[3px]'
-                                                />
-                                            </div>
-                                            <div className='m-2'>
-                                                <p className='text-black text-center font-semibold text-xl'>
-                                                    {theme?.packageName}
-                                                </p>
+                                {packageListing && packageListing.map((theme, index) => {
+                                    console.log("packageListingpackageListingpackageListing", packageListing);
+                                    console.log("themethemethemethemetheme", theme)
+                                    return (
+                                        <div className='w-fit cursor-pointer' key={index + "1"}>
+                                            <div
+                                                onClick={() => handlePopularThemeOpen(theme?._id)}>
+                                                <div className='w-[200px] h-[200px]'>
+                                                    <img
+                                                        src={`${imageUrl}${theme?.packageThemeImage}`}
+                                                        alt={theme?.name}
+                                                        className='object-fill w-full h-full rounded-full border-dotted border-red-400 p-1 border-[3px]'
+                                                    />
+                                                </div>
+                                                <div className='m-2'>
+                                                    <p className='text-black text-center font-semibold text-xl'>
+                                                        {theme?.packageName}
+                                                    </p>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                ))}
+                                    )
+                                })}
                             </Slider>
                         </div>
                     </div>

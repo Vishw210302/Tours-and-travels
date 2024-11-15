@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useGetAllItenariesQuery, useGetPackagesQuery } from '../../Api/Api';
-import pkgImage from "../../assets/image.jpg";
+
 import BannerImage from "../../assets/waterEffect.png";
 import NoDataFound from '../NoDataFound';
 import RippleEffect from '../RippleEffects/RippleEffect';
@@ -52,13 +52,18 @@ const DomesticPackages = () => {
                             <NoDataFound message="No Domestic Package found" />
                         }
                         <div className='grid md:grid-cols-2 lg:grid-cols-3 gap-10'>
-                            {domesticPackagesListing && domesticPackagesListing.map((packageItem) => (
-                                <div
-                                    key={packageItem.id}
+
                                     className='relative bg-white rounded-3xl shadow-lg overflow-hidden cursor-pointer'>
 
-                                    <div className='absolute -top-8 -right-12 w-36 h-36 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-full opacity-40 transition-all duration-500'></div>
-                                    <div className='absolute -bottom-16 -left-16 w-48 h-48 bg-gradient-to-tl from-green-500 to-yellow-500 rounded-full opacity-30 transition-all duration-500'></div>
+                            {domesticPackagesListing && domesticPackagesListing.map((packageItem, index) => {
+                                console.log("packageItempackageItempackageItem", packageItem)
+                                return (
+                                    <div
+                                        key={packageItem.id}
+                                        className='relative bg-white rounded-3xl shadow-lg overflow-hidden cursor-pointer'>
+
+                                        <div className='absolute -top-8 -right-12 w-36 h-36 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-full opacity-40 transition-all duration-500'></div>
+                                        <div className='absolute -bottom-16 -left-16 w-48 h-48 bg-gradient-to-tl from-green-500 to-yellow-500 rounded-full opacity-30 transition-all duration-500'></div>
 
                                     <img src={`${imageUrl}${packageItem.bannerImage}`} alt={packageItem.packageTitle} className='w-full h-48 object-cover rounded-t-3xl' />
 
@@ -81,9 +86,11 @@ const DomesticPackages = () => {
                                         </button>
                                     </div>
 
-                                    <div className='absolute from-gray-800'></div>
-                                </div>
-                            ))}
+
+                                        <div className='absolute from-gray-800'></div>
+                                    </div>
+                                )
+                            })}
                         </div>
                     </div>
                 </div>

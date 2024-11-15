@@ -10,7 +10,7 @@ const Filter = () => {
 
   return (
     <>
-      <div className='card rounded-2xl w-[25%] h-[100%] bg-white shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg p-3 my-2 '>
+      <div className='card rounded-2xl h-fit sticky top-[110px] bg-white shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg'>
         <div className='card bg-red-500  p-4 rounded-tl-md rounded-tr-md'>
           <h1 className='text-white font-bold text-base'>Packages Filters</h1>
         </div>

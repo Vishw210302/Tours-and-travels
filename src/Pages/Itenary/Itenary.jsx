@@ -41,12 +41,14 @@ const Itenary = () => {
               zIndex: 0
             }}
           />
-          <div className='text-2xl text-white font-bold underline z-10'> {packageName && packageName.toUpperCase()} TOURS PACKAGES</div>
         </div>
         <div className='p-4'>
-          <div className='w-[100%] flex gap-3'>
+          <div className='w-[100%] grid grid-cols-[25%_75%] gap-3'>
             <Filter />
-            {response && <Card isLoading={isLoading} data={response[0]} />}
+            {response &&
+              <Card isLoading={isLoading} data={response[0]} />
+            }
+
           </div>
         </div>
       </div>

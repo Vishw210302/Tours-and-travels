@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import { useAddPassengerDetailsMutation, useLazyGetPassengerDetailsByContactIdQuery } from '../../../Api/Api';
-import { useFlightTicketsDetailsContext } from '../../../Context/FlightTicketsDetailsContext';
 import { usePassenger } from '../../../Context/PassengerCountContext';
 
 const PassengerDetails = () => {
@@ -11,19 +10,14 @@ const PassengerDetails = () => {
   const navigate = useNavigate();
   const { passengerCount } = usePassenger();
   const [passengerPersonalDetails, setPassengerPersonalDetails] = useState("")
-
   const [submitPassengerDetails, {
     data,
     isSuccess,
     isError,
     error
   }] = useAddPassengerDetailsMutation();
-
   const [errors, setErrors] = useState({});
-
-  const totalPassengers =
-    Number(passengerCount.adult) +
-    Number(passengerCount.children)
+  const totalPassengers = Number(passengerCount.adult) + Number(passengerCount.children)
 
   const [details, setDetails] = useState({
     passengerDetailsData: passengerPersonalDetails?.passengerDetailsData?.length > 0
@@ -82,7 +76,6 @@ const PassengerDetails = () => {
 
     } else if (isError) {
       toast.error('Error occure while getting a passnger details ', { autoClose: 3000 });
-      // alert('Error ocuure while storing a mail :', error)
     }
 
   }, [storeDPassengerData, isPassengerDataFetched, isPassengerDataError, passengerFetchError])
@@ -94,15 +87,17 @@ const PassengerDetails = () => {
       navigate(`/meal-booking/${className}/${id}`);
     } else if (isError) {
       toast.error('Error ocuure while storing a mail ', { autoClose: 3000 });
-      console.log('Error ocuure while storing a mail :', error)
     }
 
   }, [data, isSuccess, isError, error])
 
 
   const handleInputChange = (index, field, value) => {
-    const updatedPassengerDetails = details.passengerDetailsData.map((passenger, i) =>
-      i === index ? { ...passenger, [field]: value } : passenger
+    const updatedPassengerDetails = details.passengerDetailsData.map((passenger, i) => {
+      return (
+        i === index ? { ...passenger, [field]: value } : passenger
+      )
+    }
     );
     setDetails((prevDetails) => ({
       ...prevDetails,
@@ -124,27 +119,30 @@ const PassengerDetails = () => {
     const newErrors = {};
     let isValid = true;
 
-    // Validate passenger details
     details.passengerDetailsData.forEach((passenger, index) => {
+
       if (!passenger.fullName) {
         newErrors[`fullName-${index}`] = 'Full Name is required';
         isValid = false;
       }
+
       if (!passenger.age) {
         newErrors[`age-${index}`] = 'Age is required';
         isValid = false;
       }
+
       if (!passenger.gender) {
         newErrors[`gender-${index}`] = 'Gender is required';
         isValid = false;
       }
+
     });
 
-    // Validate contact details
     if (!details.contactDetails.fullName) {
       newErrors.contactFullName = 'Full Name is required';
       isValid = false;
     }
+
     if (!details.contactDetails.email) {
       newErrors.contactEmail = 'Email is required';
       isValid = false;
@@ -152,6 +150,7 @@ const PassengerDetails = () => {
       newErrors.contactEmail = 'Email is not valid';
       isValid = false;
     }
+
     if (!details.contactDetails.phoneNumber) {
       newErrors.contactPhone = 'Phone Number is required';
       isValid = false;
@@ -169,8 +168,6 @@ const PassengerDetails = () => {
   };
 
   const handleMealAndFlightSeatPage = async () => {
-   
-
     const payload = {
       flightId: id,
       details,
@@ -180,7 +177,6 @@ const PassengerDetails = () => {
       setPassengerPersonalDetails(details);
       await submitPassengerDetails(payload)
     }
-    
   };
 
   return (
@@ -202,57 +198,68 @@ const PassengerDetails = () => {
             <div className='flex flex-row justify-around gap-3'>
               <div className='w-[70%]'>
                 <p className='px-2 font-bold text-xl'>Passenger Detail</p>
-                {details?.passengerDetailsData.length && details.passengerDetailsData.map((passenger, index) => (
-                  <div key={index + 1} className='card bg-white rounded-xl shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg p-5 my-2 h-fit'>
-                    <div>
-                      <p className='font-medium mb-4'>Passenger {index + 1}</p>
-                    </div>
 
-                    <div className='mb-4'>
-                      <label
-                        className='block text-sm font-medium text-gray-700 mb-2'
-                      >
-                        Full Name
-                      </label>
-                      <input
-                        type='text'
-                        className='w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500'
-                        placeholder='Enter full name'
-                        value={passenger.fullName}
-                        onChange={(e) => handleInputChange(index, 'fullName', e.target.value)}
-                      />
-                      {errors[`fullName-${index}`] && <p className="text-red-500 text-sm">{errors[`fullName-${index}`]}</p>}
-                    </div>
-
-                    <div className='grid grid-cols-2 gap-2'>
-                      <div className='mb-4'>
-                        <label className='block text-sm font-medium text-gray-700 mb-2'>Age</label>
-                        <input
-                          type='number'
-                          className='w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500'
-                          placeholder='Enter age'
-                          value={passenger.age}
-                          onChange={(e) => handleInputChange(index, 'age', e.target.value)}
-                        />
-                        {errors[`age-${index}`] && <p className="text-red-500 text-sm">{errors[`age-${index}`]}</p>}
+                {details?.passengerDetailsData.length && details.passengerDetailsData.map((passenger, index) => {
+                  return (
+                    <div key={index + 1} className='card bg-white rounded-xl shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg p-5 my-2 h-fit'>
+                      <div>
+                        <p className='font-medium mb-4'>Passenger {index + 1}</p>
                       </div>
+
                       <div className='mb-4'>
-                        <label className='block text-sm font-medium text-gray-700 mb-2'>Gender</label>
-                        <select
-                          className='w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500'
-                          value={passenger.gender}
-                          onChange={(e) => handleInputChange(index, 'gender', e.target.value)}
+                        <label
+                          className='block text-sm font-medium text-gray-700 mb-2'
                         >
-                          <option value=''>Select gender</option>
-                          <option value='male'>Male</option>
-                          <option value='female'>Female</option>
-                          <option value='other'>Other</option>
-                        </select>
-                        {errors[`gender-${index}`] && <p className="text-red-500 text-sm">{errors[`gender-${index}`]}</p>}
+                          Full Name
+                        </label>
+                        <input
+                          type='text'
+                          className='w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500'
+                          placeholder='Enter full name'
+                          value={passenger.fullName}
+                          onChange={(e) => handleInputChange(index, 'fullName', e.target.value)}
+                        />
+                        {errors[`fullName-${index}`] &&
+                          <p className="text-red-500 text-sm">{errors[`fullName-${index}`]}</p>
+                        }
+                      </div>
+
+                      <div className='grid grid-cols-2 gap-2'>
+                        <div className='mb-4'>
+                          <label className='block text-sm font-medium text-gray-700 mb-2'>Age</label>
+                          <input
+                            type='number'
+                            className='w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500'
+                            placeholder='Enter age'
+                            value={passenger.age}
+                            onChange={(e) => handleInputChange(index, 'age', e.target.value)}
+                          />
+                          {errors[`age-${index}`] &&
+                            <p className="text-red-500 text-sm">{errors[`age-${index}`]}</p>
+                          }
+                        </div>
+
+                        <div className='mb-4'>
+                          <label className='block text-sm font-medium text-gray-700 mb-2'>Gender</label>
+                          <select
+                            className='w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500'
+                            value={passenger.gender}
+                            onChange={(e) => handleInputChange(index, 'gender', e.target.value)}
+                          >
+                            <option value=''>Select gender</option>
+                            <option value='male'>Male</option>
+                            <option value='female'>Female</option>
+                            <option value='other'>Other</option>
+                          </select>
+                          {errors[`gender-${index}`] &&
+                            <p className="text-red-500 text-sm">{errors[`gender-${index}`]}</p>
+                          }
+                        </div>
+
                       </div>
                     </div>
-                  </div>
-                ))}
+                  )
+                })}
 
                 <div className='card bg-white rounded-xl shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg p-5 my-2 h-fit'>
                   <div>
@@ -268,10 +275,13 @@ const PassengerDetails = () => {
                       value={details?.contactDetails.fullName}
                       onChange={(e) => handleInputChangeContact('fullName', e.target.value)}
                     />
-                    {errors.contactFullName && <p className="text-red-500 text-sm">{errors.contactFullName}</p>}
+                    {errors.contactFullName &&
+                      <p className="text-red-500 text-sm">{errors.contactFullName}</p>
+                    }
                   </div>
 
                   <div className='grid grid-cols-2 gap-2'>
+
                     <div className='mb-4'>
                       <label className='block text-sm font-medium text-gray-700 mb-2'>Email</label>
                       <input
@@ -281,8 +291,11 @@ const PassengerDetails = () => {
                         value={details?.contactDetails.email}
                         onChange={(e) => handleInputChangeContact('email', e.target.value)}
                       />
-                      {errors.contactEmail && <p className="text-red-500 text-sm">{errors.contactEmail}</p>}
+                      {errors.contactEmail &&
+                        <p className="text-red-500 text-sm">{errors.contactEmail}</p>
+                      }
                     </div>
+
                     <div className='mb-4'>
                       <label className='block text-sm font-medium text-gray-700 mb-2'>Phone Number</label>
                       <input
@@ -292,28 +305,37 @@ const PassengerDetails = () => {
                         value={details?.contactDetails.phoneNumber}
                         onChange={(e) => handleInputChangeContact('phoneNumber', e.target.value)}
                       />
-                      {errors.contactPhone && <p className="text-red-500 text-sm">{errors.contactPhone}</p>}
+                      {errors.contactPhone &&
+                        <p className="text-red-500 text-sm">{errors.contactPhone}</p>
+                      }
                     </div>
+
                   </div>
                 </div>
               </div>
 
-              {/* Reservation Summary */}
               <div className='card w-[30%] bg-white rounded-xl shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg p-5 my-2 h-fit'>
+
                 <div>
                   <h1 className='font-semibold text-md text-black'>Reservation Summary</h1>
                 </div>
+
                 <div className='my-2 border border-dotted rounded-md border-black p-2'>
+
                   <div className='grid grid-cols-2 gap-4'>
+
                     <div className='bg-[#dae6ff] p-2 rounded-md'>
                       <p className='text-sm font-normal'>Check-In</p>
                       <p className='text-sm font-medium text-black'>05 Feb 2024</p>
                     </div>
+
                     <div className='bg-[#dae6ff] p-2 rounded-md'>
                       <p className='text-sm font-normal'>Check-Out</p>
                       <p className='text-sm font-medium text-black'>15 Feb 2024</p>
                     </div>
+
                   </div>
+
                 </div>
                 <div className='my-4'>
                   <button
@@ -325,7 +347,9 @@ const PassengerDetails = () => {
                 </div>
                 <div>
                   <button
-                    onClick={handleMealAndFlightSeatPage}
+                    onClick={() => {
+                      handleMealAndFlightSeatPage()
+                    }}
                     className='w-full bg-red-400 text-white font-semibold py-3 rounded-lg hover:bg-red-500 transition duration-300 shadow-md hover:shadow-lg'
                   >
                     Continue

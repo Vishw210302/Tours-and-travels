@@ -11,7 +11,7 @@ import { useAllApiContext } from '../../../Context/allApiContext';
 const Details = () => {
 
     const { settingData } = useAllApiContext()
-    const { isError, error, data, isLoading, isSuccess } = useGetSocialMediaLinkListingQuery();
+    const { isError, error, data, isSuccess } = useGetSocialMediaLinkListingQuery();
     const [socialMediaLinkListing, setSocialMediaLinkListing] = useState([]);
     const [mainBranchAddress, setMainBranchAddress] = useState([]);
 
@@ -19,7 +19,7 @@ const Details = () => {
         if (isSuccess) {
             setSocialMediaLinkListing(data?.data);
         } else if (isError) {
-            console.log("error", isError);
+            console.log("isError", isError);
         }
     }, [error, data, isSuccess, isError]);
 

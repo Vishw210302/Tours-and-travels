@@ -9,15 +9,8 @@ import PaidIcon from '@mui/icons-material/Paid';
 import PersonIcon from '@mui/icons-material/Person';
 import WarningIcon from '@mui/icons-material/Warning';
 import React, { useEffect, useState } from 'react';
-
-const formatDate = (dateString) => {
-
-    const date = new Date(dateString);
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const year = String(date.getFullYear()).slice(2);
-    return `${day}/${month}/${year}`;
-};
+import { useAllApiContext } from '../../../../Context/allApiContext';
+import PackagesBookingModal from '../../../AllPackages/PackagesBookingModal';
 
 const ReadMoreText = ({ text }) => {
 
@@ -49,6 +42,13 @@ const About = ({ data, allData }) => {
 
     const [departureDates, setDepartureDates] = useState([]);
     const [allItenaryData, setAllItenaryData] = useState();
+    const [importantUpdate, setImportantUpdate] = useState([]);
+    const [bookingModalOpen, setBookingModalOpen] = useState(false);
+    const { settingData } = useAllApiContext()
+
+    const handlePackageBookingModal = () => {
+        setBookingModalOpen(true)
+    }
 
     useEffect(() => {
         if (Array.isArray(allData?.itenaryData?.departureDates)) {
@@ -57,6 +57,7 @@ const About = ({ data, allData }) => {
         setAllItenaryData(allData?.itenaryData);
     }, [allData]);
 
+
     const imageUrl = `${import.meta.env.VITE_REACT_APP_IMAGE_URL}/itenary-package/`;
 
     const handleBrochureDownload = (basePath, fileUrl) => {
@@ -64,6 +65,13 @@ const About = ({ data, allData }) => {
         const pdfUrl = basePath + fileUrl
 
         if (pdfUrl) {
+
+    useEffect(() => {
+        setImportantUpdate(settingData?.data)
+    }, [settingData])
+
+    const handleBrochureDownload = (fileUrl) => {
+        if (fileUrl) {
             const link = document.createElement('a');
             link.href = pdfUrl;
             link.download = pdfUrl.split('/').pop();
@@ -79,48 +87,76 @@ const About = ({ data, allData }) => {
     const longText = data;
 
     return (
-        <div className='flex justify-around w-[100%]'>
+        <>
+            <div className='flex justify-around w-[100%]'>
 
-            <div className='w-[60%]'>
+                <div className='w-[60%]'>
 
-                <div className='card bg-white rounded-xl shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg p-3 my-2'>
-                    <h1 className='text-[20px] font-semibold text-red-500'>{allItenaryData?.packageTitle}</h1>
-                    <div className='flex items-center gap-2 mt-2 border-b-2'>
+                    <div className='card bg-white rounded-xl shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg p-3 my-2'>
+                        <h1 className='text-[20px] font-semibold text-red-500'>{allItenaryData?.packageTitle}</h1>
+                        <div className='flex items-center gap-3 mt-2 border-b-2'>
 
-                        <div className='flex items-center gap-2 mb-2'>
-                            <AvTimerIcon fontSize="large" sx={{ color: '#ef4444' }} />
-                            <div>
-                                <p> Duration</p>
-                                <p>{allItenaryData?.days?.length} days / {allItenaryData?.days?.length - 1} nights</p>
+                            <div className='flex items-center gap-2 mb-2'>
+                                <AvTimerIcon fontSize="large" sx={{ color: '#ef4444' }} />
+                                <div>
+                                    <p> Duration</p>
+                                    <p>{allItenaryData?.days?.length} days / {allItenaryData?.days?.length - 1} nights</p>
+                                </div>
                             </div>
-                        </div>
 
-                        <div className='flex items-center gap-2'>
-                            <WarningIcon fontSize="large" sx={{ color: '#ef4444' }} />
-                            <div>
-                                <p> Difficulty</p>
-                                <p>Easy to Moderate</p>
+                            <div className='flex items-center gap-2'>
+                                <WarningIcon fontSize="large" sx={{ color: '#ef4444' }} />
+                                <div>
+                                    <p> Difficulty</p>
+                                    <p>Easy to Moderate</p>
+                                </div>
                             </div>
-                        </div>
 
-                        <div className='flex items-center gap-2'>
-                            <InterpreterModeIcon fontSize="large" sx={{ color: '#ef4444' }} />
-                            <div>
-                                <p> Age Group</p>
-                                <p>16-35 years</p>
+                            <div className='flex items-center gap-2'>
+                                <InterpreterModeIcon fontSize="large" sx={{ color: '#ef4444' }} />
+                                <div>
+                                    <p> Age Group</p>
+                                    <p>16-35 years</p>
+                                </div>
                             </div>
+
                         </div>
+                        {importantUpdate && importantUpdate.map((items, index) => {
+                            if (items?.keyName == "about_update") {
+                                return (
+                                    <div key={index + "Key"} className='p-3'>
+                                        <div className='card rounded-lg bg-red-200 p-3'>
+                                            <p className='text-lg font-semibold'>Important Update</p>
+                                            <p className='text-sm'>{items?.valueContent}</p>
+                                        </div>
+                                    </div>
+                                )
+                            }
+                        })}
 
                     </div>
 
-                    <div className='p-3'>
-                        <div className='card rounded-lg bg-red-200 p-3'>
-                            <p className='text-lg font-semibold'>Important Update</p>
-                            <p className='text-sm'>If anything goes wrong, please contact us at +91 9173211901</p>
+                    <div className='card bg-white rounded-xl shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg p-3 my-2'>
+                        {longText && longText.length > 0 ?
+                            <>
+                                <p className='text-[18px] text-red-500 font-medium'>About</p>
+                                <ReadMoreText text={longText} />
+                            </>
+                            : <></>
+                        }
+
+                        <div>
+                            <button
+                                onClick={() => handleBrochureDownload(allData?.itenaryData?.fileUpload)}
+                                className='bg-red-400 hover:bg-red-500 text-white font-bold py-2 px-4 rounded-md shadow-lg transition-all duration-300 mt-2'
+                            >
+                                Brochure <i className="fa-solid fa-download"></i>
+                            </button>
                         </div>
                     </div>
 
                 </div>
+
 
                 <div className='card bg-white rounded-xl shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg p-3 my-2'>
                     <p className='text-[18px] font-medium'>About</p>
@@ -135,50 +171,64 @@ const About = ({ data, allData }) => {
                     </div>
                 </div>
 
-            </div>
+                <div className='w-[25%] h-[100%]'>
 
-            <div className='w-[25%] h-[100%]'>
 
-                <div className='card bg-white rounded-xl shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] p-3 transition-all duration-300 hover:shadow-lg'>
+                    <div className='card bg-white rounded-xl shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] p-3 transition-all duration-300 hover:shadow-lg'>
 
-                    <div>
-                        <span className='text-lg font-bold text-red-500'>₹{allItenaryData?.perPersonCost}</span>
-                        <span className='text-md font-semibold text-red-500'> / person</span>
+                        <div>
+                            <span className='text-[20px] font-bold text-red-500'>₹{allItenaryData?.perPersonCost}</span>
+                            <span className='text-md font-semibold text-red-500'> / person</span>
+                        </div>
+
+                        <div>
+                            <p className='text-md'>Includes</p>
+                        </div>
+
+                        <div className='mt-4 grid grid-cols-[50%,50%]'>
+                            <p><LocalDiningIcon /> Food</p>
+                            <p><DirectionsBikeIcon /> Travelling</p>
+                            <p><PersonIcon /> Instructor</p>
+                            <p><LocalHospitalIcon /> First Aid</p>
+                            <p><PaidIcon /> GST</p>
+                            <p><ApartmentIcon /> Accommodation</p>
+                        </div>
+
+                        <div>
+                            <button
+                                onClick={() => {
+                                    handlePackageBookingModal()
+                                }}
+                                className='w-full bg-red-400 hover:bg-red-500 text-white font-bold py-2 px-4 rounded-md shadow-lg transition-all duration-300 mt-2'
+                            >
+                                Book Now
+                            </button>
+                        </div>
+
                     </div>
-
-                    <div>
-                        <p className='text-md'>Includes</p>
+                    <div className="bg-white rounded-lg shadow-lg p-4 mt-2">
+                        <h3 className="text-lg font-medium mb-2">Departure Dates:</h3>
+                        <div className="grid grid-cols-3 gap-3">
+                            {departureDates && departureDates.map((departureDate, index) => (
+                                <div
+                                    key={index}
+                                    className="bg-gray-100 rounded-md p-3 text-center hover:bg-gray-200 transition-colors"
+                                >
+                                    <p className="text-gray-700 font-medium">
+                                        {new Date(departureDate).toLocaleDateString('en-GB', {
+                                            day: '2-digit',
+                                            month: '2-digit',
+                                            year: 'numeric'
+                                        })}
+                                    </p>
+                                </div>
+                            ))}
+                        </div>
                     </div>
-
-                    <div className='mt-4 grid grid-cols-[50%,50%]'>
-                        <p><LocalDiningIcon /> Food</p>
-                        <p><DirectionsBikeIcon /> Travelling</p>
-                        <p><PersonIcon /> Instructor</p>
-                        <p><LocalHospitalIcon /> First Aid</p>
-                        <p><PaidIcon /> GST</p>
-                        <p><ApartmentIcon /> Accommodation</p>
-                    </div>
-
-                    <div>
-                        <button className='w-full bg-red-400 hover:bg-red-500 text-white font-bold py-2 px-4 rounded-md shadow-lg transition-all duration-300 mt-2'>
-                            Book Now
-                        </button>
-                    </div>
-
                 </div>
-
-                <div className='card bg-white rounded-xl shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg p-3 my-2 flex flex-wrap'>
-                    <p className='font-medium text-[15px] text-red-500 mr-1'>Dates:-</p>
-                    {departureDates && departureDates.map((departureDate, index) => (
-                        <p key={index} className='text-[15px] font-semibold'>
-                            {formatDate(departureDate)}
-                            {index < departureDates?.length - 1 && ' ,  '}
-                        </p>
-                    ))}
-                </div>
-
             </div>
-        </div>
+            <PackagesBookingModal bookingModalOpen={bookingModalOpen} setBookingModalOpen={setBookingModalOpen} allData={allData} />
+        </>
     );
 };
 
