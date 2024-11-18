@@ -101,25 +101,44 @@ const SecondStepsBookingHotel = ({ setHotelPriceSelect, selectedHotel }) => {
                                 swiperRef.current = swiper;
                             }}
                         >
-                            {selectedHotel?.hotelImages.map((image, index) => (
-                                <SwiperSlide key={index}>
-                                    <div className='relative w-[100%] h-[250px]' onClick={() => handleImageClick(image?.url)}>
-                                        <img
-                                            src={image?.url}
-                                            alt={`Slide ${index + 1}`}
-                                            className='object-cover w-full h-full cursor-pointer'
-                                        />
-                                    </div>
-                                </SwiperSlide>
-                            ))}
+                            {selectedHotel?.hotelImages.map((image, index) => {
+                                return (
+                                    <SwiperSlide key={index}>
+                                        <div
+                                            className='relative w-[100%] h-[250px]'
+                                            onClick={() =>
+                                                handleImageClick(image?.url)
+                                            }
+                                        >
+                                            <img
+                                                src={image?.url}
+                                                alt={`Slide ${index + 1}`}
+                                                className='object-cover w-full h-full cursor-pointer'
+                                            />
+                                        </div>
+                                    </SwiperSlide>
+                                )
+                            })}
                         </Swiper>
                         <div className='flex flex-row justify-between gap-3 w-[100%] absolute bottom-[36%] z-10 p-2'>
-                            <div className='w-fit h-fit' style={{ lineHeight: 0 }} onClick={() => swiperRef.current.slidePrev()}>
+                            <div
+                                className='w-fit h-fit'
+                                style={{ lineHeight: 0 }}
+                                onClick={() =>
+                                    swiperRef.current.slidePrev()
+                                }
+                            >
                                 <p className='text-3xl text-center text-black p-1 cursor-pointer bg-white rounded-lg'>
                                     ←
                                 </p>
                             </div>
-                            <div className='w-fit h-fit' style={{ lineHeight: 0 }} onClick={() => swiperRef.current.slideNext()}>
+                            <div
+                                className='w-fit h-fit'
+                                style={{ lineHeight: 0 }}
+                                onClick={() =>
+                                    swiperRef.current.slideNext()
+                                }
+                            >
                                 <p className='text-3xl text-center text-black p-1 cursor-pointer bg-white rounded-lg'>
                                     →
                                 </p>
@@ -138,53 +157,65 @@ const SecondStepsBookingHotel = ({ setHotelPriceSelect, selectedHotel }) => {
                 <div className='px-3'>
                     <p className='text-2xl text-gray-500 font-semibold my-2'>Characteristics</p>
                     <div className='flex flex-row items-center gap-3 my-3'>
-                        {amenities.map((amenity, index) => (
-                            amenity.condition && (
-                                <div
-                                    key={index}
-                                    className="relative flex items-center"
-                                    onMouseEnter={() => setHoveredAmenity(amenity.name)}
-                                    onMouseLeave={() => setHoveredAmenity(null)}
-                                >
-                                    {amenity.icon}
-                                    {hoveredAmenity === amenity.name && (
-                                        <div className='absolute top-[25px] py-[6px] px-[8px] text-white bg-black p-1 rounded-md text-sm'>
-                                            {amenity.name}
-                                        </div>
-                                    )}
-                                </div>
+                        {amenities && amenities.map((amenity, index) => {
+                            return (
+                                amenity.condition && (
+                                    <div
+                                        key={index}
+                                        className="relative flex items-center"
+                                        onMouseEnter={() => setHoveredAmenity(amenity?.name)}
+                                        onMouseLeave={() => setHoveredAmenity(null)}
+                                    >
+                                        {amenity.icon}
+                                        {hoveredAmenity === amenity?.name && (
+                                            <div className='absolute top-[25px] py-[6px] px-[8px] text-white bg-black p-1 rounded-md text-sm'>
+                                                {amenity?.name}
+                                            </div>
+                                        )}
+                                    </div>
+                                )
                             )
-                        ))}
+                        })}
                     </div>
                 </div>
 
                 <div className='px-3'>
                     <h2 className='text-2xl text-gray-500 font-semibold mb-4'>Price</h2>
                     <div className='space-y-3'>
-                        {selectedHotel?.pricingOptions.map((items, indexHotel) => (
-                            <div key={indexHotel} className={`mt-3 card bg-white rounded-xl shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg w-[100%] h-fit mb-2 ${selectedHotelPrice === indexHotel ? 'border-4 border-blue-500' : ''}`} onClick={() => handleSelectHotelPrice(indexHotel)}>
-                                <div className="border border-gray-300 rounded-lg p-4 shadow-sm" >
-                                    <label className="flex items-center space-x-4 cursor-pointer">
-                                        <input
-                                            type="radio"
-                                            name="price-option"
-                                            className="form-radio h-5 w-5 text-blue-600"
-                                        />
-                                        <div className="flex-1 flex justify-between items-center">
-                                            <div>
-                                                <p className="text-lg text-gray-700 font-semibold">{items?.type}</p>
-                                                <div className='flex gap-2'>
-                                                    <p className="text-md text-gray-500">{items?.description}</p>
-                                                    {items?.inclusions && <span className='border-r-2 border-gray-400'></span>}
-                                                    <p className="text-md text-gray-500">{items?.inclusions}</p>
+                        {selectedHotel?.pricingOptions.map((items, indexHotel) => {
+                            return (
+                                <div
+                                    key={indexHotel}
+                                    className={`mt-3 card bg-white rounded-xl shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg w-[100%] h-fit mb-2 ${selectedHotelPrice === indexHotel ? 'border-4 border-blue-500' : ''}`}
+                                    onClick={() =>
+                                        handleSelectHotelPrice(indexHotel)
+                                    }
+                                >
+                                    <div className="border border-gray-300 rounded-lg p-4 shadow-sm" >
+                                        <label className="flex items-center space-x-4 cursor-pointer">
+                                            <input
+                                                type="radio"
+                                                name="price-option"
+                                                className="form-radio h-5 w-5 text-blue-600"
+                                            />
+                                            <div className="flex-1 flex justify-between items-center">
+                                                <div>
+                                                    <p className="text-lg text-gray-700 font-semibold">{items?.type}</p>
+                                                    <div className='flex gap-2'>
+                                                        <p className="text-md text-gray-500">{items?.description}</p>
+                                                        {items?.inclusions &&
+                                                            <span className='border-r-2 border-gray-400'></span>
+                                                        }
+                                                        <p className="text-md text-gray-500">{items?.inclusions}</p>
+                                                    </div>
                                                 </div>
+                                                <span className="text-red-600 text-xl font-semibold">{items?.totalPrice}</span>
                                             </div>
-                                            <span className="text-red-600 text-xl font-semibold">{items?.totalPrice}</span>
-                                        </div>
-                                    </label>
+                                        </label>
+                                    </div>
                                 </div>
-                            </div>
-                        ))}
+                            )
+                        })}
                     </div>
                 </div>
             </div>

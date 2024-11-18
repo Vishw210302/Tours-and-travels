@@ -52,9 +52,6 @@ const DomesticPackages = () => {
                             <NoDataFound message="No Domestic Package found" />
                         }
                         <div className='grid md:grid-cols-2 lg:grid-cols-3 gap-10'>
-
-                                    className='relative bg-white rounded-3xl shadow-lg overflow-hidden cursor-pointer'>
-
                             {domesticPackagesListing && domesticPackagesListing.map((packageItem, index) => {
                                 console.log("packageItempackageItempackageItem", packageItem)
                                 return (
@@ -65,26 +62,26 @@ const DomesticPackages = () => {
                                         <div className='absolute -top-8 -right-12 w-36 h-36 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-full opacity-40 transition-all duration-500'></div>
                                         <div className='absolute -bottom-16 -left-16 w-48 h-48 bg-gradient-to-tl from-green-500 to-yellow-500 rounded-full opacity-30 transition-all duration-500'></div>
 
-                                    <img src={`${imageUrl}${packageItem.bannerImage}`} alt={packageItem.packageTitle} className='w-full h-48 object-cover rounded-t-3xl' />
+                                        <img src={`${imageUrl}${packageItem.bannerImage}`} alt={packageItem.packageTitle} className='w-full h-48 object-cover rounded-t-3xl' />
 
-                                    <div className='p-6 relative z-10'>
-                                        <h3 className='text-xl font-bold text-black tracking-wide'>{packageItem.packageTitle}</h3>
-                                        <p className="text-base text-gray-700">
-                                            {packageItem.smallDescription.split(" ").length > 20
-                                                ? packageItem.smallDescription.split(" ").slice(0, 20).join(" ") + "..."
-                                                : packageItem.smallDescription}
-                                        </p>
+                                        <div className='p-6 relative z-10'>
+                                            <h3 className='text-xl font-bold text-black tracking-wide'>{packageItem.packageTitle}</h3>
+                                            <p className="text-base text-gray-700">
+                                                {packageItem.smallDescription.split(" ").length > 20
+                                                    ? packageItem.smallDescription.split(" ").slice(0, 20).join(" ") + "..."
+                                                    : packageItem.smallDescription}
+                                            </p>
 
-                                        <div>
-                                            <span className='text-lg font-bold text-red-400'>₹{packageItem.perPersonCost}</span>
+                                            <div>
+                                                <span className='text-lg font-bold text-red-400'>₹{packageItem.perPersonCost}</span>
+                                            </div>
+                                            <button
+                                                onClick={() => handleItenary(packageItem._id)}
+                                                className='mt-4 py-3 px-6 w-full bg-gradient-to-r from-green-400 to-blue-600 text-white font-bold rounded-xl'
+                                            >
+                                                View More
+                                            </button>
                                         </div>
-                                        <button
-                                            onClick={() => handleItenary(packageItem._id)}
-                                            className='mt-4 py-3 px-6 w-full bg-gradient-to-r from-green-400 to-blue-600 text-white font-bold rounded-xl'
-                                        >
-                                            View More
-                                        </button>
-                                    </div>
 
 
                                         <div className='absolute from-gray-800'></div>

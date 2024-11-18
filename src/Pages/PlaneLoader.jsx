@@ -24,7 +24,7 @@ const PlaneLoader = () => {
                 <div className="plane-container animate-fly-across">
                     <Plane
                         size={30}
-                        className="text-white transform rotate-45  drop-shadow-md"
+                        className="text-white transform rotate-45 drop-shadow-md"
                     />
                 </div>
             </div>
