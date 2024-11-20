@@ -63,10 +63,10 @@ const AddToCartDrawer = ({ toggleDrawer, isOpen }) => {
                 {cartItems.length > 0 ? (
                     <div className="divide-y dark:divide-gray-700">
 
-                        {cartItems.map((item, index) => {
+                        {cartItems && cartItems.map((item, index) => {
                             return (
                                 <div
-                                    key={item._id || index}
+                                    key={item?._id || index + "Saprate_Key"}
                                     className="p-4 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors"
                                 >
                                     <div className="flex space-x-4">
@@ -86,7 +86,9 @@ const AddToCartDrawer = ({ toggleDrawer, isOpen }) => {
                                                     {item?.packageTitle}
                                                 </h3>
                                                 <button
-                                                    onClick={() => handleRemoveItem(item?._id)}
+                                                    onClick={() =>
+                                                        handleRemoveItem(item?._id)
+                                                    }
                                                     className="p-1 hover:bg-red-100 dark:hover:bg-red-900/20 rounded-full transition-colors"
                                                     disabled={isProcessing(item?._id)}
                                                 >

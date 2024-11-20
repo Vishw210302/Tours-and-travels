@@ -1,90 +1,142 @@
+import { MapPin } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
-import { useGetAllItenariesQuery, useGetPackagesQuery } from '../../Api/Api';
-
+import { useNavigate } from 'react-router-dom';
+import { useGetAllItenariesQuery } from '../../Api/Api';
 import BannerImage from "../../assets/waterEffect.png";
 import NoDataFound from '../NoDataFound';
 import RippleEffect from '../RippleEffects/RippleEffect';
-import { useNavigate } from 'react-router-dom';
 
 const DomesticPackages = () => {
 
     const { isError, error, data, isSuccess } = useGetAllItenariesQuery('domestic');
-    const navigate = useNavigate()
+    const navigate = useNavigate();
     const [domesticPackagesListing, setDomesticPackagesListing] = useState([]);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [filteredPackages, setFilteredPackages] = useState([]);
     const imageUrl = `${import.meta.env.VITE_REACT_APP_IMAGE_URL}/itenary-package/`;
 
     useEffect(() => {
         if (isSuccess) {
-
             setDomesticPackagesListing(data?.data);
+            setFilteredPackages(data?.data);
         }
         if (isError) {
             console.log("error", error);
         }
     }, [isSuccess, data, isError, error]);
 
+    useEffect(() => {
+        const filtered = domesticPackagesListing.filter((packageItem) =>
+            packageItem?.packageTitle.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+        setFilteredPackages(filtered);
+    }, [searchTerm, domesticPackagesListing]);
+
     const handleItenary = (itenryId) => {
-        navigate(`/itenary-details/${itenryId}`)
-    }
+        navigate(`/itenary-details/${itenryId}`);
+    };
 
     return (
-        <>
-            <div className='bg-[#f7f7f7]'>
-                <RippleEffect BannerImage={BannerImage} BannerTitle={"Explore Our Domestic Packages"} />
-                <div className='w-full max-w-lg absolute bottom-[55%] left-[36%]'>
-                    <div className='flex'>
+        <div className='bg-[#f7f7f7]'>
+            <div className='relative'>
+                <RippleEffect
+                    BannerImage={BannerImage}
+                    BannerTitle={"Explore Our Domestic Packages"}
+                />
+                <div className='absolute inset-x-0 bottom-[37%] flex justify-center px-4'>
+                    <div className='flex w-full max-w-xl'>
                         <input
                             type="text"
                             placeholder="Search Domestic Packages ..."
-                            className="w-full p-[8px] rounded-l-md bg-white text-gray-800 placeholder-gray-400 shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            value={searchTerm}
+                            className="w-full py-2 px-4 rounded-l-md bg-white text-gray-800 placeholder-gray-400 shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            onChange={(e) =>
+                                setSearchTerm(e.target.value)
+                            }
                         />
-                        <button className='bg-blue-600 text-white p-[8px] rounded-r-md font-semibold shadow-lg hover:bg-blue-700 transition duration-200'>
-                            Search
+                        <button
+                            className='bg-blue-600 text-white py-2 px-4 rounded-r-md font-semibold shadow-lg hover:bg-blue-700 transition duration-200'
+                            onClick={() =>
+                                setSearchTerm('')
+                            }
+                        >
+                            Clear
                         </button>
                     </div>
                 </div>
+            </div>
 
-                <div className='bg-gradient-to-b from-blue-100 to-white py-10'>
-                    <div className='2xl:container 2xl:mx-auto p-5'>
-                        {domesticPackagesListing && domesticPackagesListing?.length > 0 ?
-                            <h1 className='text-3xl font-extrabold text-center mb-12 text-gray-800'>Discover Your Dream Vacation</h1>
-                            :
-                            <NoDataFound message="No Domestic Package found" />
-                        }
-                        <div className='grid md:grid-cols-2 lg:grid-cols-3 gap-10'>
-                            {domesticPackagesListing && domesticPackagesListing.map((packageItem, index) => {
-                                console.log("packageItempackageItempackageItem", packageItem)
+            <div className='bg-gradient-to-b from-blue-100 to-white py-10'>
+                <div className="2xl:container 2xl:mx-auto px-5">
+                    <div>
+
+                        {filteredPackages.length > 0 ? (
+                            <div className="text-center mb-12">
+                                <h1 className="text-4xl font-bold text-gray-900 mb-4">
+                                    Discover Your Dream Vacation
+                                </h1>
+                                <p className="text-xl text-gray-600">
+                                    Explore our hand-picked destinations and special holiday packages
+                                </p>
+                            </div>
+                        ) : (
+                            <NoDataFound message="No International Package found" />
+                        )}
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                            {filteredPackages && filteredPackages.map((items, index) => {
                                 return (
-                                    <div
-                                        key={packageItem.id}
-                                        className='relative bg-white rounded-3xl shadow-lg overflow-hidden cursor-pointer'>
+                                    <div key={index} className="bg-white rounded-2xl overflow-hidden shadow-lg transform transition duration-300 hover:scale-105 hover:shadow-2xl">
 
-                                        <div className='absolute -top-8 -right-12 w-36 h-36 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-full opacity-40 transition-all duration-500'></div>
-                                        <div className='absolute -bottom-16 -left-16 w-48 h-48 bg-gradient-to-tl from-green-500 to-yellow-500 rounded-full opacity-30 transition-all duration-500'></div>
-
-                                        <img src={`${imageUrl}${packageItem.bannerImage}`} alt={packageItem.packageTitle} className='w-full h-48 object-cover rounded-t-3xl' />
-
-                                        <div className='p-6 relative z-10'>
-                                            <h3 className='text-xl font-bold text-black tracking-wide'>{packageItem.packageTitle}</h3>
-                                            <p className="text-base text-gray-700">
-                                                {packageItem.smallDescription.split(" ").length > 20
-                                                    ? packageItem.smallDescription.split(" ").slice(0, 20).join(" ") + "..."
-                                                    : packageItem.smallDescription}
-                                            </p>
-
-                                            <div>
-                                                <span className='text-lg font-bold text-red-400'>₹{packageItem.perPersonCost}</span>
+                                        <div className="relative">
+                                            <div className="absolute top-4 right-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                                                {items.categories.toUpperCase()}
                                             </div>
-                                            <button
-                                                onClick={() => handleItenary(packageItem._id)}
-                                                className='mt-4 py-3 px-6 w-full bg-gradient-to-r from-green-400 to-blue-600 text-white font-bold rounded-xl'
-                                            >
-                                                View More
-                                            </button>
+                                            <img
+                                                src={`${imageUrl}${items?.bannerImage}`}
+                                                alt={items?.packageTitle}
+                                                className="w-full h-64 object-cover"
+                                            />
                                         </div>
 
+                                        <div className="p-4">
+                                            <h3 className="text-xl font-bold text-red-500 mb-3">
+                                                {items.packageTitle}
+                                            </h3>
 
-                                        <div className='absolute from-gray-800'></div>
+                                            <p className="text-base text-gray-600 mb-4 line-clamp-3">
+                                                {items.smallDescription}
+                                            </p>
+
+                                            <div className='flex flex-row items-center gap-3 mb-3'>
+                                                <MapPin className="text-red-500 w-5 h-5" />
+                                                <span className="text-md text-gray-600">
+                                                    {items.departureFrom} → {items.departureTo}
+                                                </span>
+                                            </div>
+
+                                            <div className='flex flex-row items-center justify-between'>
+                                                <div>
+                                                    <p className="text-md text-gray-500">Starting from</p>
+                                                    <div className='flex flex-row items-center'>
+                                                        <p className="text-2xl font-bold text-red-500">
+                                                            ₹{items.perPersonCost}
+                                                        </p>
+                                                        <p className="text-lg text-gray-500 mx-2">/ per person</p>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <button
+                                                        className="bg-red-500 text-white px-6 py-2 rounded-lg font-semibold hover:bg-red-600 transition duration-300"
+                                                        onClick={() =>
+                                                            handleItenary(items?._id)
+                                                        }
+                                                    >
+                                                        View More
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 )
                             })}
@@ -92,8 +144,8 @@ const DomesticPackages = () => {
                     </div>
                 </div>
             </div>
-        </>
+        </div>
     );
-}
+};
 
 export default DomesticPackages;

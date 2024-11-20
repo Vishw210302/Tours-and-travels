@@ -61,7 +61,7 @@ const InqueriesPage = ({ itenaryPriceData, itenatyDataListing }) => {
         };
 
         try {
-            const result = await inqueriesPost(formData).unwrap();
+            await inqueriesPost(formData).unwrap();
             if (isSuccess) {
                 setName('');
                 setEmail('');
@@ -91,14 +91,19 @@ const InqueriesPage = ({ itenaryPriceData, itenatyDataListing }) => {
     return (
         <>
             <div className='card bg-[#f1f1f1] shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg sticky z-10 bottom-0 p-3'>
+
                 <div className='flex justify-between items-center 2xl:container 2xl:mx-auto'>
                     <div>
                         <p className='text-[18px] font-semibold'>From {itenaryPriceData?.perPersonPrice} ₹ / person</p>
                     </div>
-                    <button className='bg-red-400 hover:bg-red-500 text-white font-bold py-2 px-4 rounded-md shadow-lg transition-all duration-300' onClick={handleInqueryModalOpen}>
+                    <button
+                        className='bg-red-400 hover:bg-red-500 text-white font-bold py-2 px-4 rounded-md shadow-lg transition-all duration-300'
+                        onClick={handleInqueryModalOpen}
+                    >
                         Send Inquiry
                     </button>
                 </div>
+
             </div>
             <Modal
                 open={openInqueryModal}
@@ -106,19 +111,21 @@ const InqueriesPage = ({ itenaryPriceData, itenatyDataListing }) => {
                 aria-labelledby="modal-title"
                 aria-describedby="modal-description"
             >
-                <Box sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    height: '100vh',
-                }}>
-                    <Box sx={{
-                        position: 'relative',
-                        width: '30%',
-                        bgcolor: 'white',
-                        boxShadow: 24,
-                        borderRadius: 1,
+                <Box
+                    sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        height: '100vh',
                     }}>
+                    <Box
+                        sx={{
+                            position: 'relative',
+                            width: '30%',
+                            bgcolor: 'white',
+                            boxShadow: 24,
+                            borderRadius: 1,
+                        }}>
                         <CloseIcon
                             onClick={handleInqueryModalClose}
                             sx={{
@@ -130,12 +137,13 @@ const InqueriesPage = ({ itenaryPriceData, itenatyDataListing }) => {
                             }}
                         />
                         <div className='border rounded-lg shadow-md p-4 bg-white'>
-                            <div className='p-3 border-b-2 flex flex-1 items-center gap-2'>
-                                <p className='font-semibold text-lg text-red-500'>{itenatyDataListing?.packageTitle}</p>
-                                <p>Tour Pricing Inquiry</p>
+                            <div className='p-2 border-b-2 flex flex-1 items-center gap-2'>
+                                <p className='text-base font-semibold text-red-500'>{itenatyDataListing?.packageTitle}</p>
+                                <p className='text-sm font-semibold text-gray-500'>Tour Pricing Inquiry</p>
                             </div>
                             <div className='p-4'>
                                 <form onSubmit={handleSubmit}>
+
                                     <div className='mb-4'>
                                         <label className='block text-sm font-medium text-gray-700' htmlFor='name'>
                                             Full Name
@@ -280,6 +288,7 @@ const InqueriesPage = ({ itenaryPriceData, itenatyDataListing }) => {
                                             : 'Submit Inquiry'
                                         }
                                     </button>
+
                                 </form>
                             </div>
                         </div>

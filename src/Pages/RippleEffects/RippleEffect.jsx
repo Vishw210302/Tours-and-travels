@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
 import $ from "jquery";
 import "jquery.ripples";
+import React, { useEffect } from "react";
 
 const RippleEffect = ({ BannerImage, BannerTitle }) => {
     useEffect(() => {

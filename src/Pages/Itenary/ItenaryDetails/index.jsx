@@ -33,7 +33,7 @@ const Index = () => {
           <div className={`w-full h-[600px] flex flex-row justify-center items-center`}>
             <img
               src={`${imageUrl}${itenatyDataListing.bannerImage}`}
-              className='h-full w-full object-cover object-centers'
+              className='h-full w-full'
               alt={itenatyDataListing.bannerImage}
             />
           </div>

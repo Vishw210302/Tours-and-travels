@@ -104,11 +104,11 @@ const TermsAndConditionsCard = () => {
                         />
                         <div>
                             <div className='p-3 border-b-2'>
-                                <p className='text-red-500 text-[21px] text-center'>Terms & Condition</p>
+                                <p className='text-red-500 font-semibold text-[21px] text-center'>Terms & Condition</p>
                             </div>
                             <div className='px-[28px] py-[15px]'>
-                                <div>
-                                    <span className='text-red-500 text-[21px] text-center font-semibold tracking-widest'>Discipline</span>
+                                <div className='mb-3'>
+                                    <span className='text-red-500 text-[21px] text-center tracking-widest'>Discipline</span>
                                 </div>
                                 <div className='mt-1'>
                                     <div div className='flex mb-3'>
@@ -172,11 +172,11 @@ const TermsAndConditionsCard = () => {
                         />
                         <div>
                             <div className='p-3 border-b-2'>
-                                <p className='text-red-500 text-[21px] text-center'>Booking Terms</p>
+                                <p className='text-red-500 text-[21px] font-semibold text-center'>Booking Terms</p>
                             </div>
                             <div className='px-[28px] py-[15px]'>
-                                <div>
-                                    <span className='text-red-500 text-[21px] text-center font-semibold tracking-widest'>Discipline</span>
+                                <div className='mb-3'>
+                                    <span className='text-red-500 text-[21px] text-center tracking-widest'>Discipline</span>
                                 </div>
                                 <div className='mt-1'>
                                     <div div className='flex mb-3'>
@@ -240,11 +240,11 @@ const TermsAndConditionsCard = () => {
                         />
                         <div>
                             <div className='p-3 border-b-2'>
-                                <p className='text-red-500 text-[21px] text-center'>Cancellation Policy</p>
+                                <p className='text-red-500 text-[21px] font-semibold text-center'>Cancellation Policy</p>
                             </div>
                             <div className='px-[28px] py-[15px]'>
-                                <div>
-                                    <span className='text-red-500 text-[21px] text-center font-semibold tracking-widest'>Discipline</span>
+                                <div className='mb-3'>
+                                    <span className='text-red-500 text-[21px] text-center tracking-widest'>Discipline</span>
                                 </div>
                                 <div className='mt-1'>
                                     <div className='flex mb-3'>

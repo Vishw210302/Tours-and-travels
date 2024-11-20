@@ -18,10 +18,13 @@ const Description = ({ description }) => {
 
     return (
         <div>
-            <span className='text-[15px] font-normal mt-2 text-justify'>
+            <span className='text-[16px] font-normal text-justify'>
                 {isExpanded ? description : description?.slice(0, maxLength)}
                 {description && description?.length > maxLength && (
-                    <button onClick={toggleExpanded} className='text-red-500 ml-2'>
+                    <button
+                        onClick={toggleExpanded}
+                        className='text-red-500 ml-2'
+                    >
                         {isExpanded ? 'Read Less' : 'Read More'}
                     </button>
                 )}
@@ -78,12 +81,14 @@ const Modal = ({ isOpen, onClose, siteDetails }) => {
                     <div className='grid grid-cols-2 gap-4'>
                         <div
                             className='w-full'
-                            onClick={() => handleImageClick(`${siteSeenImage}${siteDetails?.siteseen}`)}
+                            onClick={() =>
+                                handleImageClick(`${siteSeenImage}${siteDetails?.siteseen}`)
+                            }
                         >
                             <img src={`${siteSeenImage}${siteDetails?.siteseen}`} alt={siteDetails?.SiteseenName} className='w-full h-48 object-cover rounded-lg' />
                         </div>
                         <div>
-                            <p className='text-base'>{getDescription(siteDetails?.SiteseenDescription)}</p>
+                            <p className='text-base text-justify font-normal'>{getDescription(siteDetails?.SiteseenDescription)}</p>
                             {siteDetails?.SiteseenDescription?.split(' ')?.length > maxWords && (
                                 <button onClick={toggleExpanded} className='text-red-500'>
                                     {isExpanded ? 'Read Less' : 'Read More'}
@@ -175,15 +180,15 @@ const Days = ({ days, inclusionExclusion }) => {
                             </div>
 
                             <div>
-                                <div>
-                                    <span className='text-[18px] text-red-500 lowercase font-bold border-b-2 border-red-300 mb-3'>{daysItenary?.title}</span>
+                                <div className='mb-2'>
+                                    <span className='text-[18px] text-red-500 lowercase font-bold'>{daysItenary?.title}</span>
                                 </div>
                                 <div>
                                     <Description description={daysItenary?.description} />
                                 </div>
                                 {daysItenary?.siteseens && daysItenary.siteseens.length > 0 && (
                                     <div>
-                                        <div className='text-black font-bold text-[15px] mt-5'>
+                                        <div className='text-black font-bold text-[15px] mt-3'>
                                             <p>Sight Seeing Included:</p>
                                         </div>
                                         <div>
@@ -228,7 +233,7 @@ const Days = ({ days, inclusionExclusion }) => {
 
             <div className="grid grid-cols-2 gap-4 w-[100%]">
                 {inclusion && inclusion.length > 0 ?
-                    <div className="card bg-white rounded-xl shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg my-2 p-3">
+                    <div className="card bg-white rounded-xl shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg my-2 p-3 h-fit">
                         <p className="text-center text-[21px] text-red-500 font-bold">Inclusions</p>
                         <div className="mt-3 px-3">
                             {inclusion && inclusion.map((item, index) => {
@@ -253,7 +258,7 @@ const Days = ({ days, inclusionExclusion }) => {
                     <></>
                 }
                 {exclusion && exclusion.length > 0 ?
-                    <div className="card bg-white rounded-xl shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg my-2 p-3">
+                    <div className="card bg-white rounded-xl shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg my-2 p-3 h-fit">
                         <p className="text-center text-[21px] text-red-500 font-bold">Exclusions</p>
                         <div className="mt-3">
                             {exclusion && exclusion.map((item, index) => (

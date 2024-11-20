@@ -44,7 +44,7 @@ const TestimonialForm = () => {
                 <form onSubmit={handleSubmit} className="p-4">
 
                     <div className="mb-4">
-                        <label htmlFor="name" className="block text-sm font-medium text-gray-700">Your Name :</label>
+                        <label htmlFor="name" className="block text-md font-medium text-gray-700">Your Name :</label>
                         <input
                             type="text"
                             id="name"
@@ -56,7 +56,7 @@ const TestimonialForm = () => {
                     </div>
 
                     <div className="mb-4">
-                        <label htmlFor="description" className="block text-sm font-medium text-gray-700">Your Review :</label>
+                        <label htmlFor="description" className="block text-md font-medium text-gray-700">Your Review :</label>
                         <textarea
                             id="description"
                             value={reviewDescription}
@@ -68,7 +68,7 @@ const TestimonialForm = () => {
                     </div>
 
                     <div className="mb-4">
-                        <label className="block text-sm font-medium text-gray-700">Rating :</label>
+                        <label className="block text-md font-medium text-gray-700">Rating :</label>
                         <div className="grid grid-cols-5 gap-2 mt-2">
                             {[1, 2, 3, 4, 5].map((star) => (
                                 <label key={star} className="relative">

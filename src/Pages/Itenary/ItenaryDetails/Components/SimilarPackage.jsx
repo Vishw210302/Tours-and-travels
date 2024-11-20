@@ -1,7 +1,8 @@
-import React from 'react'
+import React from 'react';
 import itenaryImage from "../../../../assets/image.jpg";
 
 const SimilarPackage = () => {
+
   return (
     <div className='card bg-white rounded-xl shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg p-3 my-2'>
       <p className='text-lg font-bold text-red-400'>Similar Package</p>

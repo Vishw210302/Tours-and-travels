@@ -21,10 +21,8 @@ const TourTheme = () => {
     }, [error, data, isSuccess, isError]);
 
     const handlePopularThemeOpen = (themeId) => {
-        console.log("themeId", themeId);
         navigate(`popularTheme/${themeId}`);
     };
-
 
     const settings = {
         dots: false,
@@ -74,8 +72,6 @@ const TourTheme = () => {
                         <div className='my-3'>
                             <Slider {...settings}>
                                 {packageListing && packageListing.map((theme, index) => {
-                                    console.log("packageListingpackageListingpackageListing", packageListing);
-                                    console.log("themethemethemethemetheme", theme)
                                     return (
                                         <div className='w-fit cursor-pointer' key={index + "1"}>
                                             <div
