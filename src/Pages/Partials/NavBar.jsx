@@ -60,7 +60,7 @@ const NavBar = ({ settingData, settingIsSuccess, settingIsError, settingError })
 
   return (
     <>
-      <nav className={`${isScrolled ? 'shadow-lg bg-[#14266a]' : 'bg-[#14266a]'} transition-all duration-300 sticky top-0 z-50`}>
+      <nav className={`${isScrolled ? 'shadow-lg bg-[#213c5e]' : 'bg-[#213c5e]'} transition-all duration-300 sticky top-0 z-50`}>
         <div className="container mx-auto px-6">
           <div className="flex items-center justify-between h-20">
             <div

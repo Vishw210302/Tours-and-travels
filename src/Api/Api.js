@@ -209,6 +209,7 @@ export const myApi = createApi({
         getParticularHotelListing: builder.query({
             query: (city) => `get-particular-hotel-listing/${city}`,
         }),
+
     }),
 
 });
