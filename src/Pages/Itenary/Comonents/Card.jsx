@@ -119,7 +119,7 @@ const TravelPackageCard = ({ isLoading, data }) => {
 
                     <div className="absolute top-[82%]">
                         <div className="bg-red-500 px-3 py-1 rounded-[9px] ml-2">
-                            <p className="text-white capitalize">
+                            <p className="text-white font-semibold capitalize">
                                 {item?.categories}
                             </p>
                         </div>
@@ -142,7 +142,7 @@ const TravelPackageCard = ({ isLoading, data }) => {
                             <Calendar className="w-5 h-5 text-red-500" />
                         </div>
                         <div className="flex flex-col">
-                            <span className="text-sm text-gray-500">Duration</span>
+                            <span className="text-lg text-red-500 font-semibold">Duration</span>
                             <span className="font-semibold text-gray-800">{item?.days?.length} days</span>
                         </div>
                     </div>
@@ -152,7 +152,7 @@ const TravelPackageCard = ({ isLoading, data }) => {
                             <Users className="w-5 h-5 text-blue-500" />
                         </div>
                         <div className="flex flex-col">
-                            <span className="text-sm text-gray-500">Price</span>
+                            <span className="text-lg text-red-500 font-semibold">Price</span>
                             <span className="font-semibold text-gray-800">₹ {item?.perPersonCost?.toLocaleString()}</span>
                         </div>
                     </div>
@@ -161,20 +161,22 @@ const TravelPackageCard = ({ isLoading, data }) => {
                 <div className="bg-white rounded-lg shadow-lg p-4">
                     <h3 className="text-lg font-medium mb-2">Departure Dates:</h3>
                     <div className="grid grid-cols-3 gap-3">
-                        {item?.departureDates?.map((date, index) => (
-                            <div
-                                key={index}
-                                className="bg-gray-100 rounded-md p-3 text-center hover:bg-gray-200 transition-colors"
-                            >
-                                <p className="text-gray-700 font-medium">
-                                    {new Date(date).toLocaleDateString('en-GB', {
-                                        day: '2-digit',
-                                        month: '2-digit',
-                                        year: 'numeric'
-                                    })}
-                                </p>
-                            </div>
-                        ))}
+                        {item?.departureDates?.map((date, index) => {
+                            return (
+                                <div
+                                    key={index}
+                                    className="bg-gray-100 rounded-md p-3 text-center hover:bg-gray-200 transition-colors"
+                                >
+                                    <p className="text-gray-700 font-medium">
+                                        {new Date(date).toLocaleDateString('en-GB', {
+                                            day: '2-digit',
+                                            month: '2-digit',
+                                            year: 'numeric'
+                                        })}
+                                    </p>
+                                </div>
+                            )
+                        })}
                     </div>
                 </div>
 
@@ -197,7 +199,11 @@ const TravelPackageCard = ({ isLoading, data }) => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                 {data?.itenaries?.map((item, index) => {
                     return (
-                        <PackageCard key={item?._id} item={item} index={index} />
+                        <PackageCard
+                            key={item?._id}
+                            item={item}
+                            index={index}
+                        />
                     )
                 })}
             </div>

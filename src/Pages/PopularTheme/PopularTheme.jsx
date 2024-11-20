@@ -53,7 +53,9 @@ const PopularTheme = () => {
                 <div className='2xl:container 2xl:mx-auto p-5'>
                     <div className='grid md:grid-cols-2 lg:grid-cols-3 gap-10'>
                         {travelPackages && travelPackages.map((packageItem, index) => {
+
                             return (
+
                                 <div key={index + "key"} className="bg-white rounded-2xl overflow-hidden shadow-lg transform transition duration-300 hover:scale-105 hover:shadow-2xl">
 
                                     <div className="relative">

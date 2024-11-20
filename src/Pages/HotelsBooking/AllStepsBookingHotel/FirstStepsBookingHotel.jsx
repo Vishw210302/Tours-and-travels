@@ -101,6 +101,7 @@ const FirstStepsBookingHotel = ({ setIsHotelSelected, onSelectHotel }) => {
             </div>
 
             {particularHotelListing && particularHotelListing.slice(0, itemsToShow).map((items, index) => {
+
                 const amenities = [
                     { name: 'Wifi', icon: <FaWifi size={25} color='#3cb7ff' className='cursor-pointer' />, condition: items?.amenities?.wifi },
                     { name: 'TV', icon: <FaTv size={25} color='#3cb7ff' className='cursor-pointer' />, condition: items?.amenities?.tv },
@@ -138,23 +139,25 @@ const FirstStepsBookingHotel = ({ setIsHotelSelected, onSelectHotel }) => {
                                 <p className='font-medium text-lg text-black py-2'>{items?.description}</p>
 
                                 <div className='flex flex-row flex-wrap gap-4 py-2'>
-                                    {amenities.map((amenity, amenityIndex) => (
-                                        amenity.condition && (
-                                            <div
-                                                key={amenityIndex}
-                                                className="relative flex items-center"
-                                                onMouseEnter={() => setHoveredAmenity({ name: amenity.name, index })}
-                                                onMouseLeave={() => setHoveredAmenity({})}
-                                            >
-                                                {amenity.icon}
-                                                {hoveredAmenity.name === amenity.name && hoveredAmenity.index === index && (
-                                                    <div className='absolute top-[25px] py-[6px] px-[8px] text-white bg-black p-1 rounded-md text-sm'>
-                                                        {amenity.name}
-                                                    </div>
-                                                )}
-                                            </div>
+                                    {amenities && amenities.map((amenity, amenityIndex) => {
+                                        return (
+                                            amenity.condition && (
+                                                <div
+                                                    key={amenityIndex}
+                                                    className="relative flex items-center"
+                                                    onMouseEnter={() => setHoveredAmenity({ name: amenity.name, index })}
+                                                    onMouseLeave={() => setHoveredAmenity({})}
+                                                >
+                                                    {amenity.icon}
+                                                    {hoveredAmenity.name === amenity.name && hoveredAmenity.index === index && (
+                                                        <div className='absolute top-[25px] py-[6px] px-[8px] text-white bg-black p-1 rounded-md text-sm'>
+                                                            {amenity.name}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            )
                                         )
-                                    ))}
+                                    })}
                                 </div>
                             </div>
 

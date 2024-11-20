@@ -42,18 +42,20 @@ const BlogDetailsPage = () => {
                             <p className='text-[24px] text-red-500 my-3 border-b-2 border-red-700'>Gallery Images</p>
                         </div>
                         <div className='grid grid-cols-3 gap-2 w-full h-full'>
-                            {blog.blogGallery.map((galleryImage, index) => (
-                                <div
-                                    key={index}
-                                    onClick={() => handleImageClick(`${galleryImagePath}${galleryImage}`)}
-                                >
-                                    <img
-                                        src={`${galleryImagePath}${galleryImage}`}
-                                        alt={`gallery-${index}`}
-                                        className='w-full h-full cursor-pointer object-cover'
-                                    />
-                                </div>
-                            ))}
+                            {blog.blogGallery.map((galleryImage, index) => {
+                                return (
+                                    <div
+                                        key={index}
+                                        onClick={() => handleImageClick(`${galleryImagePath}${galleryImage}`)}
+                                    >
+                                        <img
+                                            src={`${galleryImagePath}${galleryImage}`}
+                                            alt={`gallery-${index}`}
+                                            className='w-full h-full cursor-pointer object-cover'
+                                        />
+                                    </div>
+                                )
+                            })}
                         </div>
                     </div>
                 )}

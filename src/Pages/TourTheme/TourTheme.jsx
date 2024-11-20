@@ -7,7 +7,7 @@ import { useGetPackageThemeDataQuery } from '../../Api/Api';
 
 const TourTheme = () => {
 
-    const { isError, error, data, isLoading, isSuccess } = useGetPackageThemeDataQuery();
+    const { isError, error, data, isSuccess } = useGetPackageThemeDataQuery();
     const [packageListing, setPackageListing] = useState([]);
     const imageUrl = `${import.meta.env.VITE_REACT_APP_IMAGE_URL}/package-theme/`;
     const navigate = useNavigate();

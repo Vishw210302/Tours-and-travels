@@ -158,16 +158,18 @@ const ThirdStepsBookingHotel = () => {
                         </div>
                         {showSuggestions && filteredCoupons.length > 0 && (
                             <div className="absolute z-20 w-full bg-white border border-gray-300 rounded-md shadow-lg mt-2 max-h-60 overflow-auto">
-                                {filteredCoupons.map((coupon, index) => (
-                                    <div
-                                        key={index}
-                                        className="p-3 hover:bg-blue-100 cursor-pointer transition-all"
-                                        onClick={() => handleCouponClick(coupon.promoCode)}
-                                    >
-                                        <p className="text-gray-800 font-semibold">{coupon.promoCode}</p>
-                                        <p className="text-sm text-gray-500">Discount: {coupon.discountAmount} ₹</p>
-                                    </div>
-                                ))}
+                                {filteredCoupons.map((coupon, index) => {
+                                    return (
+                                        <div
+                                            key={index}
+                                            className="p-3 hover:bg-blue-100 cursor-pointer transition-all"
+                                            onClick={() => handleCouponClick(coupon?.promoCode)}
+                                        >
+                                            <p className="text-gray-800 font-semibold">{coupon?.promoCode}</p>
+                                            <p className="text-sm text-gray-500">Discount: {coupon?.discountAmount} ₹</p>
+                                        </div>
+                                    )
+                                })}
                             </div>
                         )}
                     </div>

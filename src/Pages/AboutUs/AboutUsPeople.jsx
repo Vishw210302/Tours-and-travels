@@ -7,6 +7,7 @@ import { useGetTeamMemberDetailsQuery } from '../../Api/Api';
 import NoDataFound from '../NoDataFound';
 
 const AboutUsPeople = () => {
+
     const { isError, error, data, isSuccess } = useGetTeamMemberDetailsQuery();
     const [teamMemberListing, setTeamMemberListing] = useState([])
     const teamMemberImage = `${import.meta.env.VITE_REACT_APP_IMAGE_URL}/team-member/`;
@@ -57,7 +58,10 @@ const AboutUsPeople = () => {
                                     <SwiperSlide key={index + "key"}>
                                         <div className='w-fit h-fit' key={index + "key"}>
                                             <div className='w-[200px] h-[200px]'>
-                                                <img src={items?.teamMemberImage ? `${teamMemberImage}${items?.teamMemberImage}` : `${teamMemberImage}${items?.teamMemberImage}`} alt='' className='object-fill w-full h-full rounded-full border-dotted border-red-400 p-1 border-[3px]' />
+                                                <img
+                                                    src={items?.teamMemberImage ? `${teamMemberImage}${items?.teamMemberImage}` : `${teamMemberImage}${items?.teamMemberImage}`}
+                                                    alt=''
+                                                    className='object-fill w-full h-full rounded-full border-dotted border-red-400 p-1 border-[3px]' />
                                             </div>
                                             <div className='m-2 text-center'>
                                                 <p className='text-black font-bold text-xl'>{items?.teamMemberName}</p>

@@ -46,13 +46,17 @@ const Details = () => {
             })}
 
             <div className='mt-3'>
+
                 <p className='text-red-400 text-[18px] font-bold'>
                     Call us
                 </p>
+
                 <p className='text-gray-400 text-base font-medium text-justify'>
                     Request a quote or just chat about your next vacation. We're always happy to help!
                 </p>
+
                 <div>
+
                     {mainBranchAddress && (
                         <div className='flex flex-row my-2'>
                             <p className='text-red-400 text-[15px] font-medium'>Domestic :-</p>
@@ -109,29 +113,44 @@ const Details = () => {
                         {socialMediaLinkListing && socialMediaLinkListing.map((item, index) => {
                             return (
                                 <div key={index} className='p-1'>
-                                    {item.socialMediaName === 'facebook' && (
-                                        <a href={`https://${item.socialMediaLink}`} target="_blank" rel="noopener noreferrer">
-                                            <FacebookIcon fontSize='large' className='hover:text-blue-500' />
+                                    {item?.socialMediaName === 'facebook' && (
+                                        <a href={`https://${item?.socialMediaLink}`} target="_blank" rel="noopener noreferrer">
+                                            <FacebookIcon
+                                                fontSize='large'
+                                                className='hover:text-blue-500'
+                                            />
                                         </a>
                                     )}
-                                    {item.socialMediaName === 'Instagram' && (
-                                        <a href={`https://${item.socialMediaLink}`} target="_blank" rel="noopener noreferrer">
-                                            <InstagramIcon fontSize='large' className='hover:text-pink-500' />
+                                    {item?.socialMediaName === 'Instagram' && (
+                                        <a href={`https://${item?.socialMediaLink}`} target="_blank" rel="noopener noreferrer">
+                                            <InstagramIcon
+                                                fontSize='large'
+                                                className='hover:text-pink-500'
+                                            />
                                         </a>
                                     )}
-                                    {item.socialMediaName === 'linkedin' && (
-                                        <a href={`https://${item.socialMediaLink}`} target="_blank" rel="noopener noreferrer">
-                                            <LinkedInIcon fontSize='large' className='hover:text-blue-700' />
+                                    {item?.socialMediaName === 'linkedin' && (
+                                        <a href={`https://${item?.socialMediaLink}`} target="_blank" rel="noopener noreferrer">
+                                            <LinkedInIcon
+                                                fontSize='large'
+                                                className='hover:text-blue-700'
+                                            />
                                         </a>
                                     )}
-                                    {item.socialMediaName === 'youtube' && (
-                                        <a href={`https://${item.socialMediaLink}`} target="_blank" rel="noopener noreferrer">
-                                            <YouTubeIcon fontSize='large' className='hover:text-red-500' />
+                                    {item?.socialMediaName === 'youtube' && (
+                                        <a href={`https://${item?.socialMediaLink}`} target="_blank" rel="noopener noreferrer">
+                                            <YouTubeIcon
+                                                fontSize='large'
+                                                className='hover:text-red-500'
+                                            />
                                         </a>
                                     )}
-                                    {item.socialMediaName === 'twitter' && (
-                                        <a href={`https://${item.socialMediaLink}`} target="_blank" rel="noopener noreferrer">
-                                            <XIcon fontSize='large' className='hover:text-blue-400' />
+                                    {item?.socialMediaName === 'twitter' && (
+                                        <a href={`https://${item?.socialMediaLink}`} target="_blank" rel="noopener noreferrer">
+                                            <XIcon
+                                                fontSize='large'
+                                                className='hover:text-blue-400'
+                                            />
                                         </a>
                                     )}
                                 </div>
@@ -139,7 +158,6 @@ const Details = () => {
                         })}
                     </div>
                 </div>
-
             </div>
         </div>
     )

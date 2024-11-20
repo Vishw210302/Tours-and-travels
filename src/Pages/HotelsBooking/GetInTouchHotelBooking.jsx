@@ -56,30 +56,34 @@ const GetInTouchHotelBooking = () => {
 
                     <div className="bg-white shadow-lg rounded-lg p-8 max-w-lg mx-auto border border-gray-300 z-10">
                         <form onSubmit={handleSubmit} className="space-y-6">
-                            {['name', 'email', 'mobileNumber', 'message'].map((field, index) => (
-                                <div key={field}>
-                                    <label className='w-fit flex flex-1 justify-start'>{`Your ${field.charAt(0).toUpperCase() + field.slice(1)}:`}</label>
-                                    {field !== 'message' ? (
-                                        <input
-                                            type={field === 'email' ? 'email' : field === 'mobileNumber' ? 'tel' : 'text'}
-                                            id={field}
-                                            value={formData[field]}
-                                            onChange={handleChange}
-                                            placeholder={`Enter Your ${field.charAt(0).toUpperCase() + field.slice(1)}`}
-                                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring focus:ring-blue-500 focus:outline-none transition duration-200"
-                                        />
-                                    ) : (
-                                        <textarea
-                                            id={field}
-                                            value={formData[field]}
-                                            onChange={handleChange}
-                                            placeholder="Enter Your Message"
-                                            rows="4"
-                                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring focus:ring-blue-500 focus:outline-none transition duration-200"
-                                        ></textarea>
-                                    )}
-                                </div>
-                            ))}
+                            {['name', 'email', 'mobileNumber', 'message'].map((field, index) => {
+                                return (
+                                    <div key={field || index + "field"}>
+                                        <label className='w-fit flex flex-1 justify-start'>
+                                            {`Your ${field.charAt(0).toUpperCase() + field.slice(1)}:`}
+                                        </label>
+                                        {field !== 'message' ? (
+                                            <input
+                                                type={field === 'email' ? 'email' : field === 'mobileNumber' ? 'tel' : 'text'}
+                                                id={field}
+                                                value={formData[field]}
+                                                onChange={handleChange}
+                                                placeholder={`Enter Your ${field.charAt(0).toUpperCase() + field.slice(1)}`}
+                                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring focus:ring-blue-500 focus:outline-none transition duration-200"
+                                            />
+                                        ) : (
+                                            <textarea
+                                                id={field}
+                                                value={formData[field]}
+                                                onChange={handleChange}
+                                                placeholder="Enter Your Message"
+                                                rows="4"
+                                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring focus:ring-blue-500 focus:outline-none transition duration-200"
+                                            ></textarea>
+                                        )}
+                                    </div>
+                                )
+                            })}
 
                             <div>
                                 <button

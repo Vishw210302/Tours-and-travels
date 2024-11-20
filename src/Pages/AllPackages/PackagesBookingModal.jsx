@@ -148,15 +148,17 @@ const PackagesBookingModal = ({ bookingModalOpen, setBookingModalOpen, allData }
                                     required
                                 >
                                     <option value="">Select a date</option>
-                                    {allData?.itenaryData?.departureDates?.map((date, index) => (
-                                        <option key={index} value={date}>
-                                            {new Date(date).toLocaleDateString('en-US', {
-                                                year: 'numeric',
-                                                month: 'long',
-                                                day: 'numeric',
-                                            })}
-                                        </option>
-                                    ))}
+                                    {allData?.itenaryData?.departureDates?.map((date, index) => {
+                                        return (
+                                            <option key={index + "date"} value={date}>
+                                                {new Date(date).toLocaleDateString('en-US', {
+                                                    year: 'numeric',
+                                                    month: 'long',
+                                                    day: 'numeric',
+                                                })}
+                                            </option>
+                                        )
+                                    })}
                                 </select>
                             </div>
 

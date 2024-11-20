@@ -43,6 +43,7 @@ const Blogs = () => {
                     </div>
                 </div>
             </div>
+
             {blogListing && blogListing?.length > 0 ?
                 blogListing && blogListing.map((items, index) => {
 

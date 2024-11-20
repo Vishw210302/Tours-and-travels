@@ -96,7 +96,9 @@ const Footer = ({ settingData, settingIsSuccess, settingIsError, settingError })
               {websiteLogo && websiteLogo.map((items, index) => {
                 if (items?.keyName == "Footer_Description") {
                   return (
-                    <p className='text-justify' key={index + "key"}>{items?.valueContent}</p>
+                    <p className='text-justify' key={index + "key"}>
+                      {items?.valueContent}
+                    </p>
                   )
                 }
               })}

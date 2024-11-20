@@ -4,12 +4,10 @@ import Loader from '../../Partials/Loader';
 
 const Herosection = () => {
 
-
   const { isError, isLoading, isSuccess, data, error } = useGetSliderQuery();
   const [sliderListing, setSliderListing] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [err, setErr] = useState(null);
-
   const imageUrl = `${import.meta.env.VITE_REACT_APP_IMAGE_URL}/Slider-Image/`;
 
   useEffect(() => {
@@ -21,7 +19,6 @@ const Herosection = () => {
   }, [isSuccess, isError, data, error]);
 
   useEffect(() => {
-
     if (sliderListing?.length > 0) {
       const intervalId = setInterval(() => {
         setCurrentIndex((prevIndex) => (prevIndex + 1) % sliderListing?.length);
@@ -47,15 +44,17 @@ const Herosection = () => {
           ) : (
             <>
               {sliderListing && sliderListing?.length > 0 ? (
-                sliderListing.map((item, index) => (
-                  <img
-                    key={index}
-                    src={`${imageUrl}${item.slider}`}
-                    alt={`Slide ${index}`}
-                    className={`absolute w-full h-full transition-opacity duration-1000 ease-in-out ${currentIndex === index ? 'opacity-100' : 'opacity-0'
-                      }`}
-                  />
-                ))
+                sliderListing.map((item, index) => {
+                  return (
+                    <img
+                      key={index}
+                      src={`${imageUrl}${item.slider}`}
+                      alt={`Slide ${index}`}
+                      className={`absolute w-full h-full transition-opacity duration-1000 ease-in-out ${currentIndex === index ? 'opacity-100' : 'opacity-0'
+                        }`}
+                    />
+                  )
+                })
               ) : (
                 <p>No slider images available</p>
               )}

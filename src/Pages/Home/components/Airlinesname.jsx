@@ -58,15 +58,17 @@ const Airlinesname = () => {
             ) : (
               <Slider {...settings}>
                 {brandData && brandData?.length > 0 ? (
-                  brandData.map((image, index) => (
-                    <div key={index} className="flex justify-center">
-                      <img
-                        src={`${imageUrl}${image?.brandsLogo}`}
-                        alt={`Airline logo ${index + 1}`}
-                        className="w-40 h-40 object-contain"
-                      />
-                    </div>
-                  ))
+                  brandData.map((image, index) => {
+                    return (
+                      <div key={index} className="flex justify-center">
+                        <img
+                          src={`${imageUrl}${image?.brandsLogo}`}
+                          alt={`Airline logo ${index + 1}`}
+                          className="w-40 h-40 object-contain"
+                        />
+                      </div>
+                    )
+                  })
                 ) : (
                   <div className="flex justify-center items-center w-full h-full">
                     <p className="text-gray-500">No brands available.</p>

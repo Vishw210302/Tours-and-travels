@@ -47,7 +47,13 @@ const Aboutus = () => {
                       return (
                         <SwiperSlide key={index + "key"}>
                           <div className='w-[100%] h-[100%]'>
-                            <img src={items ? `${aboutUsImage}${items}` : `${aboutUsImage}${items}`} alt={index} width={800} height={800} className='object-fill' />
+                            <img
+                              src={items ? `${aboutUsImage}${items}` : `${aboutUsImage}${items}`}
+                              alt={index}
+                              width={800}
+                              height={800}
+                              className='object-fill'
+                            />
                           </div>
                         </SwiperSlide>
                       )

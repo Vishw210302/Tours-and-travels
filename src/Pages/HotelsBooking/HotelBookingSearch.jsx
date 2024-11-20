@@ -120,15 +120,17 @@ const HotelBookingSearch = ({ onSearch }) => {
                                 />
                                 {fromCitiesListing.length > 0 && (
                                     <ul className="absolute z-10 bg-white border border-gray-300 rounded-md mt-1 w-full max-h-60 overflow-auto">
-                                        {fromCitiesListing.map((city) => (
-                                            <li
-                                                key={city._id}
-                                                className="px-4 py-2 hover:bg-blue-500 hover:text-white cursor-pointer"
-                                                onClick={() => handleCitySelectFrom(city)}
-                                            >
-                                                {city.city}
-                                            </li>
-                                        ))}
+                                        {fromCitiesListing && fromCitiesListing.map((city) => {
+                                            return (
+                                                <li
+                                                    key={city._id}
+                                                    className="px-4 py-2 hover:bg-blue-500 hover:text-white cursor-pointer"
+                                                    onClick={() => handleCitySelectFrom(city)}
+                                                >
+                                                    {city.city}
+                                                </li>
+                                            )
+                                        })}
                                     </ul>
                                 )}
                             </div>

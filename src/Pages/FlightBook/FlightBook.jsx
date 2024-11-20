@@ -27,7 +27,6 @@ const LuggageIcon = () => (
 const FlightBook = () => {
     const { id, key, className } = useParams();
     const navigate = useNavigate();
-    const location = useLocation();
     const [flight, setFlight] = useState();
     const [fetchFlight, { data, isSuccess, isError, error }] = useLazyGetParticularFlightQuery();
 
@@ -200,14 +199,16 @@ const FlightBook = () => {
 
                                 {flight?.hold !== "Direct" && flight?.hold_details?.length > 0 && (
                                     <div className="bg-[#f7f7f7] rounded-lg p-4">
-                                        {holdDetails?.length > 0 && holdDetails.map((detail, index) => (
-                                            <div key={index} className="flex items-center space-x-2">
-                                                <ClockIcon />
-                                                <span className="text-md text-gray-700 font-semibold">
-                                                    Layover: {detail.duration} in {detail.city} ({detail.airport})
-                                                </span>
-                                            </div>
-                                        ))}
+                                        {holdDetails?.length > 0 && holdDetails.map((detail, index) => {
+                                            return (
+                                                <div key={index} className="flex items-center space-x-2">
+                                                    <ClockIcon />
+                                                    <span className="text-md text-gray-700 font-semibold">
+                                                        Layover: {detail?.duration} in {detail?.city} ({detail?.airport})
+                                                    </span>
+                                                </div>
+                                            )
+                                        })}
 
                                     </div>
                                 )}

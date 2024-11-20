@@ -167,66 +167,70 @@ const MealAndSelect = () => {
 
                     <div className='2xl:container 2xl:mx-auto px-5 mt-5'>
                         <div className='flex justify-center gap-6 text-4xl flex-wrap'>
-                            {mealTypes?.length > 0 && mealTypes.map((meal, index) => (
-                                <div
-                                    key={index}
-                                    className={`border rounded-lg p-2 cursor-pointer ${selectedMeal === meal._id ? 'bg-red-300' : 'hover:bg-red-400'
-                                        }`}
-                                    onClick={() => handleSelectMeal(meal._id)}
-                                >
-                                    <p className='text-xl flex flex-1 justify-center items-center font-semibold'>
-                                        {meal.mealCategories}
-                                    </p>
-                                </div>
-                            ))}
+                            {mealTypes?.length > 0 && mealTypes.map((meal, index) => {
+                                return (
+                                    <div
+                                        key={index + "meal"}
+                                        className={`border rounded-lg p-2 cursor-pointer ${selectedMeal === meal._id ? 'bg-red-300' : 'hover:bg-red-400'
+                                            }`}
+                                        onClick={() => handleSelectMeal(meal._id)}
+                                    >
+                                        <p className='text-xl flex flex-1 justify-center items-center font-semibold'>
+                                            {meal.mealCategories}
+                                        </p>
+                                    </div>
+                                )
+                            })}
                         </div>
                     </div>
                     <div className='2xl:container 2xl:mx-auto px-5 mt-5'>
 
                         <div className='grid grid-cols-1 sm:grid-cols-3 gap-6 px-5 mt-5'>
                             {particularMeal?.length > 0 ? (
-                                particularMeal.map((meal, index) => (
-                                    <div
-                                        key={index}
-                                        className='bg-white rounded-xl shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg p-5 my-2 w-full flex flex-col'
-                                    >
-                                        <img
-                                            src={`${mealUrl}${meal?.mealItemsImage}`}
-                                            alt={meal.name}
-                                            className='w-full h-52 rounded-t-xl'
-                                        />
-                                        <div className='p-3 grid grid-cols-2 items-center'>
-                                            <h3 className='text-lg font-semibold'>{meal?.mealItems}</h3>
-                                            <span className='text-xl font-bold text-red-500 text-right'>₹{meal.mealPrice}</span>
-                                            <label className='flex items-center mt-2'>
-                                                <input
-                                                    type='checkbox'
-                                                    checked={selecteParticularMeals.some((m) => m.mealItems === meal.mealItems)}
-                                                    onChange={() => handleSelectMeals(meal)}
-                                                    className='mr-2'
-                                                />
-                                                <span>Select</span>
-                                            </label>
-                                            {selecteParticularMeals.some(m => m.mealItems == meal.mealItems) && (
-                                                <div className='flex flex-row-reverse items-center  mt-3'>
-                                                    <button
-                                                        onClick={() => increaseCount(meal._id)}
-                                                        className='bg-red-300 hover:bg-red-400 px-3 py-1 rounded-lg font-bold text-xl'
-                                                    >
-                                                        +
-                                                    </button>
-                                                    <span className='mx-2 text-lg'>{mealCounts[meal._id] || 1}</span>
-                                                    <button
-                                                        onClick={() => decreaseCount(meal._id)}
-                                                        className='bg-red-300 hover:bg-red-400 px-3 py-1 rounded-lg font-bold text-xl'
-                                                    >
-                                                        -
-                                                    </button>
-                                                </div>
-                                            )}
+                                particularMeal.map((meal, index) => {
+                                    return (
+                                        <div
+                                            key={index + "keys"}
+                                            className='bg-white rounded-xl shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg p-5 my-2 w-full flex flex-col'
+                                        >
+                                            <img
+                                                src={`${mealUrl}${meal?.mealItemsImage}`}
+                                                alt={meal.name}
+                                                className='w-full h-52 rounded-t-xl'
+                                            />
+                                            <div className='p-3 grid grid-cols-2 items-center'>
+                                                <h3 className='text-lg font-semibold'>{meal?.mealItems}</h3>
+                                                <span className='text-xl font-bold text-red-500 text-right'>₹{meal.mealPrice}</span>
+                                                <label className='flex items-center mt-2'>
+                                                    <input
+                                                        type='checkbox'
+                                                        checked={selecteParticularMeals.some((m) => m.mealItems === meal.mealItems)}
+                                                        onChange={() => handleSelectMeals(meal)}
+                                                        className='mr-2'
+                                                    />
+                                                    <span>Select</span>
+                                                </label>
+                                                {selecteParticularMeals.some(m => m.mealItems == meal.mealItems) && (
+                                                    <div className='flex flex-row-reverse items-center  mt-3'>
+                                                        <button
+                                                            onClick={() => increaseCount(meal._id)}
+                                                            className='bg-red-300 hover:bg-red-400 px-3 py-1 rounded-lg font-bold text-xl'
+                                                        >
+                                                            +
+                                                        </button>
+                                                        <span className='mx-2 text-lg'>{mealCounts[meal._id] || 1}</span>
+                                                        <button
+                                                            onClick={() => decreaseCount(meal._id)}
+                                                            className='bg-red-300 hover:bg-red-400 px-3 py-1 rounded-lg font-bold text-xl'
+                                                        >
+                                                            -
+                                                        </button>
+                                                    </div>
+                                                )}
+                                            </div>
                                         </div>
-                                    </div>
-                                ))
+                                    )
+                                })
                             ) : (
                                 <div className='col-span-3 text-center text-xl font-semibold text-gray-500'>
                                     No meals available

@@ -70,22 +70,24 @@ const TestimonialForm = () => {
                     <div className="mb-4">
                         <label className="block text-md font-medium text-gray-700">Rating :</label>
                         <div className="grid grid-cols-5 gap-2 mt-2">
-                            {[1, 2, 3, 4, 5].map((star) => (
-                                <label key={star} className="relative">
-                                    <input
-                                        type="radio"
-                                        value={star}
-                                        checked={numberOfReview === star}
-                                        onChange={() => setRating(star)}
-                                        className="hidden"
-                                    />
-                                    <span
-                                        className={`cursor-pointer text-[40px] ${star <= numberOfReview ? 'text-yellow-400' : 'text-gray-300'}`}
-                                    >
-                                        ★
-                                    </span>
-                                </label>
-                            ))}
+                            {[1, 2, 3, 4, 5].map((star) => {
+                                return (
+                                    <label key={star} className="relative">
+                                        <input
+                                            type="radio"
+                                            value={star}
+                                            checked={numberOfReview === star}
+                                            onChange={() => setRating(star)}
+                                            className="hidden"
+                                        />
+                                        <span
+                                            className={`cursor-pointer text-[40px] ${star <= numberOfReview ? 'text-yellow-400' : 'text-gray-300'}`}
+                                        >
+                                            ★
+                                        </span>
+                                    </label>
+                                )
+                            })}
                         </div>
                     </div>
 

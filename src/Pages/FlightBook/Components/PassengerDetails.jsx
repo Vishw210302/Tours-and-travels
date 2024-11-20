@@ -200,8 +200,12 @@ const PassengerDetails = () => {
                 <p className='px-2 font-bold text-xl'>Passenger Detail</p>
 
                 {details?.passengerDetailsData.length && details.passengerDetailsData.map((passenger, index) => {
+
                   return (
-                    <div key={index + 1} className='card bg-white rounded-xl shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg p-5 my-2 h-fit'>
+                    <div
+                      key={index + 1}
+                      className='card bg-white rounded-xl shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg p-5 my-2 h-fit'
+                    >
                       <div>
                         <p className='font-medium mb-4'>Passenger {index + 1}</p>
                       </div>

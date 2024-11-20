@@ -86,12 +86,14 @@ const InternationalPackages = () => {
 
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                             {filteredPackages && filteredPackages.map((items, index) => {
+
                                 return (
+
                                     <div key={index} className="bg-white rounded-2xl overflow-hidden shadow-lg transform transition duration-300 hover:scale-105 hover:shadow-2xl">
 
                                         <div className="relative">
                                             <div className="absolute top-4 right-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
-                                                {items.categories.toUpperCase()}
+                                                {items?.categories.toUpperCase()}
                                             </div>
                                             <img
                                                 src={`${imageUrl}${items?.bannerImage}`}
@@ -102,17 +104,17 @@ const InternationalPackages = () => {
 
                                         <div className="p-4">
                                             <h3 className="text-xl font-bold text-red-500 mb-3">
-                                                {items.packageTitle}
+                                                {items?.packageTitle}
                                             </h3>
 
                                             <p className="text-base text-gray-600 mb-4 line-clamp-3">
-                                                {items.smallDescription}
+                                                {items?.smallDescription}
                                             </p>
 
                                             <div className='flex flex-row items-center gap-3 mb-3'>
                                                 <MapPin className="text-red-500 w-5 h-5" />
                                                 <span className="text-md text-gray-600">
-                                                    {items.departureFrom} → {items.departureTo}
+                                                    {items?.departureFrom} → {items?.departureTo}
                                                 </span>
                                             </div>
 
@@ -121,7 +123,7 @@ const InternationalPackages = () => {
                                                     <p className="text-md text-gray-500">Starting from</p>
                                                     <div className='flex flex-row items-center'>
                                                         <p className="text-2xl font-bold text-red-500">
-                                                            ₹{items.perPersonCost}
+                                                            ₹{items?.perPersonCost}
                                                         </p>
                                                         <p className="text-lg text-gray-500 mx-2">/ per person</p>
                                                     </div>

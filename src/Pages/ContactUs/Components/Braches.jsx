@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { useGetBranchesQuery, useLazyGetSubBranchesQuery } from '../../../Api/Api';
 
 const Braches = () => {
@@ -17,7 +17,7 @@ const Braches = () => {
                 fetchSubBranches(defaultCityId);
             }
         } else if (isError) {
-            console.log("isLocationError", isError);
+            console.log("isError", isError);
         }
     }, [error, data, isSuccess, isError]);
 
@@ -25,7 +25,7 @@ const Braches = () => {
         if (subBranchSuccess) {
             setSubBranch(subBranchData?.data)
         } else if (isSubBranchError) {
-            console.log("isLocationError", subBranchError);
+            console.log("isSubBranchError", subBranchError);
         }
     }, [isSubBranchError, subBranchData, subBranchSuccess, subBranchError]);
 
@@ -45,28 +45,30 @@ const Braches = () => {
                 }
                 <div>
                     <div className='flex justify-center gap-6 text-4xl flex-wrap'>
-                        {allBrach.map((city, index) => (
-                            <div
-                                key={index}
-                                onClick={() => handleCityClick(city._id)}
-                                className={`border rounded-lg p-2 cursor-pointer hover:bg-red-400 ${selectedCity === city._id ? 'bg-red-400 text-white' : ''
-                                    }`}
-                            >
-                                <p className='text-xl flex flex-1 justify-center items-center font-semibold hover:text-white'>
-                                    {city.branchLocation}
-                                </p>
-                            </div>
-                        ))}
+                        {allBrach.map((city, index) => {
+                            return (
+                                <div
+                                    key={index}
+                                    onClick={() => handleCityClick(city._id)}
+                                    className={`border rounded-lg p-2 cursor-pointer hover:bg-red-400 ${selectedCity === city._id ? 'bg-red-400 text-white' : ''
+                                        }`}
+                                >
+                                    <p className='text-xl flex flex-1 justify-center items-center font-semibold hover:text-white'>
+                                        {city.branchLocation}
+                                    </p>
+                                </div>
+                            )
+                        })}
                     </div>
                     <div className='grid grid-cols-4 gap-4'>
                         {subBranch && subBranch.map((location, index) => {
                             return (
-                                <div key={index}>
+                                <div key={index + "location"}>
                                     <div className='card mt-10 bg-white shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg p-1 relative rounded-xl'>
                                         <div className='p-2'>
-                                            <p className='text-lg text-center font-semibold text-red-400 my-2 bg-[#ededed]'>{location.branchName}</p>
+                                            <p className='text-lg text-center font-semibold text-red-400 my-2 bg-[#ededed]'>{location?.branchName}</p>
                                             <iframe
-                                                src={location.mapUrl}
+                                                src={location?.mapUrl}
                                                 width="100%"
                                                 height="150"
                                                 style={{ border: 0 }}
@@ -74,10 +76,10 @@ const Braches = () => {
                                                 loading="lazy"
                                             ></iframe>
                                             <div className='mt-2'>
-                                                <p className='text-red-500 text-base'>{location.branchNumber}</p>
+                                                <p className='text-red-500 text-base'>{location?.branchNumber}</p>
                                             </div>
                                             <div className='mt-2'>
-                                                <p className='text-red-500 text-lg'>{location.branchLocation}</p>
+                                                <p className='text-red-500 text-lg'>{location?.branchLocation}</p>
                                             </div>
                                         </div>
                                     </div>
