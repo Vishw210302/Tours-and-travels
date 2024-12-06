@@ -1,10 +1,11 @@
-import { MapPin } from 'lucide-react';
+import { Heart, MapPin } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGetAllItenariesQuery } from '../../Api/Api';
 import BannerImage from "../../assets/waterEffect.png";
 import NoDataFound from '../NoDataFound';
 import RippleEffect from '../RippleEffects/RippleEffect';
+import { useAllApiContext } from '../../Context/allApiContext';
 
 const DomesticPackages = () => {
 
@@ -14,6 +15,8 @@ const DomesticPackages = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [filteredPackages, setFilteredPackages] = useState([]);
     const imageUrl = `${import.meta.env.VITE_REACT_APP_IMAGE_URL}/itenary-package/`;
+    const { favorites, toggleFavorite } = useAllApiContext();
+
 
     useEffect(() => {
         if (isSuccess) {
@@ -35,6 +38,12 @@ const DomesticPackages = () => {
     const handleItenary = (itenryId) => {
         navigate(`/itenary-details/${itenryId}`);
     };
+
+    const handleToggleFavorite = (e, id, item) => {
+        e.stopPropagation();
+        e.preventDefault();
+        toggleFavorite(id, item);
+    }
 
     return (
         <div className='bg-[#f7f7f7]'>
@@ -89,8 +98,22 @@ const DomesticPackages = () => {
                                     <div key={index} className="bg-white rounded-2xl overflow-hidden shadow-lg transform transition duration-300 hover:scale-105 hover:shadow-2xl">
 
                                         <div className="relative">
-                                            <div className="absolute top-4 right-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                                            <div className="absolute top-4 left-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
                                                 {items.categories.toUpperCase()}
+                                            </div>
+                                            <div className="absolute top-3 right-3 z-10">
+                                                <button
+                                                    onClick={(e) => handleToggleFavorite(e, items?._id, items)}
+                                                    className="h-fit p-2 bg-white rounded-full shadow-lg hover:shadow-xl"
+                                                    aria-label={favorites?.has(items?._id) ? "Remove from favorites" : "Add to favorites"}
+                                                >
+                                                    <Heart
+                                                        className={`transition-colors duration-300 h-fit ${favorites?.has(items?._id)
+                                                            ? 'fill-red-500 text-red-500'
+                                                            : 'text-gray-600'
+                                                            }`}
+                                                    />
+                                                </button>
                                             </div>
                                             <img
                                                 src={`${imageUrl}${items?.bannerImage}`}

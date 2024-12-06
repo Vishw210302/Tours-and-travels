@@ -5,18 +5,18 @@ import PlaneLoader from '../PlaneLoader';
 
 const AddToCartDrawer = ({ toggleDrawer, isOpen }) => {
 
-    const { addToCart, setaddToCart } = useAllApiContext();
+    const { addToCart, removeFromCart, clearCart } = useAllApiContext();
     const imageUrl = `${import.meta.env.VITE_REACT_APP_IMAGE_URL}/itenary-package/`;
     const [processingItems, setProcessingItems] = useState(new Set());
     const isProcessing = (itemId) => processingItems.has(itemId);
     const cartItems = Array.isArray(addToCart) ? addToCart : [];
 
     const handleRemoveItem = (itemId) => {
-        setaddToCart(prev => {
-            const updatedCart = prev.filter(item => item._id !== itemId);
-            localStorage.setItem('cart', JSON.stringify(updatedCart));
-            return updatedCart;
-        });
+        removeFromCart(itemId);
+    };
+
+    const handleClearCart = () => {
+        clearCart();
     };
 
     const handleCheckout = async (item) => {
@@ -49,12 +49,21 @@ const AddToCartDrawer = ({ toggleDrawer, isOpen }) => {
                         </span>
                     </div>
 
-                    <button
-                        onClick={toggleDrawer}
-                        className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-                    >
-                        <X className="h-5 w-5 text-gray-500 dark:text-gray-400" />
-                    </button>
+                    <div className="flex items-center space-x-2">
+                        <button
+                            onClick={handleClearCart}
+                            className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                            title="Clear Cart"
+                        >
+                            <Trash2 className="h-5 w-5 text-red-500" />
+                        </button>
+                        <button
+                            onClick={toggleDrawer}
+                            className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                        >
+                            <X className="h-5 w-5 text-gray-500 dark:text-gray-400" />
+                        </button>
+                    </div>
 
                 </div>
             </div>

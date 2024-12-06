@@ -15,6 +15,7 @@ const BookingConfirmPage = ({ pdfLink, bookingData, isSuccess }) => {
     const [flight, setFlight] = useState();
     const [passengerName, setPassengerName] = useState('')
     const { className } = useParams();
+    const navigate = useNavigate()
 
     useEffect(() => {
         if (isSuccess) {
@@ -72,6 +73,10 @@ const BookingConfirmPage = ({ pdfLink, bookingData, isSuccess }) => {
         a.click();
         a.remove();
         window.URL.revokeObjectURL(pdfLink);
+
+        setTimeout(() => {
+            navigate('/flights');
+        }, 4000);
     };
 
     return (
@@ -327,7 +332,8 @@ const FlightsTicketsPaymentPage = () => {
 
             const payload = {
                 paymentId: payment.id,
-                contactId: localStorage.getItem('contactId')
+                contactId: localStorage.getItem('contactId'),
+                className: className
             };
 
             setPaymentId(payment.id)

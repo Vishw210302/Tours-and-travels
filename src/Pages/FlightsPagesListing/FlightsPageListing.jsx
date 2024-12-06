@@ -152,6 +152,8 @@ const FlightsPageListing = () => {
                 oneWay: directChecked
             }
 
+            console.log(payload, 'payloadpayload')
+
             const totalPassengerCount = {
                 adult: adlutValue,
                 children: childrenValue,
@@ -196,18 +198,14 @@ const FlightsPageListing = () => {
 
                         <form
                             className="p-2"
-                            onSubmit={() => {
-                                handleSearchFlight()
-                            }}>
+                            onSubmit={handleSearchFlight}>
 
                             <div className='mb-2'>
                                 <label className="inline-flex items-center">
                                     <input
                                         type="checkbox"
                                         checked={directChecked}
-                                        onChange={() => {
-                                            handleCheckedValue()
-                                        }}
+                                        onChange={handleCheckedValue}
                                         className="form-checkbox h-5 w-5 text-blue-600"
                                     />
                                     <span className="ml-2 text-white">Direct Flight</span>

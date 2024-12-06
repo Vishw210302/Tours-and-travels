@@ -7,24 +7,8 @@ const TravelPackageCard = ({ isLoading, data }) => {
 
     const imageUrl = `${import.meta.env.VITE_REACT_APP_IMAGE_URL}/itenary-package/`;
     const navigate = useNavigate();
-    const { setaddToCart } = useAllApiContext();
-
-    const [favorites, setFavorites] = useState(() => {
-        const savedFavorites = localStorage.getItem('favorites');
-        return new Set(savedFavorites ? JSON.parse(savedFavorites) : []);
-    });
-
-    useEffect(() => {
-        localStorage.setItem('favorites', JSON.stringify(Array.from(favorites)));
-    }, [favorites]);
-
-    useEffect(() => {
-        const savedCart = localStorage.getItem('cart');
-        if (savedCart) {
-            setaddToCart(JSON.parse(savedCart));
-        }
-    }, [setaddToCart]);
-
+    const { favorites, toggleFavorite } = useAllApiContext();
+    
     const handleItineraryDetails = useCallback((itineraryId) => {
         navigate(`/itenary-details/${itineraryId}`);
     }, [navigate]);
@@ -32,43 +16,13 @@ const TravelPackageCard = ({ isLoading, data }) => {
     const truncateText = useCallback((text, maxLength) => {
         if (!text) return '';
         return text.length > maxLength ? `${text.substring(0, maxLength)}...` : text;
-    }, []);
+    }, []);    
 
-    const toggleFavorite = useCallback((e, id, item) => {
+    const handleToggleFavorite = (e, id, item) => {
         e.stopPropagation();
         e.preventDefault();
-
-        setFavorites(prev => {
-            const newFavorites = new Set(prev);
-
-            if (newFavorites.has(id)) {
-                newFavorites.delete(id);
-
-                setaddToCart(prevCart => {
-                    const currentCart = Array.isArray(prevCart) ? prevCart : [];
-                    const updatedCart = currentCart.filter(cartItem => cartItem?._id !== id);
-                    localStorage.setItem('cart', JSON.stringify(updatedCart));
-                    return updatedCart;
-                });
-            } else {
-                newFavorites.add(id);
-
-                setaddToCart(prevCart => {
-                    const currentCart = Array.isArray(prevCart) ? prevCart : [];
-                    const itemExists = currentCart.some(cartItem => cartItem?._id === id);
-
-                    if (!itemExists) {
-                        const updatedCart = [...currentCart, item];
-                        localStorage.setItem('cart', JSON.stringify(updatedCart));
-                        return updatedCart;
-                    }
-                    return currentCart;
-                });
-            }
-
-            return newFavorites;
-        });
-    }, [setaddToCart]);
+        toggleFavorite(id, item);
+    }
 
     const EmptyState = useMemo(() => (
         <div className="w-full max-w-4xl mx-auto p-8">
@@ -104,12 +58,12 @@ const TravelPackageCard = ({ isLoading, data }) => {
 
                     <div className="absolute top-3 right-3 z-10">
                         <button
-                            onClick={(e) => toggleFavorite(e, item?._id, item)}
+                            onClick={(e) => handleToggleFavorite(e, item?._id, item)}
                             className="h-fit p-2 bg-white rounded-full shadow-lg hover:shadow-xl"
-                            aria-label={favorites.has(item?._id) ? "Remove from favorites" : "Add to favorites"}
+                            aria-label={favorites?.has(item?._id) ? "Remove from favorites" : "Add to favorites"}
                         >
                             <Heart
-                                className={`transition-colors duration-300 h-fit ${favorites.has(item?._id)
+                                className={`transition-colors duration-300 h-fit ${favorites?.has(item?._id)
                                     ? 'fill-red-500 text-red-500'
                                     : 'text-gray-600'
                                     }`}
