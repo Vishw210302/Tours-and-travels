@@ -2,6 +2,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import Modal from '@mui/material/Modal';
 import { Box } from '@mui/system';
 import React, { useState } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
 import { useInqueriesPostMutation } from '../../Api/Api';
 import PlaneLoader from '../PlaneLoader';
 
@@ -62,6 +63,7 @@ const InqueriesPage = ({ itenaryPriceData, itenatyDataListing }) => {
 
         try {
             await inqueriesPost(formData).unwrap();
+            toast.success("Inquery sent successfully");
             if (isSuccess) {
                 setName('');
                 setEmail('');
@@ -72,7 +74,7 @@ const InqueriesPage = ({ itenaryPriceData, itenatyDataListing }) => {
                 setDepartureDate('');
             }
         } catch (error) {
-            console.error('Failed to submit form:', error);
+            toast.error("Please fill all required field")
         }
     };
 
@@ -155,7 +157,6 @@ const InqueriesPage = ({ itenaryPriceData, itenatyDataListing }) => {
                                             onChange={(e) => setName(e.target.value)}
                                             className='w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-300'
                                             placeholder='Enter your full name'
-                                            required
                                         />
                                     </div>
 
@@ -172,7 +173,6 @@ const InqueriesPage = ({ itenaryPriceData, itenatyDataListing }) => {
                                             placeholder='Enter your mobile number'
                                             pattern='[0-9]*'
                                             inputMode='numeric'
-                                            required
                                         />
                                     </div>
 
@@ -187,7 +187,6 @@ const InqueriesPage = ({ itenaryPriceData, itenatyDataListing }) => {
                                             onChange={(e) => setEmail(e.target.value)}
                                             className='w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-300'
                                             placeholder='Enter your email address'
-                                            required
                                         />
                                     </div>
 
@@ -223,7 +222,6 @@ const InqueriesPage = ({ itenaryPriceData, itenatyDataListing }) => {
                                             min={1}
                                             onChange={(e) => setNumberOfAdults(e.target.value)}
                                             className='w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-300'
-                                            required
                                         />
                                     </div>
 
@@ -238,7 +236,6 @@ const InqueriesPage = ({ itenaryPriceData, itenatyDataListing }) => {
                                             min={0}
                                             onChange={(e) => setNumberOfChildrenWithBed(e.target.value)}
                                             className='w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-300'
-                                            required
                                         />
                                     </div>
 
@@ -253,7 +250,6 @@ const InqueriesPage = ({ itenaryPriceData, itenatyDataListing }) => {
                                             min={0}
                                             onChange={(e) => setNumberOfChildrenWithoutBed(e.target.value)}
                                             className='w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-300'
-                                            required
                                         />
                                     </div>
 
@@ -295,6 +291,18 @@ const InqueriesPage = ({ itenaryPriceData, itenatyDataListing }) => {
                     </Box>
                 </Box>
             </Modal>
+            <ToastContainer
+                position="top-right"
+                autoClose={3000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+            />
         </>
     );
 };

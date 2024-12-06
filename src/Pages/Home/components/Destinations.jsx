@@ -97,8 +97,8 @@ const Destinations = () => {
                             disableOnInteraction: false,
                         }}
                         navigation={{
-                            prevEl: '.swiper-button-prev',
-                            nextEl: '.swiper-button-next',
+                            prevEl: '.swiper-button-prevs',
+                            nextEl: '.swiper-button-nexts',
                         }}
                         breakpoints={{
                             640: { slidesPerView: 2 },
@@ -149,13 +149,13 @@ const Destinations = () => {
                     </Swiper>
 
                     <button
-                        className="swiper-button-prev absolute left-0 top-1/2 -translate-y-1/2 z-10 -translate-x-1/2 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center group hover:bg-blue-50 transition-all duration-300"
+                        className="swiper-button-prevs absolute left-0 top-1/2 -translate-y-1/2 z-10 -translate-x-1/2 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center group hover:bg-blue-50 transition-all duration-300"
                     >
                         <ChevronLeft className="w-6 h-6 text-gray-800 group-hover:text-blue-600" />
                     </button>
 
                     <button
-                        className="swiper-button-next absolute right-0 top-1/2 -translate-y-1/2 z-10 translate-x-1/2 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center group hover:bg-blue-50 transition-all duration-300"
+                        className="swiper-button-nexts absolute right-0 top-1/2 -translate-y-1/2 z-10 translate-x-1/2 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center group hover:bg-blue-50 transition-all duration-300"
                     >
                         <ChevronRight className="w-6 h-6 text-gray-800 group-hover:text-blue-600" />
                     </button>

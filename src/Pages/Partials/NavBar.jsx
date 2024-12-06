@@ -148,7 +148,7 @@ const NavBar = ({ settingData, settingIsSuccess, settingIsError, settingError })
               </button>
             </div>
 
-            <div className="flex items-center ml-4">
+            <div className="hidden space-x-4 lg:flex items-center ml-4">
               <button
                 className="relative p-2 hover:bg-gray-700 rounded-full transition-colors"
                 onClick={toggleDrawer}
