@@ -47,6 +47,7 @@ const TravelPackageCard = ({ isLoading, data }) => {
         return (
             <div key={`${item?._id}-${index}`} className="card bg-white shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 my-2 flex flex-col hover:shadow-2xl">
                 <div className="relative flex-1">
+
                     <div className="w-full h-[40%]">
                         <img
                             src={`${imageUrl}${item?.bannerImage}`}
@@ -63,10 +64,14 @@ const TravelPackageCard = ({ isLoading, data }) => {
                             aria-label={favorites?.has(item?._id) ? "Remove from favorites" : "Add to favorites"}
                         >
                             <Heart
-                                className={`transition-colors duration-300 h-fit ${favorites?.has(item?._id)
-                                    ? 'fill-red-500 text-red-500'
-                                    : 'text-gray-600'
-                                    }`}
+
+                                className={`
+                                    transition-colors duration-300 h-fit
+                                     ${favorites.has(item?._id)
+                                        ? 'fill-red-500 text-red-500'
+                                        : 'text-gray-600'
+                                    }`
+                                }
                             />
                         </button>
                     </div>
@@ -78,6 +83,7 @@ const TravelPackageCard = ({ isLoading, data }) => {
                             </p>
                         </div>
                     </div>
+
                 </div>
 
                 <div className="p-2 flex flex-col flex-grow">
@@ -114,30 +120,30 @@ const TravelPackageCard = ({ isLoading, data }) => {
 
                 <div className="bg-white rounded-lg shadow-lg p-4">
                     <h3 className="text-lg font-medium mb-2">Departure Dates:</h3>
-                    <div className="grid grid-cols-3 gap-3">
-                        {item?.departureDates?.map((date, index) => {
-                            return (
-                                <div
-                                    key={index}
-                                    className="bg-gray-100 rounded-md p-3 text-center hover:bg-gray-200 transition-colors"
-                                >
-                                    <p className="text-gray-700 font-medium">
-                                        {new Date(date).toLocaleDateString('en-GB', {
-                                            day: '2-digit',
-                                            month: '2-digit',
-                                            year: 'numeric'
-                                        })}
-                                    </p>
-                                </div>
-                            )
-                        })}
+                    <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
+                        {item?.departureDates?.map((date, index) => (
+                            <div
+                                key={index}
+                                className="bg-gray-100 rounded-md p-3 text-center hover:bg-gray-200 transition-colors"
+                            >
+                                <p className="text-gray-700 font-medium">
+                                    {new Date(date).toLocaleDateString('en-GB', {
+                                        day: '2-digit',
+                                        month: '2-digit',
+                                        year: 'numeric',
+                                    })}
+                                </p>
+                            </div>
+                        ))}
                     </div>
                 </div>
 
                 <div className="p-3">
                     <button
                         className="w-full bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg flex items-center justify-center group"
-                        onClick={() => handleItineraryDetails(item?._id)}
+                        onClick={() => {
+                            handleItineraryDetails(item?._id)
+                        }}
                     >
                         <span className="mr-2">View Details</span>
                         <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" />
