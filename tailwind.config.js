@@ -41,7 +41,7 @@ export default {
       animation: {
         'plane-fly': 'planeFly 2s ease-in-out infinite',
         'rotate-sun': 'rotateSun 10s linear infinite',
-        'fly-across': 'fly-across 2s infinite linear',
+        'fly-across': 'fly-across 5s infinite linear',
         'slight-bounce': 'slight-bounce 1s infinite ease-in-out',
         'float-cloud': 'float-cloud 2s infinite ease-in-out'
       },

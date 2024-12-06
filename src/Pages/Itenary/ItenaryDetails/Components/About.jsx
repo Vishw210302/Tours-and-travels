@@ -41,6 +41,7 @@ const About = ({ data, allData }) => {
     const [allItenaryData, setAllItenaryData] = useState();
     const [importantUpdate, setImportantUpdate] = useState([]);
     const [bookingModalOpen, setBookingModalOpen] = useState(false);
+    const [paymentModelOpen, setPaymentModelOpen] = useState(false);
     const { settingData } = useAllApiContext()
     const longText = data;
 

@@ -4,7 +4,7 @@ import React from 'react'
 const PlaneLoader = () => {
 
     return (
-        <div className="relative w-24 h-6 overflow-hidden">
+        <div className="relative w-full h-6 overflow-hidden">
 
             <div className="absolute inset-0 flex items-center">
                 <div className="h-[2px] w-full bg-gradient-to-r from-transparent via-white/20 to-transparent" />
@@ -26,7 +26,7 @@ const PlaneLoader = () => {
 
             <div className="absolute inset-0 flex items-center">
 
-                <div className="plane-container animate-fly-across">
+                <div className="plane-container animate-fly-across w-full">
                     <Plane
                         size={30}
                         className="text-white transform rotate-45 drop-shadow-md"

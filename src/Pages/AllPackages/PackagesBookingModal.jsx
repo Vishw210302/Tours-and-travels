@@ -88,7 +88,7 @@ const PackagesBookingModal = ({ bookingModalOpen, setBookingModalOpen, allData }
                     </div>
 
                     <div className="p-4">
-
+ 
                         <form onSubmit={handleSubmit}>
 
                             <div className="mb-4">
