@@ -10,6 +10,11 @@ import WarningIcon from '@mui/icons-material/Warning';
 import React, { useEffect, useState } from 'react';
 import { useAllApiContext } from '../../../../Context/allApiContext';
 import PackagesBookingModal from '../../../AllPackages/PackagesBookingModal';
+import StripePayment from '../../../Payment/PaymentForm';
+import Modal from '../../../Modal/Modal';
+import PaymentSuccess from '../../../Payment/PaymentSuccess';
+import { useAddItenaryParsonDetailsMutation } from '../../../../Api/Api';
+import { useNavigate } from 'react-router-dom';
 
 const ReadMoreText = ({ text }) => {
 
@@ -42,7 +47,13 @@ const About = ({ data, allData }) => {
     const [importantUpdate, setImportantUpdate] = useState([]);
     const [bookingModalOpen, setBookingModalOpen] = useState(false);
     const [paymentModelOpen, setPaymentModelOpen] = useState(false);
+    const [stripeModalOpen, setStripeModalOpen] = useState(false)
+    const [payMentSucessodalOpen, setPaymentsucessModelOpen] = useState(false)
+    const [personDetails, setPersonDetails] = useState({})
+    const [handlePersonDetailsApi] = useAddItenaryParsonDetailsMutation()
     const { settingData } = useAllApiContext()
+    const [paymentId, setPaymentId] = useState('')
+    const navigate = useNavigate()
     const longText = data;
 
     const handlePackageBookingModal = () => {
@@ -67,6 +78,63 @@ const About = ({ data, allData }) => {
         }
         setAllItenaryData(allData?.itenaryData);
     }, [allData]);
+
+    const openStraipeModel = (itenryData) => {
+        setPersonDetails(itenryData)
+        setStripeModalOpen(true)
+        setBookingModalOpen(false)
+    }
+
+    const handlePaymentSuccess = async (details) => {
+
+        // const personDetails = {
+        //     formData: {
+        //         name: 'Ajay varma',
+        //         mobile: '9173211901',
+        //         email: 'varmaajay182@gmail.com',
+        //         departureDate: '2024-11-21T00:00:00.000Z',
+        //         adults: '2',
+        //         childrenWithoutBed: '2',
+        //         infants: 2,
+        //         percentageSelection: '10'
+        //     },
+        //     payPrice: 8304.89,
+        //     itenaryId: '672b6de28f03f504db1eed74',
+        //     remainingBalance: 149488.02
+        // }
+
+        try {
+
+            const payload = {
+                paymentId: details?.id,
+                personDetail: personDetails.formData,
+                payPrice: personDetails.payPrice,
+                itenaryId: allItenaryData._id,
+                remainingBalance: personDetails.remainingBalance
+            }
+
+            const response = await handlePersonDetailsApi(payload).unwrap();
+
+            if (response.status === 201) {
+                setPaymentId(details?.id)
+                setStripeModalOpen(false)
+                setPaymentsucessModelOpen(true)
+
+            }  else {
+                console.log('Unexpected response:', response);
+            }
+        } catch (error) {
+            console.error('An error occurred:', error);
+        }
+       
+    }
+
+
+    console.log(personDetails, 'personDetailspersonDetails')
+
+    const openBookingConfirmPage = ()=>{
+        navigate(`/`);
+    }
 
     return (
         <>
@@ -118,7 +186,6 @@ const About = ({ data, allData }) => {
                                 )
                             }
                         })}
-
                     </div>
 
                     <div className='card bg-white rounded-xl shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg p-3 my-2'>
@@ -198,11 +265,21 @@ const About = ({ data, allData }) => {
                     </div>
                 </div>
             </div >
+
             <PackagesBookingModal
                 bookingModalOpen={bookingModalOpen}
                 setBookingModalOpen={setBookingModalOpen}
                 allData={allData}
+                openStraipeModel={openStraipeModel}
             />
+
+            <Modal isOpen={stripeModalOpen} onClose={() => setStripeModalOpen(false)}>
+                <StripePayment onPaymentSuccess={handlePaymentSuccess} personDetails={personDetails} description="Payment for intery" />
+            </Modal>
+
+            <Modal isOpen={payMentSucessodalOpen} onClose={() => setPaymentsucessModelOpen(false)} hideCloseButton={true}>
+                <PaymentSuccess openBookingConfirmPage={openBookingConfirmPage} paymentId={paymentId} payPrice = {personDetails?.payPrice ? personDetails.payPrice : 12345}/>
+            </Modal>
         </>
     );
 }

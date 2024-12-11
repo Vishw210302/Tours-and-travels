@@ -5,7 +5,7 @@ import { useCreatePaymentIntentMutation } from '../../Api/Api';
 import { useFlightTicketsDetailsContext } from '../../Context/FlightTicketsDetailsContext';
 import PlaneLoader from '../PlaneLoader';
 
-const PaymentForm = ({ onPaymentSuccess, description }) => {
+const PaymentForm = ({ onPaymentSuccess, description, personDetails }) => {
 
     const stripe = useStripe();
     const elements = useElements();
@@ -40,12 +40,12 @@ const PaymentForm = ({ onPaymentSuccess, description }) => {
 
         const cardElement = elements.getElement(CardElement);
 
+
         try {
 
             const cardholderName = event.target.name.value;
-
             const payload = {
-                amount: totalTicketPrice * 100,
+                amount: personDetails ? personDetails.payPrice * 100 : totalTicketPrice * 100,
                 currency: 'inr',
                 description: description,
                 billing_details: {
@@ -53,6 +53,13 @@ const PaymentForm = ({ onPaymentSuccess, description }) => {
                     address: billingAddress,
                 },
             }
+
+            console.log(personDetails.peyPrice, 'payload')
+
+            // onPaymentSuccess({
+            //     id: 'pi_3QUmuZSEV9soa2c80oPuPxva',
+            // });
+
             const response = await createPaymentIntent(payload).unwrap()
 
             if (response && response?.paymentIntent?.client_secret) {
@@ -70,6 +77,7 @@ const PaymentForm = ({ onPaymentSuccess, description }) => {
                 });
 
                 if (result.error) {
+
                     toast.error(result.error.message, { autoClose: 3000 });
                 } else {
                     if (result.paymentIntent.status === 'succeeded') {
@@ -105,13 +113,13 @@ const PaymentForm = ({ onPaymentSuccess, description }) => {
                 )}
 
                 <form onSubmit={handleSubmit}>
-
                     <div className="mb-6">
                         <label htmlFor="name" className="block text-sm font-semibold text-gray-700">Cardholder Name</label>
                         <input
                             id="name"
                             name="name"
                             placeholder="John Doe"
+                            value={personDetails ? personDetails.formData.name : ""}
                             className="mt-2 w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-blue-500 focus:outline-none transition"
                         />
                     </div>
@@ -219,7 +227,7 @@ const PaymentForm = ({ onPaymentSuccess, description }) => {
                         {loading ? (
                             <PlaneLoader />
                         ) : (
-                            `Pay ₹${totalTicketPrice}`
+                            `Pay ${personDetails ? personDetails.payPrice : '₹' + totalTicketPrice}`
                         )}
                     </button>
 
@@ -236,7 +244,7 @@ const PaymentForm = ({ onPaymentSuccess, description }) => {
     );
 };
 
-const StripePayment = ({ onPaymentSuccess, description }) => {
+const StripePayment = ({ onPaymentSuccess, description, personDetails }) => {
 
     const [stripePromise, setStripePromise] = useState(null);
 
@@ -249,7 +257,7 @@ const StripePayment = ({ onPaymentSuccess, description }) => {
     return (
         stripePromise && (
             <Elements stripe={stripePromise}>
-                <PaymentForm onPaymentSuccess={onPaymentSuccess} description={description} />
+                <PaymentForm onPaymentSuccess={onPaymentSuccess} description={description} personDetails={personDetails} />
             </Elements>
         )
     );

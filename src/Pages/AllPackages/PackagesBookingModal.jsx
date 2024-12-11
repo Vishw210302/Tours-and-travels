@@ -1,7 +1,7 @@
 import Modal from '@mui/material/Modal';
 import React, { useState } from 'react';
 
-const PackagesBookingModal = ({ bookingModalOpen, setBookingModalOpen, allData }) => {
+const PackagesBookingModal = ({ bookingModalOpen, setBookingModalOpen, allData, openStraipeModel }) => {
 
     const [formData, setFormData] = useState({
         name: '',
@@ -12,24 +12,32 @@ const PackagesBookingModal = ({ bookingModalOpen, setBookingModalOpen, allData }
         childrenWithBed: 0,
         childrenWithoutBed: 0,
         infants: 0,
+        percentageSelection: '0',
     });
 
     const calculateTotalPrice = () => {
-        const { adults, childrenWithBed, childrenWithoutBed, infants } = formData;
+        const { adults, childrenWithBed, childrenWithoutBed, infants, percentageSelection } = formData;
         const pricing = allData?.itenaryData?.price || {};
+
         const totalAdults = adults * (pricing.perPersonPrice || 0);
         const totalChildWithBed = childrenWithBed * (pricing.childWithBed || 0);
         const totalChildWithoutBed = childrenWithoutBed * (pricing.childWithoutBed || 0);
         const totalInfants = infants * (pricing.costPerInfont || 0);
         const subtotal = totalAdults + totalChildWithBed + totalChildWithoutBed + totalInfants;
+
         const gst = subtotal * 0.05;
         const tcs = subtotal * 0.05;
+        const final = subtotal + gst + tcs;
+
+        const percentageAmount = final * (parseFloat(percentageSelection) / 100);
 
         return {
             subtotal,
             gst,
             tcs,
             final: subtotal + gst + tcs,
+            percentageAmount,
+            percentageSelection
         };
     };
 
@@ -44,6 +52,7 @@ const PackagesBookingModal = ({ bookingModalOpen, setBookingModalOpen, allData }
             childrenWithBed: 0,
             childrenWithoutBed: 0,
             infants: 0,
+            percentageSelection: '0',
         });
     };
 
@@ -68,7 +77,21 @@ const PackagesBookingModal = ({ bookingModalOpen, setBookingModalOpen, allData }
         }).format(price);
     };
 
+
     const prices = calculateTotalPrice();
+    const handleBookItenry = () => {
+        const payPrice = prices.percentageSelection === '0' ? prices.final : prices.percentageAmount;
+
+        const itenryData = {
+            formData,
+            payPrice,
+            remainingBalance: prices.final - prices.percentageAmount
+        }
+
+        openStraipeModel(itenryData)
+
+    }
+
 
     return (
         <Modal
@@ -88,7 +111,7 @@ const PackagesBookingModal = ({ bookingModalOpen, setBookingModalOpen, allData }
                     </div>
 
                     <div className="p-4">
- 
+
                         <form onSubmit={handleSubmit}>
 
                             <div className="mb-4">
@@ -234,6 +257,28 @@ const PackagesBookingModal = ({ bookingModalOpen, setBookingModalOpen, allData }
                                 </p>
                             </div>
 
+                            <div className="mb-4">
+                                <label className="block text-sm font-medium text-gray-700" htmlFor="percentageSelection">
+                                    Partial Payment Percentage
+                                </label>
+                                <select
+                                    id="percentageSelection"
+                                    value={formData.percentageSelection}
+                                    onChange={handleInputChange}
+                                    className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-300"
+                                >
+                                    <option value="0">Full Payment (100%)</option>
+                                    <option value="10">Partial Payment (10%)</option>
+                                    <option value="20">Partial Payment (20%)</option>
+                                    <option value="50">Partial Payment (50%)</option>
+                                </select>
+                                {prices.percentageSelection !== '0' && (
+                                    <p className="text-sm text-gray-600 mt-2">
+                                        Partial Payment Amount: {formatPrice(prices.percentageAmount)}
+                                    </p>
+                                )}
+                            </div>
+
                             <div className="grid grid-cols-4 gap-4 my-4">
                                 <div className="flex flex-col items-start">
                                     <p className="text-red-400 font-semibold text-[16px]">Total Price :-</p>
@@ -253,10 +298,36 @@ const PackagesBookingModal = ({ bookingModalOpen, setBookingModalOpen, allData }
                                 </div>
                             </div>
 
+                            {/* Updated pricing section to show partial payment amount */}
+                            {prices.percentageSelection !== '0' && (
+                                <div className="mb-4 bg-blue-50 p-3 rounded-md">
+                                    <p className="text-blue-600 font-semibold">
+                                        Partial Payment Details
+                                    </p>
+                                    <div className="flex justify-between mt-2">
+                                        <span>Partial Payment Percentage:</span>
+                                        <span className="font-bold">{prices.percentageSelection}%</span>
+                                    </div>
+                                    <div className="flex justify-between mt-1">
+                                        <span>Partial Payment Amount:</span>
+                                        <span className="font-bold text-green-600">
+                                            {formatPrice(prices.percentageAmount)}
+                                        </span>
+                                    </div>
+                                    <div className="flex justify-between mt-1">
+                                        <span>Remaining Balance:</span>
+                                        <span className="font-bold text-red-600">
+                                            {formatPrice(prices.final - prices.percentageAmount)}
+                                        </span>
+                                    </div>
+                                </div>
+                            )}
+
                             <div className="mt-6 flex justify-between">
                                 <button
-                                    type="submit"
+                                    type="button"
                                     className="px-8 py-2 rounded-lg bg-red-400 text-white font-semibold hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-blue-300"
+                                    onClick={() => handleBookItenry()}
                                 >
                                     Book Now
                                 </button>
