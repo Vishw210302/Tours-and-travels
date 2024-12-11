@@ -210,6 +210,14 @@ export const myApi = createApi({
             query: (city) => `get-particular-hotel-listing/${city}`,
         }),
 
+        addItenaryParsonDetails: builder.mutation({
+            query: (payload) => ({
+                url: "itenary-payment",
+                method: "POST",
+                body: payload,
+            }),
+        }),
+
     }),
 
 });
@@ -254,4 +262,5 @@ export const {
     useGetHotelCouponCodeDataQuery,
     useGetSocialMediaLinkListingQuery,
     useGetParticularHotelListingQuery,
+    useAddItenaryParsonDetailsMutation
 } = myApi;

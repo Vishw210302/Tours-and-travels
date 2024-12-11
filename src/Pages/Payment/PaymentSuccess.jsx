@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import CopyAllIcon from '@mui/icons-material/CopyAll';
 import { useFlightTicketsDetailsContext } from '../../Context/FlightTicketsDetailsContext';
 
-const PaymentSuccess = ({ openBookingConfirmPage, paymentId }) => {
+const PaymentSuccess = ({ openBookingConfirmPage, paymentId, payPrice }) => {
 
     const [countdown, setCountdown] = useState(5);
     const [showContent, setShowContent] = useState(false);
@@ -73,7 +73,7 @@ const PaymentSuccess = ({ openBookingConfirmPage, paymentId }) => {
                     </div>
 
                     <div className='text-white text-2xl font-semibold mt-6'>
-                        ₹{totalTicketPrice}
+                        ₹{payPrice? payPrice : totalTicketPrice}
                     </div>
                 </div>
             </div>
