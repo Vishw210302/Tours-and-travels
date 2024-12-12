@@ -27,6 +27,8 @@ const FlightsPageListing = () => {
     const [classMatch, setClassMatch] = useState('economy');
     const timeoutRef = useRef(null);
     const { setPassengerCount } = usePassenger();
+    localStorage.removeItem('contactId');
+    localStorage.removeItem('passengerCount');
 
     useEffect(() => {
         if (specialFlghtSucess) {

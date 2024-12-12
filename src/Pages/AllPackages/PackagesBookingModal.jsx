@@ -70,6 +70,7 @@ const PackagesBookingModal = ({ bookingModalOpen, setBookingModalOpen, allData, 
     };
 
     const formatPrice = (price) => {
+        const roundedPrice = Math.floor(price);
         return new Intl.NumberFormat('en-IN', {
             style: 'currency',
             currency: 'INR',
@@ -80,12 +81,12 @@ const PackagesBookingModal = ({ bookingModalOpen, setBookingModalOpen, allData, 
 
     const prices = calculateTotalPrice();
     const handleBookItenry = () => {
-        const payPrice = prices.percentageSelection === '0' ? prices.final : prices.percentageAmount;
+        const payPrice = prices.percentageSelection === '0' ? prices.final : Math.floor(prices.percentageAmount);
 
         const itenryData = {
             formData,
             payPrice,
-            remainingBalance: prices.final - prices.percentageAmount
+            remainingBalance: Math.floor(prices.final - prices.percentageAmount) 
         }
 
         openStraipeModel(itenryData)

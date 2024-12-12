@@ -676,7 +676,7 @@ const FlightsTicketsPaymentPage = () => {
             </Modal>
 
             <Modal isOpen={showPaymentSucess} onClose={() => setShowPaymnetSucess(false)} hideCloseButton={true}>
-                <PaymentSuccess paymentId={paymentId} openBookingConfirmPage={handleBookingConfirmPage} />
+                <PaymentSuccess paymentId={paymentId} openBookingConfirmPage={handleBookingConfirmPage} title={'Ticket bookings'}/>
             </Modal>
 
             <Modal isOpen={bookingConfirm} onClose={() => setShowBookingConfirm(false)}>

@@ -12,6 +12,7 @@ import { useAllApiContext } from '../../../../Context/allApiContext';
 import PackagesBookingModal from '../../../AllPackages/PackagesBookingModal';
 import StripePayment from '../../../Payment/PaymentForm';
 import Modal from '../../../Modal/Modal';
+import { ToastContainer, toast } from 'react-toastify';
 import PaymentSuccess from '../../../Payment/PaymentSuccess';
 import { useAddItenaryParsonDetailsMutation } from '../../../../Api/Api';
 import { useNavigate } from 'react-router-dom';
@@ -129,11 +130,10 @@ const About = ({ data, allData }) => {
        
     }
 
-
-    console.log(personDetails, 'personDetailspersonDetails')
-
     const openBookingConfirmPage = ()=>{
-        navigate(`/`);
+        setPaymentsucessModelOpen(false)
+        navigate(`/itenary-details/${allData?._id}`);
+        toast.success("Itenary booked successfully! Your payment details have been recorded.");
     }
 
     return (
@@ -274,12 +274,18 @@ const About = ({ data, allData }) => {
             />
 
             <Modal isOpen={stripeModalOpen} onClose={() => setStripeModalOpen(false)}>
-                <StripePayment onPaymentSuccess={handlePaymentSuccess} personDetails={personDetails} description="Payment for intery" />
+                <StripePayment onPaymentSuccess={handlePaymentSuccess} personDetails={personDetails} description="Payment for itenary" />
             </Modal>
 
             <Modal isOpen={payMentSucessodalOpen} onClose={() => setPaymentsucessModelOpen(false)} hideCloseButton={true}>
-                <PaymentSuccess openBookingConfirmPage={openBookingConfirmPage} paymentId={paymentId} payPrice = {personDetails?.payPrice ? personDetails.payPrice : 12345}/>
+                <PaymentSuccess openBookingConfirmPage={openBookingConfirmPage} paymentId={paymentId} payPrice = {personDetails?.payPrice } title={'Itenary Booking'}/>
             </Modal>
+
+            <ToastContainer
+                position="top-right"
+                className="toast-container"
+                draggable="true"
+            />
         </>
     );
 }
