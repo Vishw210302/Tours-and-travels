@@ -338,7 +338,7 @@ const FlightsTicketsPaymentPage = () => {
 
             setPaymentId(payment.id)
 
-            const response = await fetch('http://localhost:7781/api/addFlightTicketsData', {
+            const response = await fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/addFlightTicketsData`, {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json'
