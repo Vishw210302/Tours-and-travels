@@ -44,19 +44,25 @@ const AddToCartDrawer = ({ toggleDrawer, isOpen }) => {
                     <div className="flex items-center space-x-2">
                         <ShoppingBag className="h-6 w-6 text-gray-600 dark:text-gray-300" />
                         <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Your Cart</h2>
-                        <span className="ml-2 text-sm text-gray-500 dark:text-gray-400">
-                            ({cartItems.length} items)
-                        </span>
+                        {cartItems && cartItems.length ?
+                            <span className="ml-2 text-sm text-gray-500 dark:text-gray-400">
+                                ({cartItems.length} items)
+                            </span>
+                            : ""
+                        }
                     </div>
 
                     <div className="flex items-center space-x-2">
-                        <button
-                            onClick={handleClearCart}
-                            className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-                            title="Clear Cart"
-                        >
-                            <Trash2 className="h-5 w-5 text-red-500" />
-                        </button>
+                        {cartItems && cartItems.length > 0 ?
+                            <button
+                                onClick={handleClearCart}
+                                className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                                title="Clear Cart"
+                            >
+                                <Trash2 className="h-5 w-5 text-red-500" />
+                            </button>
+                            : ""
+                        }
                         <button
                             onClick={toggleDrawer}
                             className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
