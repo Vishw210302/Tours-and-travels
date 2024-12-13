@@ -10,6 +10,7 @@ import 'swiper/css/autoplay';
 import { Autoplay } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import ImageModal from '../../ImageModal';
+import { useAllApiContext } from '../../../Context/allApiContext';
 
 const SecondStepsBookingHotel = ({ setHotelPriceSelect, selectedHotel }) => {
 
@@ -18,8 +19,9 @@ const SecondStepsBookingHotel = ({ setHotelPriceSelect, selectedHotel }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [hoveredAmenity, setHoveredAmenity] = useState(null);
     const [modalImage, setModalImage] = useState(null);
-
+    const { setPricingOptions, pricingOptions } = useAllApiContext();
     const handleSelectHotelPrice = (indexHotel) => {
+        setPricingOptions(indexHotel)
         setSelectedHotelPrice(indexHotel);
         setHotelPriceSelect(true);
     };
@@ -46,47 +48,6 @@ const SecondStepsBookingHotel = ({ setHotelPriceSelect, selectedHotel }) => {
 
     return (
         <>
-            <div className='card bg-white shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg p-5 my-2 w-[95%] h-fit'>
-                <div className='flex flex-row justify-between items-center'>
-                    <div className='flex flex-row items-center gap-4'>
-                        <div className='flex flex-row items-center gap-3'>
-                            <MdOutlineLogin size={25} color='#3cb7ff' />
-                            <div className='border-r border-gray-500 pr-3'>
-                                <p className='text-black text-sm font-semibold'>Check In</p>
-                                <p className='text-gray-600 text-sm font-semibold'>22/01/2025</p>
-                            </div>
-                        </div>
-                        <div className='flex flex-row items-center gap-3'>
-                            <MdOutlineLogin size={25} color='#3cb7ff' />
-                            <div className='border-r border-gray-500 pr-3'>
-                                <p className='text-black text-sm font-semibold'>Check Out</p>
-                                <p className='text-gray-600 text-sm font-semibold'>23/01/2025</p>
-                            </div>
-                        </div>
-                        <div className='flex flex-row items-center gap-3'>
-                            <CgCalendarDates size={25} color='#3cb7ff' />
-                            <div className='border-r border-gray-500 pr-3'>
-                                <p className='text-black text-sm font-semibold'>Night</p>
-                                <p className='text-gray-600 text-sm font-semibold'>1</p>
-                            </div>
-                        </div>
-                        <div className='flex flex-row items-center gap-3'>
-                            <FaPerson size={25} color='#3cb7ff' />
-                            <div className='border-r border-gray-500 pr-3'>
-                                <p className='text-black text-sm font-semibold'>Adult</p>
-                                <p className='text-gray-600 text-sm font-semibold'>1</p>
-                            </div>
-                        </div>
-                        <div className='flex flex-row items-center gap-3'>
-                            <FaPerson size={25} color='#3cb7ff' />
-                            <div className='border-r border-gray-500 pr-3'>
-                                <p className='text-black text-sm font-semibold'>Children</p>
-                                <p className='text-gray-600 text-sm font-semibold'>1</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             <div className='card bg-white shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg my-2 w-[95%] h-fit rounded-md py-2'>
                 <div className='px-3 flex flex-row gap-2'>
@@ -186,7 +147,7 @@ const SecondStepsBookingHotel = ({ setHotelPriceSelect, selectedHotel }) => {
                             return (
                                 <div
                                     key={indexHotel}
-                                    className={`mt-3 card bg-white rounded-xl shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg w-[100%] h-fit mb-2 ${selectedHotelPrice === indexHotel ? 'border-4 border-blue-500' : ''}`}
+                                    className={`mt-3 card bg-white rounded-xl shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg w-[100%] h-fit mb-2 ${pricingOptions == indexHotel ? 'border-4 border-blue-500' : ''}`}
                                     onClick={() =>
                                         handleSelectHotelPrice(indexHotel)
                                     }
@@ -196,6 +157,7 @@ const SecondStepsBookingHotel = ({ setHotelPriceSelect, selectedHotel }) => {
                                             <input
                                                 type="radio"
                                                 name="price-option"
+                                                checked={pricingOptions === indexHotel}
                                                 className="form-radio h-5 w-5 text-blue-600"
                                             />
                                             <div className="flex-1 flex justify-between items-center">
