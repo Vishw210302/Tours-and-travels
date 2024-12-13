@@ -77,46 +77,7 @@ const FourthStepsBookingHotel = () => {
 
     return (
         <>
-            <div className='card bg-white shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg p-5 my-2 w-[95%] h-fit'>
-                <div className='flex flex-row justify-between items-center'>
-                    <div className='flex flex-row items-center gap-4'>
-
-                        <div className='flex flex-row items-center gap-3'>
-                            <MdOutlineLogin size={25} color='#3cb7ff' />
-                            <div className='border-r border-gray-500 pr-3'>
-                                <p className='text-black text-sm font-semibold'>Check In</p>
-                                <p className='text-gray-600 text-sm font-semibold'>22/01/2025</p>
-                            </div>
-                        </div>
-
-                        <div className='flex flex-row items-center gap-3'>
-                            <MdOutlineLogin size={25} color='#3cb7ff' />
-                            <div className='border-r border-gray-500 pr-3'>
-                                <p className='text-black text-sm font-semibold'>Check Out</p>
-                                <p className='text-gray-600 text-sm font-semibold'>23/01/2025</p>
-                            </div>
-                        </div>
-
-                        <div className='flex flex-row items-center gap-3'>
-                            <CgCalendarDates size={25} color='#3cb7ff' />
-                            <div className='border-r border-gray-500 pr-3'>
-                                <p className='text-black text-sm font-semibold'>Night</p>
-                                <p className='text-gray-600 text-sm font-semibold'>1</p>
-                            </div>
-                        </div>
-
-                        <div className='flex flex-row items-center gap-3'>
-                            <FaPerson size={25} color='#3cb7ff' />
-                            <div className='border-r border-gray-500 pr-3'>
-                                <p className='text-black text-sm font-semibold'>Adult</p>
-                                <p className='text-gray-600 text-sm font-semibold'>1</p>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
+            
             <div className='card bg-white shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg p-5 my-2 w-[95%] h-fit'>
                 <div>
                     <p className='text-2xl font-semibold text-gray-500 mb-4'>Billing Information</p>

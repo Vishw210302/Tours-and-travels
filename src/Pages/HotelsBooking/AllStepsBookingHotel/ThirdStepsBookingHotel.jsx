@@ -7,12 +7,13 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useGetHotelCouponCodeDataQuery } from '../../../Api/Api';
 import HotelTestimonialForm from '../HotelTestimonialForm';
 
-const ThirdStepsBookingHotel = () => {
+const ThirdStepsBookingHotel = ({totalPrice}) => {
 
     const { isError, error, data, isSuccess } = useGetHotelCouponCodeDataQuery();
     const [hotelCouponCodeListing, setHotelCouponCodeListing] = useState([]);
     const [showSuggestions, setShowSuggestions] = useState(false);
     const [filteredCoupons, setFilteredCoupons] = useState(hotelCouponCodeListing);
+
 
     useEffect(() => {
         if (isSuccess) {
@@ -62,65 +63,14 @@ const ThirdStepsBookingHotel = () => {
     return (
         <>
             <div className='card bg-white shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg p-5 my-2 h-fit rounded-md'>
-                <div className='flex flex-row justify-between items-center'>
-                    <div className='flex flex-row items-center gap-4'>
-                        <div className='flex flex-row items-center gap-3'>
-                            <div>
-                                <MdOutlineLogin size={25} color='#3cb7ff' />
-                            </div>
-                            <div className='border-r border-gray-500 pr-3'>
-                                <p className='text-black text-sm font-semibold'>Check In</p>
-                                <p className='text-gray-600 text-sm font-semibold'>22/01/2025</p>
-                            </div>
-                        </div>
-                        <div className='flex flex-row items-center gap-3'>
-                            <div>
-                                <MdOutlineLogin size={25} color='#3cb7ff' />
-                            </div>
-                            <div className='border-r border-gray-500 pr-3'>
-                                <p className='text-black text-sm font-semibold'>Check Out</p>
-                                <p className='text-gray-600 text-sm font-semibold'>23/01/2025</p>
-                            </div>
-                        </div>
-                        <div className='flex flex-row items-center gap-3'>
-                            <div>
-                                <CgCalendarDates size={25} color='#3cb7ff' />
-                            </div>
-                            <div className='border-r border-gray-500 pr-3'>
-                                <p className='text-black text-sm font-semibold'>Night</p>
-                                <p className='text-gray-600 text-sm font-semibold'>1</p>
-                            </div>
-                        </div>
-                        <div className='flex flex-row items-center gap-3'>
-                            <div>
-                                <FaPerson size={25} color='#3cb7ff' />
-                            </div>
-                            <div className='border-r border-gray-500 pr-3'>
-                                <p className='text-black text-sm font-semibold'>Adult</p>
-                                <p className='text-gray-600 text-sm font-semibold'>1</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div className='card bg-white shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg p-5 my-2 h-fit rounded-md'>
                 <div className='grid grid-cols-6 gap-2'>
                     <div>
                         <p className='text-lg text-red-500 font-semibold'>Single Room</p>
                         <p className='text-base text-gray-400 font-medium'>Non-refundable Rate</p>
                     </div>
                     <div>
-                        <p className='text-lg text-red-500 font-semibold'>Guests</p>
-                        <p className='text-base text-gray-400 font-medium'>1 Adult</p>
-                    </div>
-                    <div>
-                        <p className='text-lg text-red-500 font-semibold'>Nights</p>
-                        <p className='text-base text-gray-400 font-medium'>1</p>
-                    </div>
-                    <div>
                         <p className='text-lg text-red-500 font-semibold'>Net Price</p>
-                        <p className='text-base text-gray-400 font-medium'>₹ 100</p>
+                        <p className='text-base text-gray-400 font-medium'>₹ {totalPrice}</p>
                     </div>
                     <div>
                         <p className='text-lg text-red-500 font-semibold'>Tax</p>

@@ -11,6 +11,10 @@ export const AllApiProvider = ({ children }) => {
         isSuccess: settingIsSuccess,
     } = useGetSettingListingQuery();
 
+    const [hotellisting, setHotelListing] = useState([])
+
+    const [pricingOptions, setPricingOptions] = useState()
+
     const [addToCart, setaddToCart] = useState(() => {
         const savedCart = localStorage.getItem('addToCart');
         return savedCart ? JSON.parse(savedCart) : [];
@@ -72,7 +76,11 @@ export const AllApiProvider = ({ children }) => {
             setFavorites,
             toggleFavorite,
             removeFromCart,
-            clearCart
+            clearCart,
+            setHotelListing,
+            hotellisting,
+            setPricingOptions,
+            pricingOptions
         }}>
             {children}
         </AllApiContext.Provider>

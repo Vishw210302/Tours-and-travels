@@ -7,42 +7,35 @@ import { RiDrinksLine } from "react-icons/ri";
 import { TbAirConditioning, TbDisabled } from "react-icons/tb";
 import { useLocation } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import { useAllApiContext } from '../../../Context/allApiContext';
 
 const FirstStepsBookingHotel = ({ setIsHotelSelected, onSelectHotel }) => {
 
     const [selectedHotel, setSelectedHotel] = useState(null);
     const location = useLocation();
-    const { formData, hotelCityData } = location.state || {};
+    const { hotelCityData } = location.state || {};
     const [particularHotelListing, setParticularHotelListing] = useState([]);
-    const [formInputData, setFormInputData] = useState([]);
     const [itemsToShow, setItemsToShow] = useState(5);
     const [hoveredAmenity, setHoveredAmenity] = useState({});
+    const {setHotelListing, setPricingOptions} = useAllApiContext()
 
     useEffect(() => {
+       
         if (hotelCityData?.data && Array.isArray(hotelCityData.data)) {
+            setHotelListing(hotelCityData.data)
             setParticularHotelListing(hotelCityData.data);
-            setFormInputData(formData);
         } else {
             setParticularHotelListing([]);
-            setFormInputData([]);
         }
     }, [hotelCityData]);
 
     const handleSelectHotel = (index) => {
+        console.log(index)
+
         setSelectedHotel(index);
         setIsHotelSelected(true);
         onSelectHotel(particularHotelListing[index]);
     };
-
-    const calculateNights = (checkinDate, checkoutDate) => {
-        const checkin = new Date(checkinDate);
-        const checkout = new Date(checkoutDate);
-        const differenceInTime = checkout - checkin;
-        const differenceInDays = differenceInTime / (1000 * 3600 * 24);
-        return differenceInDays;
-    };
-
-    const nights = calculateNights(formInputData?.checkinDate, formInputData?.checkoutDate);
 
     const loadMoreHotels = () => {
         setItemsToShow(prev => prev + 5);
@@ -50,55 +43,7 @@ const FirstStepsBookingHotel = ({ setIsHotelSelected, onSelectHotel }) => {
 
     return (
         <>
-            <div className='card bg-white shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg p-5 my-2 w-[95%] h-fit rounded-lg'>
-                <div className='flex flex-row justify-between items-center'>
-                    <div className='flex flex-row items-center gap-4'>
-                        <div className='flex flex-row items-center gap-3'>
-                            <div>
-                                <MdOutlineLogin size={25} color='#3cb7ff' />
-                            </div>
-                            <div className='border-r border-gray-500 pr-3'>
-                                <p className='text-black text-sm font-semibold'>Check In</p>
-                                <p className='text-gray-600 text-sm font-semibold'>{formInputData?.checkinDate}</p>
-                            </div>
-                        </div>
-                        <div className='flex flex-row items-center gap-3'>
-                            <MdOutlineLogin size={25} color='#3cb7ff' />
-                            <div className='border-r border-gray-500 pr-3'>
-                                <p className='text-black text-sm font-semibold'>Check Out</p>
-                                <p className='text-gray-600 text-sm font-semibold'>{formInputData?.checkoutDate}</p>
-                            </div>
-                        </div>
-                        <div className='flex flex-row items-center gap-3'>
-                            <div>
-                                <CgCalendarDates size={25} color='#3cb7ff' />
-                            </div>
-                            <div className='border-r border-gray-500 pr-3'>
-                                <p className='text-black text-sm font-semibold'>Night</p>
-                                <p className='text-gray-600 text-sm font-semibold'>{nights}</p>
-                            </div>
-                        </div>
-                        <div className='flex flex-row items-center gap-3'>
-                            <div>
-                                <FaPerson size={25} color='#3cb7ff' />
-                            </div>
-                            <div className='border-r border-gray-500 pr-3'>
-                                <p className='text-black text-sm font-semibold'>Adult</p>
-                                <p className='text-gray-600 text-sm font-semibold'>{formInputData?.adults}</p>
-                            </div>
-                        </div>
-                        <div className='flex flex-row items-center gap-3'>
-                            <div>
-                                <FaPerson size={25} color='#3cb7ff' />
-                            </div>
-                            <div className='border-r border-gray-500 pr-3'>
-                                <p className='text-black text-sm font-semibold'>Children</p>
-                                <p className='text-gray-600 text-sm font-semibold'>{formInputData?.children}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            
 
             {particularHotelListing && particularHotelListing.slice(0, itemsToShow).map((items, index) => {
 
