@@ -154,8 +154,6 @@ const FlightsPageListing = () => {
                 oneWay: directChecked
             }
 
-            console.log(payload, 'payloadpayload')
-
             const totalPassengerCount = {
                 adult: adlutValue,
                 children: childrenValue,

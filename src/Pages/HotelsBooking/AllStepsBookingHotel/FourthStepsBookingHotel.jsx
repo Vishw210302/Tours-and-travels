@@ -1,10 +1,20 @@
 import React, { useState } from 'react';
-import { CgCalendarDates } from "react-icons/cg";
-import { FaPerson } from "react-icons/fa6";
-import { MdOutlineLogin } from "react-icons/md";
+import StripePayment from '../../Payment/PaymentForm';
+import Modal from '../../Modal/Modal';
+import { useProcessHotelPaymentMutation } from '../../../Api/Api';
+import { useAllApiContext } from '../../../Context/allApiContext';
+import PaymentSuccess from '../../Payment/PaymentSuccess';
+import { useNavigate } from 'react-router-dom';
 
-const FourthStepsBookingHotel = () => {
+const FourthStepsBookingHotel = ({finalHotelPrice}) => {
 
+    const [paymentModal, setPaymentModal] = useState(false)
+    const [paymentSuccessModal, setPaymentSuccessModal] = useState(false)
+    const navigate = useNavigate();
+    const [personDetails, setPersonDetails] =useState('')
+    const {hotelBookingDetails} = useAllApiContext()
+    const [paymentId, setPaymentId] = useState(null)
+    const [processHotelPayment] = useProcessHotelPaymentMutation();
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
@@ -60,8 +70,18 @@ const FourthStepsBookingHotel = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        
+        setPersonDetails({
+            formData: {
+                ...formData,
+                name: `${formData.firstName} ${formData.lastName}` 
+            },
+            payPrice:` ₹${finalHotelPrice}`
+        })
+
+        setPaymentModal(true)
+
         if (validate()) {
-            alert('Booking Confirmed');
 
             setFormData({
                 firstName: '',
@@ -75,9 +95,36 @@ const FourthStepsBookingHotel = () => {
         }
     };
 
+    const handlePaymentSuccess = async (paymentDetail)=> {
+
+        try{
+            const payload = {
+                hotelBookingDetails,
+                personDetails: personDetails.formData,
+                bookingAmount: personDetails.payPrice,
+                paymentId:paymentDetail.id
+            }
+
+          const bookingRes =  await processHotelPayment(payload).unwrap()
+
+          if(bookingRes.success){
+            setPaymentId(paymentDetail.id)
+            setPaymentModal(false)
+            setPaymentSuccessModal(true)
+          }
+
+        }catch(err){
+            console.log('hotel payment', err)
+        }
+
+    }
+
+    const handleRedirect = ()=> {
+        navigate({pathname:"/hotels"})
+    }
+
     return (
         <>
-            
             <div className='card bg-white shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg p-5 my-2 w-[95%] h-fit'>
                 <div>
                     <p className='text-2xl font-semibold text-gray-500 mb-4'>Billing Information</p>
@@ -198,13 +245,22 @@ const FourthStepsBookingHotel = () => {
                                 type="submit"
                                 className="bg-red-400 text-white font-semibold px-4 py-2 rounded-md hover:bg-red-500 transition duration-200"
                             >
-                                Confirm Booking ( ₹ 5000)
+                                Confirm Booking ( ₹ {finalHotelPrice})
                             </button>
                         </div>
 
                     </form>
                 </div>
             </div>
+
+            <Modal isOpen={paymentModal} onClose={() => setPaymentModal(false)}>
+                <StripePayment onPaymentSuccess={handlePaymentSuccess} personDetails={personDetails} description="Payment for itenary" />
+            </Modal>
+
+            <Modal isOpen={paymentSuccessModal} onClose={() => setPaymentSuccessModal(false)} hideCloseButton={true}>
+                <PaymentSuccess openBookingConfirmPage={handleRedirect} paymentId={paymentId} payPrice = {personDetails?.payPrice } title={'Hotel Booking'}/>
+            </Modal>
+
         </>
     );
 };

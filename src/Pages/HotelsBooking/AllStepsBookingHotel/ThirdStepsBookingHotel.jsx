@@ -1,19 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { CgCalendarDates } from "react-icons/cg";
-import { FaPerson } from "react-icons/fa6";
-import { MdOutlineLogin } from "react-icons/md";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useGetHotelCouponCodeDataQuery } from '../../../Api/Api';
 import HotelTestimonialForm from '../HotelTestimonialForm';
+import { useAllApiContext } from '../../../Context/allApiContext';
 
-const ThirdStepsBookingHotel = ({totalPrice}) => {
+const ThirdStepsBookingHotel = ({ setFinalTotalPrice }) => {
 
     const { isError, error, data, isSuccess } = useGetHotelCouponCodeDataQuery();
     const [hotelCouponCodeListing, setHotelCouponCodeListing] = useState([]);
     const [showSuggestions, setShowSuggestions] = useState(false);
     const [filteredCoupons, setFilteredCoupons] = useState(hotelCouponCodeListing);
-
+    const { totalHotelPrice } = useAllApiContext()
+    const [tax, setTax] = useState(20);
+    const [couponCode, setCouponCode] = useState("");
+    const [finalHotelPrice, setFinalHotelPrice]= useState(totalHotelPrice + tax);
 
     useEffect(() => {
         if (isSuccess) {
@@ -22,6 +23,13 @@ const ThirdStepsBookingHotel = ({totalPrice}) => {
             console.log("error", isError);
         }
     }, [error, data, isSuccess, isError]);
+
+    useEffect(() => {
+     if(finalHotelPrice){
+        setFinalTotalPrice(finalHotelPrice)
+     }
+    }, [finalHotelPrice])
+    
 
     const handleInputFocus = () => {
         setFilteredCoupons(hotelCouponCodeListing);
@@ -40,18 +48,13 @@ const ThirdStepsBookingHotel = ({totalPrice}) => {
         setFilteredCoupons(filtered);
     };
 
-    const handleCouponClick = (couponCode) => {
-        document.getElementById('promoCode').value = couponCode;
-        setShowSuggestions(false);
-        toast.success(`Coupon code ${couponCode} applied successfully!`);
-    };
-
     const handleApplyCoupon = () => {
-        const couponCode = document.getElementById('promoCode').value;
+        
         if (couponCode) {
-            const coupon = hotelCouponCodeListing.find(coupon => coupon.promoCode === couponCode);
+            const coupon = hotelCouponCodeListing.find(coupon => coupon.promoCode == couponCode);
             if (coupon) {
                 toast.success(`Coupon code ${couponCode} applied successfully! Discount: ₹${coupon.discountAmount}`);
+                setFinalHotelPrice(finalHotelPrice - Number(coupon.discountAmount))
             } else {
                 toast.error(`Invalid coupon code: ${couponCode}`);
             }
@@ -62,7 +65,7 @@ const ThirdStepsBookingHotel = ({totalPrice}) => {
 
     return (
         <>
-            <div className='card bg-white shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg p-5 my-2 h-fit rounded-md'>
+            <div className='card bg-white w-[98%] shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg p-5 my-2 h-fit rounded-md'>
                 <div className='grid grid-cols-6 gap-2'>
                     <div>
                         <p className='text-lg text-red-500 font-semibold'>Single Room</p>
@@ -70,15 +73,15 @@ const ThirdStepsBookingHotel = ({totalPrice}) => {
                     </div>
                     <div>
                         <p className='text-lg text-red-500 font-semibold'>Net Price</p>
-                        <p className='text-base text-gray-400 font-medium'>₹ {totalPrice}</p>
+                        <p className='text-base text-gray-400 font-medium'>₹ {totalHotelPrice}</p>
                     </div>
                     <div>
                         <p className='text-lg text-red-500 font-semibold'>Tax</p>
-                        <p className='text-base text-gray-400 font-medium'>₹ 15</p>
+                        <p className='text-base text-gray-400 font-medium'>₹ {tax}</p>
                     </div>
                     <div>
                         <p className='text-lg text-red-500 font-semibold'>Total Price</p>
-                        <p className='text-base text-gray-400 font-medium'>₹ 115</p>
+                        <p className='text-base text-gray-400 font-medium'>₹ {finalHotelPrice}</p>
                     </div>
                 </div>
             </div>
@@ -94,6 +97,7 @@ const ThirdStepsBookingHotel = ({totalPrice}) => {
                                 id="promoCode"
                                 className="flex-1 block w-full rounded-l-md text-base font-medium border border-gray-300 px-2"
                                 placeholder="Enter coupon code"
+                                value={couponCode}
                                 onFocus={handleInputFocus}
                                 onBlur={handleInputBlur}
                                 onChange={handleInputChange}
@@ -113,7 +117,7 @@ const ThirdStepsBookingHotel = ({totalPrice}) => {
                                         <div
                                             key={index}
                                             className="p-3 hover:bg-blue-100 cursor-pointer transition-all"
-                                            onClick={() => handleCouponClick(coupon?.promoCode)}
+                                            onClick={() => setCouponCode(coupon?.promoCode || "")}
                                         >
                                             <p className="text-gray-800 font-semibold">{coupon?.promoCode}</p>
                                             <p className="text-sm text-gray-500">Discount: {coupon?.discountAmount} ₹</p>
@@ -127,7 +131,9 @@ const ThirdStepsBookingHotel = ({totalPrice}) => {
                 <div className='w-full'>
                     <HotelTestimonialForm />
                 </div>
-                <ToastContainer
+                
+            </div>
+            <ToastContainer
                     position="top-right"
                     autoClose={3000}
                     hideProgressBar={false}
@@ -139,7 +145,6 @@ const ThirdStepsBookingHotel = ({totalPrice}) => {
                     pauseOnHover
                     theme="light"
                 />
-            </div>
         </>
     );
 };
