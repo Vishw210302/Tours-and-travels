@@ -28,6 +28,12 @@ const HotelBookingSearch = ({ onSearch }) => {
         skip: !formData.city,
     });
 
+    useEffect(() => {
+        const totalGuests = parseInt(formData.adults) + parseInt(formData.children);
+        const recommendedRooms = Math.ceil(totalGuests / 2); // Assuming 2 guests per room
+        setFormData((prev) => ({ ...prev, rooms: recommendedRooms }));
+    }, [formData.adults, formData.children]);
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
@@ -54,6 +60,7 @@ const HotelBookingSearch = ({ onSearch }) => {
             });
             return;
         }
+        
         onSearch();
         refetchHotelData();
         navigate('/booking-results', { state: { formData, hotelCityData } });
@@ -209,6 +216,7 @@ const HotelBookingSearch = ({ onSearch }) => {
                                 type="number"
                                 id="rooms"
                                 name="rooms"
+                                readOnly
                                 value={formData.rooms}
                                 onChange={handleChange}
                                 className="w-full px-3 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-400 focus:outline-none"

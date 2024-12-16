@@ -42,10 +42,10 @@ const PaymentForm = ({ onPaymentSuccess, description, personDetails }) => {
 
 
         try {
-
+        
             const cardholderName = event.target.name.value;
             const payload = {
-                amount: personDetails ? personDetails.payPrice * 100 : totalTicketPrice * 100,
+                amount: personDetails ? parseFloat(personDetails.payPrice.replace(/[^\d]/g, '')) * 100 : totalTicketPrice * 100,
                 currency: 'inr',
                 description: description,
                 billing_details: {
@@ -53,8 +53,6 @@ const PaymentForm = ({ onPaymentSuccess, description, personDetails }) => {
                     address: billingAddress,
                 },
             }
-
-            console.log(personDetails.peyPrice, 'payload')
 
             // onPaymentSuccess({
             //     id: 'pi_3QUmuZSEV9soa2c80oPuPxva',

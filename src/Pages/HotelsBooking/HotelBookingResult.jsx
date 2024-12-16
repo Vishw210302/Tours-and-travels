@@ -5,7 +5,7 @@ import SecondStepsBookingHotel from './AllStepsBookingHotel/SecondStepsBookingHo
 import ThirdStepsBookingHotel from './AllStepsBookingHotel/ThirdStepsBookingHotel';
 import { MdOutlineLogin } from 'react-icons/md';
 import { CgCalendarDates } from 'react-icons/cg';
-import { FaPerson } from 'react-icons/fa6';
+import { FaPerson, FaBed  } from 'react-icons/fa6';
 import { useLocation } from 'react-router-dom';
 import { useAllApiContext } from '../../Context/allApiContext';
 
@@ -23,14 +23,15 @@ const HotelBookingResult = () => {
     const [isHotelPriceSelect, setHotelPriceSelect] = useState(false);
     const [selectedHotel, setSelectedHotel] = useState(null);
     const [formInputData, setFormInputData] = useState([]);
-    const {setPricingOptions } = useAllApiContext()
+    const { setPricingOptions, setTotalHotelPrice, setHotelBookingDetails } = useAllApiContext()
     const location = useLocation();
     const { formData } = location.state || {};
+    const [finalHotelPrice, SetFinalHotelPrice] = useState(null)
 
     useEffect(() => {
-        console.log(formData, 'sads')
         if (formData) {
             setFormInputData(formData);
+            
         } else {
             setFormInputData([]);
         }
@@ -48,13 +49,23 @@ const HotelBookingResult = () => {
     const nights = calculateNights(formInputData?.checkinDate, formInputData?.checkoutDate);
 
     const handleNext = () => {
-        if(currentStep === 1){
+        if (currentStep == 1) {
             setPricingOptions()
         }
         if (currentStep < steps.length) {
             setCurrentStep((prev) => prev + 1);
         }
     };
+
+    const handleHotelPrice = (hotelPrice) => {
+        let cleanedAmount = Number(hotelPrice.replace(/\s*₹\s*/, ""));
+        const totalPrice = cleanedAmount * nights * Number(formInputData.rooms);
+        setTotalHotelPrice(totalPrice)
+    };
+
+    const handleFinalHotelPrice = (finalPrice)=> {
+        SetFinalHotelPrice(finalPrice)
+    }
 
     const handlePrevious = () => {
         if (currentStep > 1) {
@@ -65,6 +76,25 @@ const HotelBookingResult = () => {
     const handleSelectHotel = (hotelData) => {
         setSelectedHotel(hotelData);
     };
+
+    useEffect(() => {
+
+     if(formInputData){
+
+        const bookingDetails = {
+            cityName : formInputData.city,
+            checkInDate: formInputData.checkinDate,
+            checkOutDate: formInputData.checkoutDate,
+            totalGuests: Number(formInputData.adults) + Number(formInputData.children),
+            numberOfNights:nights,
+            numberOfRooms: formInputData.rooms
+        }
+
+        setHotelBookingDetails(bookingDetails)
+
+     }
+    }, [formInputData])
+    
 
     return (
         <>
@@ -104,7 +134,7 @@ const HotelBookingResult = () => {
 
                     <div className="py-6">
 
-                        <div className='card bg-white shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg p-5 my-2 w-[95%] h-fit rounded-lg'>
+                        <div className='card bg-white shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg p-5 my-2 w-[98%] h-fit rounded-lg'>
                             <div className='flex flex-row justify-between items-center'>
                                 <div className='flex flex-row items-center gap-4'>
                                     <div className='flex flex-row items-center gap-3'>
@@ -150,6 +180,15 @@ const HotelBookingResult = () => {
                                             <p className='text-gray-600 text-sm font-semibold'>{formInputData?.children}</p>
                                         </div>
                                     </div>
+                                    <div className='flex flex-row items-center gap-3'>
+                                        <div>
+                                            <FaBed size={25} color='#3cb7ff' />
+                                        </div>
+                                        <div className='border-r border-gray-500 pr-3'>
+                                            <p className='text-black text-sm font-semibold'>Rooms</p>
+                                            <p className='text-gray-600 text-sm font-semibold'>{formInputData?.rooms}</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -161,13 +200,13 @@ const HotelBookingResult = () => {
                             />
                         )}
                         {currentStep === 2 && (
-                            <SecondStepsBookingHotel setHotelPriceSelect={setHotelPriceSelect} selectedHotel={selectedHotel} />
+                            <SecondStepsBookingHotel setHotelPriceSelect={setHotelPriceSelect} selectedHotel={selectedHotel} selectedHotelPrice={handleHotelPrice} />
                         )}
                         {currentStep === 3 && (
-                            <ThirdStepsBookingHotel selectedHotel={selectedHotel} formData={formData}/>
+                            <ThirdStepsBookingHotel selectedHotel={selectedHotel} formData={formData} setFinalTotalPrice={handleFinalHotelPrice}/>
                         )}
                         {currentStep === 4 && (
-                            <FourthStepsBookingHotel selectedHotel={selectedHotel} />
+                            <FourthStepsBookingHotel selectedHotel={selectedHotel} finalHotelPrice={finalHotelPrice}/>
                         )}
                     </div>
 

@@ -218,6 +218,14 @@ export const myApi = createApi({
             }),
         }),
 
+        processHotelPayment: builder.mutation({
+            query: (payload) => ({
+                url: "hotel-payment",
+                method: "POST",
+                body: payload,
+            }),
+        })
+
     }),
 
 });
@@ -262,5 +270,6 @@ export const {
     useGetHotelCouponCodeDataQuery,
     useGetSocialMediaLinkListingQuery,
     useGetParticularHotelListingQuery,
-    useAddItenaryParsonDetailsMutation
+    useAddItenaryParsonDetailsMutation,
+    useProcessHotelPaymentMutation
 } = myApi;

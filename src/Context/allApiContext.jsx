@@ -4,6 +4,7 @@ import { useGetSettingListingQuery } from '../Api/Api';
 const AllApiContext = createContext();
 
 export const AllApiProvider = ({ children }) => {
+
     const {
         isError: settingIsError,
         error: settingError,
@@ -15,6 +16,19 @@ export const AllApiProvider = ({ children }) => {
 
     const [pricingOptions, setPricingOptions] = useState()
 
+    const [totalHotelPrice, setTotalHotelPrice] = useState(null);
+
+    const [hotelBookingDetails, setHotelBookingDetails] = useState({
+        hotelName: '',
+        checkInDate: '',
+        checkOutDate: '',
+        roomType: '',
+        numberOfNights: '',
+        totalGuests: '',
+        numberOfRooms:'',
+        cityName: '',
+    });
+    
     const [addToCart, setaddToCart] = useState(() => {
         const savedCart = localStorage.getItem('addToCart');
         return savedCart ? JSON.parse(savedCart) : [];
@@ -80,7 +94,11 @@ export const AllApiProvider = ({ children }) => {
             setHotelListing,
             hotellisting,
             setPricingOptions,
-            pricingOptions
+            pricingOptions,
+            setTotalHotelPrice,
+            totalHotelPrice,
+            setHotelBookingDetails,
+            hotelBookingDetails
         }}>
             {children}
         </AllApiContext.Provider>

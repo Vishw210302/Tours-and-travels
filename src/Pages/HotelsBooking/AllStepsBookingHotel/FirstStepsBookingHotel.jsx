@@ -17,10 +17,9 @@ const FirstStepsBookingHotel = ({ setIsHotelSelected, onSelectHotel }) => {
     const [particularHotelListing, setParticularHotelListing] = useState([]);
     const [itemsToShow, setItemsToShow] = useState(5);
     const [hoveredAmenity, setHoveredAmenity] = useState({});
-    const {setHotelListing, setPricingOptions} = useAllApiContext()
+    const {setHotelListing, hotelBookingDetails, setHotelBookingDetails} = useAllApiContext()
 
     useEffect(() => {
-       
         if (hotelCityData?.data && Array.isArray(hotelCityData.data)) {
             setHotelListing(hotelCityData.data)
             setParticularHotelListing(hotelCityData.data);
@@ -30,11 +29,14 @@ const FirstStepsBookingHotel = ({ setIsHotelSelected, onSelectHotel }) => {
     }, [hotelCityData]);
 
     const handleSelectHotel = (index) => {
-        console.log(index)
 
         setSelectedHotel(index);
         setIsHotelSelected(true);
         onSelectHotel(particularHotelListing[index]);
+        setHotelBookingDetails((prevDetails) => ({
+            ...prevDetails, 
+            hotelName: particularHotelListing[index].hotelName, 
+        }));
     };
 
     const loadMoreHotels = () => {

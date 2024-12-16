@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { CgCalendarDates } from "react-icons/cg";
 import { FaShower, FaTv } from "react-icons/fa";
 import { FaPerson, FaWifi } from "react-icons/fa6";
@@ -12,18 +12,23 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import ImageModal from '../../ImageModal';
 import { useAllApiContext } from '../../../Context/allApiContext';
 
-const SecondStepsBookingHotel = ({ setHotelPriceSelect, selectedHotel }) => {
+const SecondStepsBookingHotel = ({ setHotelPriceSelect, selectedHotel, selectedHotelPrice }) => {
 
     const swiperRef = useRef(null);
-    const [selectedHotelPrice, setSelectedHotelPrice] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [hoveredAmenity, setHoveredAmenity] = useState(null);
     const [modalImage, setModalImage] = useState(null);
-    const { setPricingOptions, pricingOptions } = useAllApiContext();
-    const handleSelectHotelPrice = (indexHotel) => {
+    const { setPricingOptions, pricingOptions, setHotelBookingDetails } = useAllApiContext();
+    
+
+    const handleSelectHotelPrice = (indexHotel, hotelPrice) => {
         setPricingOptions(indexHotel)
-        setSelectedHotelPrice(indexHotel);
         setHotelPriceSelect(true);
+        selectedHotelPrice(hotelPrice)
+        setHotelBookingDetails((pre)=>({
+            ...pre,
+            roomType: selectedHotel.pricingOptions[indexHotel].type
+        }))
     };
 
     const handleImageClick = (imageUrl) => {
@@ -149,7 +154,7 @@ const SecondStepsBookingHotel = ({ setHotelPriceSelect, selectedHotel }) => {
                                     key={indexHotel}
                                     className={`mt-3 card bg-white rounded-xl shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg w-[100%] h-fit mb-2 ${pricingOptions == indexHotel ? 'border-4 border-blue-500' : ''}`}
                                     onClick={() =>
-                                        handleSelectHotelPrice(indexHotel)
+                                        handleSelectHotelPrice(indexHotel, items?.totalPrice)
                                     }
                                 >
                                     <div className="border border-gray-300 rounded-lg p-4 shadow-sm" >
