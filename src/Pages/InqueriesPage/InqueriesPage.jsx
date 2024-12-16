@@ -55,6 +55,7 @@ const InqueriesPage = ({ itenaryPriceData, itenatyDataListing }) => {
             customerName: name,
             mobileNumber: mobile,
             customerEmail: email,
+            packageName: itenatyDataListing?.packageTitle,
             travelDate: [departureDate],
             numberOfAdult: [numberOfAdults.toString()],
             numberOfChildWithBed: [numberOfChildrenWithBed.toString()],
