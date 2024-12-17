@@ -225,7 +225,6 @@ const FlightsTicketsPaymentPage = () => {
             setMealData(fetchBookingData?.data?.flightBookDetails?.mealDetails)
             setDiscountCoupon(fetchBookingData?.data?.discountCouponData)
             setPromoCode(fetchBookingData?.data?.promocodeData)
-
         } else if (hasFetchingBookingErr) {
             console.log(fetchingBookingErr, 'hasFetchingBookingErr')
         }
