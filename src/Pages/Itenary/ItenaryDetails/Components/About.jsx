@@ -149,43 +149,44 @@ const About = ({ data, allData }) => {
                             </h3>
                         </div>
                         <div className='flex items-center gap-3 border-b-2 p-2'>
-                            <div
-                                onClick={handleFlightsClick}
-                                className={`group border border-red-400 rounded-lg p-2 transition-all duration-300 ease-in-out 
-                                    hover:bg-red-500 hover:shadow-lg cursor-pointer hover:scale-105 active:scale-95 
-                                    ${activeFlightsIcon ? 'bg-red-500' : ''}`}>
-                                <div className="flex justify-center items-center h-full">
-                                    <LuPlane
-                                        size={30}
-                                        className={`${activeFlightsIcon ? 'text-white' : 'text-red-500'} 
-                                        group-hover:text-white transition-colors duration-300`}
-                                    />
-                                </div>
-                                <p className={`text-[15px] ${activeFlightsIcon ? 'text-white' : 'text-red-500'} 
-                                group-hover:text-white transition-colors duration-300`}>
-                                    Flight
-                                </p>
-                            </div>
-
                             {itenaryFlightsDetails && itenaryFlightsDetails.length > 0 ?
                                 <div
-                                    onClick={handleDatesClick}
+                                    onClick={handleFlightsClick}
                                     className={`group border border-red-400 rounded-lg p-2 transition-all duration-300 ease-in-out 
-                                 hover:bg-red-500 hover:shadow-lg cursor-pointer hover:scale-105 active:scale-95 
-                                 ${activeDatesIcon ? 'bg-red-500' : ''}`}>
+                                    hover:bg-red-500 hover:shadow-lg cursor-pointer hover:scale-105 active:scale-95 
+                                    ${activeFlightsIcon ? 'bg-red-500' : ''}`}>
                                     <div className="flex justify-center items-center h-full">
-                                        <BsCalendar2Date
+                                        <LuPlane
                                             size={30}
-                                            className={`${activeDatesIcon ? 'text-white' : 'text-red-500'} 
+                                            className={`${activeFlightsIcon ? 'text-white' : 'text-red-500'} 
                                         group-hover:text-white transition-colors duration-300`}
                                         />
                                     </div>
-                                    <p className={`text-[15px] ${activeDatesIcon ? 'text-white' : 'text-red-500'} 
+                                    <p className={`text-[15px] ${activeFlightsIcon ? 'text-white' : 'text-red-500'} 
                                 group-hover:text-white transition-colors duration-300`}>
-                                        Dates
+                                        Flight
                                     </p>
-                                </div> : <></>
+                                </div>
+                                : <></>
                             }
+
+                            <div
+                                onClick={handleDatesClick}
+                                className={`group border border-red-400 rounded-lg p-2 transition-all duration-300 ease-in-out 
+                                 hover:bg-red-500 hover:shadow-lg cursor-pointer hover:scale-105 active:scale-95 
+                                 ${activeDatesIcon ? 'bg-red-500' : ''}`}>
+                                <div className="flex justify-center items-center h-full">
+                                    <BsCalendar2Date
+                                        size={30}
+                                        className={`${activeDatesIcon ? 'text-white' : 'text-red-500'} 
+                                        group-hover:text-white transition-colors duration-300`}
+                                    />
+                                </div>
+                                <p className={`text-[15px] ${activeDatesIcon ? 'text-white' : 'text-red-500'} 
+                                group-hover:text-white transition-colors duration-300`}>
+                                    Dates
+                                </p>
+                            </div>
 
 
                             <div
