@@ -1,5 +1,5 @@
 import { ArrowRight, Calendar, Heart, MapPin, Users } from 'lucide-react';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAllApiContext } from "../../../Context/allApiContext";
 
@@ -8,7 +8,7 @@ const TravelPackageCard = ({ isLoading, data }) => {
     const imageUrl = `${import.meta.env.VITE_REACT_APP_IMAGE_URL}/itenary-package/`;
     const navigate = useNavigate();
     const { favorites, toggleFavorite } = useAllApiContext();
-    
+
     const handleItineraryDetails = useCallback((itineraryId) => {
         navigate(`/itenary-details/${itineraryId}`);
     }, [navigate]);
@@ -16,7 +16,7 @@ const TravelPackageCard = ({ isLoading, data }) => {
     const truncateText = useCallback((text, maxLength) => {
         if (!text) return '';
         return text.length > maxLength ? `${text.substring(0, maxLength)}...` : text;
-    }, []);    
+    }, []);
 
     const handleToggleFavorite = (e, id, item) => {
         e.stopPropagation();
@@ -115,26 +115,6 @@ const TravelPackageCard = ({ isLoading, data }) => {
                             <span className="text-lg text-red-500 font-semibold">Price</span>
                             <span className="font-semibold text-gray-800">₹ {item?.perPersonCost?.toLocaleString()}</span>
                         </div>
-                    </div>
-                </div>
-
-                <div className="bg-white rounded-lg shadow-lg p-4">
-                    <h3 className="text-lg font-medium mb-2">Departure Dates:</h3>
-                    <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
-                        {item?.departureDates?.map((date, index) => (
-                            <div
-                                key={index}
-                                className="bg-gray-100 rounded-md p-3 text-center hover:bg-gray-200 transition-colors"
-                            >
-                                <p className="text-gray-700 font-medium">
-                                    {new Date(date).toLocaleDateString('en-GB', {
-                                        day: '2-digit',
-                                        month: '2-digit',
-                                        year: 'numeric',
-                                    })}
-                                </p>
-                            </div>
-                        ))}
                     </div>
                 </div>
 
