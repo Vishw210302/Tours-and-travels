@@ -42,7 +42,7 @@ const PaymentForm = ({ onPaymentSuccess, description, personDetails }) => {
 
 
         try {
-        
+
             const cardholderName = event.target.name.value;
             const payload = {
                 amount: personDetails ? parseFloat(personDetails.payPrice.replace(/[^\d]/g, '')) * 100 : totalTicketPrice * 100,
@@ -113,13 +113,23 @@ const PaymentForm = ({ onPaymentSuccess, description, personDetails }) => {
                 <form onSubmit={handleSubmit}>
                     <div className="mb-6">
                         <label htmlFor="name" className="block text-sm font-semibold text-gray-700">Cardholder Name</label>
-                        <input
-                            id="name"
-                            name="name"
-                            placeholder="John Doe"
-                            value={personDetails ? personDetails.formData.name : ""}
-                            className="mt-2 w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-blue-500 focus:outline-none transition"
-                        />
+                        {personDetails ? (
+                            <input
+                                id="name"
+                                name="name"
+                                placeholder="John Doe"
+                                value={personDetails ? personDetails.formData.name : ""}
+                                className="mt-2 w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-blue-500 focus:outline-none transition"
+                            />
+                        ) : (
+                            <input
+                                id="name"
+                                name="name"
+                                placeholder="John Doe"
+                                className="mt-2 w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-blue-500 focus:outline-none transition"
+                            />
+                        )}
+
                     </div>
 
                     <div className="mb-6">
