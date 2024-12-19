@@ -1,116 +1,147 @@
-import { MapPin } from 'lucide-react';
-import React from 'react';
-import pkgImage from "../../assets/image.jpg";
+import { ArrowRight, Calendar, Heart, Users } from 'lucide-react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useLocation, useParams } from 'react-router-dom';
+import { useGetDataByThemeMutation } from '../../Api/Api';
 import BannerImage from "../../assets/water.jpg";
+import { useAllApiContext } from '../../Context/allApiContext';
 import RippleEffect from '../RippleEffects/RippleEffect';
-
-const travelPackages = [
-    {
-        id: 1,
-        name: "Maldives Getaway",
-        description: "Enjoy 7 days in the beautiful Maldives with beach resorts and water sports.",
-        perPersonCost: "20,000",
-        image: pkgImage,
-        departureFrom: "Ahmedabad",
-        departureTo: "Bali",
-        categories: "premium",
-    },
-    {
-        id: 2,
-        name: "Swiss Alps Adventure",
-        description: "A 10-day tour of the Swiss Alps with skiing, snowboarding, and scenic train rides.",
-        perPersonCost: "15,000",
-        image: pkgImage,
-        departureFrom: "Ahmedabad",
-        departureTo: "Bali",
-        categories: "Royal",
-    },
-    {
-        id: 3,
-        name: "Bali Vacation",
-        description: "Relax in Bali with a 5-day trip including temple visits and beach fun.",
-        perPersonCost: "12,000",
-        image: pkgImage,
-        departureFrom: "Ahmedabad",
-        departureTo: "Bali",
-        categories: "Classic",
-    }
-];
 
 const PopularTheme = () => {
 
-    const handleItenary = (packageUrl) => {
-        console.log("click on Id", packageUrl)
+    const { id } = useParams()
+    const { state } = useLocation();
+    console.log("packageDatapackageData", state)
+    const [getDataByThemeApi, { data, isLoading, isSuccess, isError, error }] = useGetDataByThemeMutation();
+    const [dataByTheme, setDataByTheme] = useState([])
+    const { favorites, toggleFavorite } = useAllApiContext();
+    const imageUrl = `${import.meta.env.VITE_REACT_APP_IMAGE_URL}/itenary-package/`;
+
+    const handleItineraryDetails = (packageId) => {
+        console.log("clicked by me", packageId)
     }
+
+    const handleToggleFavorite = (e, id, item) => {
+        e.stopPropagation();
+        e.preventDefault();
+        toggleFavorite(id, item);
+    }
+
+    const truncateText = useCallback((text, maxLength) => {
+        if (!text) return '';
+        return text.length > maxLength ? `${text.substring(0, maxLength)}...` : text;
+    }, []);
+
+    useEffect(() => {
+        if (isSuccess) {
+            setDataByTheme(data?.data);
+        } else if (isError) {
+            console.log("error", isError);
+        }
+    }, [error, data, isSuccess, isError])
+
+    useEffect(() => {
+        if (id) {
+            getDataByThemeApi(id)
+        }
+    }, [id])
 
     return (
         <>
             <div className='bg-white min-h-screen'>
                 <RippleEffect
                     BannerImage={BannerImage}
-                    BannerTitle={"Popular Theme"}
+                    BannerTitle={state?.packageName}
                 />
-                <div className='2xl:container 2xl:mx-auto p-5'>
-                    <div className='grid md:grid-cols-2 lg:grid-cols-3 gap-10'>
-                        {travelPackages && travelPackages.map((packageItem, index) => {
+                <div>
+                    <div className='2xl:container 2xl:mx-auto p-5'>
+                        <div className='grid grid-cols-3 gap-2'>
+                            {dataByTheme && dataByTheme.map((item, index) => {
+                                return (
+                                    <div key={index + "key"} className="card bg-white shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 my-2 flex flex-col hover:shadow-2xl rounded-lg">
+                                        <div className="relative flex-1">
 
-                            return (
-
-                                <div key={index + "key"} className="bg-white rounded-2xl overflow-hidden shadow-lg transform transition duration-300 hover:scale-105 hover:shadow-2xl">
-
-                                    <div className="relative">
-                                        <div className="absolute top-4 right-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
-                                            {packageItem?.categories.toUpperCase()}
-                                        </div>
-                                        <img
-                                            src={packageItem?.image}
-                                            alt={packageItem?.name}
-                                            className="w-full h-64 object-cover"
-                                        />
-                                    </div>
-
-                                    <div className="p-4">
-                                        <h3 className="text-xl font-bold text-red-500 mb-3">
-                                            {packageItem?.name}
-                                        </h3>
-
-                                        <p className="text-base text-gray-600 mb-4 line-clamp-3">
-                                            {packageItem?.description}
-                                        </p>
-
-                                        <div className='flex flex-row items-center gap-3 mb-3'>
-                                            <MapPin className="text-red-500 w-5 h-5" />
-                                            <span className="text-md text-gray-600">
-                                                {packageItem?.departureFrom} → {packageItem?.departureTo}
-                                            </span>
-                                        </div>
-
-                                        <div className='flex flex-row items-center justify-between'>
-                                            <div>
-                                                <p className="text-md text-gray-500">Starting from</p>
-                                                <div className='flex flex-row items-center'>
-                                                    <p className="text-2xl font-bold text-red-500">
-                                                        ₹{packageItem?.perPersonCost}
-                                                    </p>
-                                                    <p className="text-lg text-gray-500 mx-2">/ per person</p>
-                                                </div>
+                                            <div className="w-full h-[40%]">
+                                                <img
+                                                    src={`${imageUrl}${item?.bannerImage}`}
+                                                    alt={item?.packageTitle}
+                                                    className="h-[220px] w-full rounded-tl-lg rounded-tr-lg object-cover"
+                                                    loading="lazy"
+                                                />
                                             </div>
-                                            <div>
+
+                                            <div className="absolute top-3 right-3 z-10">
                                                 <button
-                                                    className="bg-red-500 text-white px-6 py-2 rounded-lg font-semibold hover:bg-red-600 transition duration-300"
-                                                    onClick={() =>
-                                                        handleItenary(packageItem?.id)
-                                                    }
+                                                    onClick={(e) => handleToggleFavorite(e, item?._id, item)}
+                                                    className="h-fit p-2 bg-white rounded-full shadow-lg hover:shadow-xl"
+                                                    aria-label={favorites?.has(item?._id) ? "Remove from favorites" : "Add to favorites"}
                                                 >
-                                                    View More
+                                                    <Heart
+                                                        className={`transition-colors duration-300 h-fit ${favorites.has(item?._id)
+                                                            ? 'fill-red-500 text-red-500'
+                                                            : 'text-gray-600'
+                                                            }`
+                                                        }
+                                                    />
                                                 </button>
                                             </div>
+
+                                            <div className="absolute top-[82%]">
+                                                <div className="bg-red-500 px-3 py-1 rounded-[9px] ml-2">
+                                                    <p className="text-white font-semibold capitalize">
+                                                        {item?.categories}
+                                                    </p>
+                                                </div>
+                                            </div>
+
                                         </div>
 
+                                        <div className="p-2 flex flex-col flex-grow">
+                                            <h2 className="text-xl mb-2 font-bold text-red-500">
+                                                {item?.packageTitle}
+                                            </h2>
+                                            <p className="text-base font-normal text-gray-600">
+                                                {truncateText(item?.smallDescription, 120)}
+                                            </p>
+                                        </div>
+
+                                        <div className="grid grid-cols-2 gap-4 p-4 border-y border-gray-100">
+
+                                            <div className="grid grid-cols-[auto_1fr] gap-2 items-center">
+                                                <div className="p-2 bg-red-50 rounded-lg">
+                                                    <Calendar className="w-5 h-5 text-red-500" />
+                                                </div>
+                                                <div className="flex flex-col">
+                                                    <span className="text-lg text-red-500 font-semibold">Duration</span>
+                                                    <span className="font-semibold text-gray-800">{item?.days?.length} days</span>
+                                                </div>
+                                            </div>
+
+                                            <div className="grid grid-cols-[auto_1fr] gap-2 items-center">
+                                                <div className="p-2 bg-blue-50 rounded-lg">
+                                                    <Users className="w-5 h-5 text-blue-500" />
+                                                </div>
+                                                <div className="flex flex-col">
+                                                    <span className="text-lg text-red-500 font-semibold">Price</span>
+                                                    <span className="font-semibold text-gray-800">₹ {item.perPersonCost}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="p-3">
+                                            <button
+                                                className="w-full bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg flex items-center justify-center group"
+                                                onClick={() => {
+                                                    handleItineraryDetails(item?._id)
+                                                }}
+                                            >
+                                                <span className="mr-2">View Details</span>
+                                                <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" />
+                                            </button>
+                                        </div>
                                     </div>
-                                </div>
-                            )
-                        })}
+                                )
+                            })}
+                        </div>
                     </div>
                 </div>
             </div>

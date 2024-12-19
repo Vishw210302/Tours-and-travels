@@ -20,8 +20,9 @@ const TourTheme = () => {
         }
     }, [error, data, isSuccess, isError]);
 
-    const handlePopularThemeOpen = (themeId) => {
-        navigate(`popularTheme/${themeId}`);
+    const handlePopularThemeOpen = (themeId, packageName) => {
+        console.log("packageNamepackageNamepackageName", packageName)
+        navigate(`popularTheme/${themeId}`, { state: { packageName } });
     };
 
     const settings = {
@@ -75,7 +76,7 @@ const TourTheme = () => {
                                     return (
                                         <div className='w-fit cursor-pointer' key={index + "1"}>
                                             <div
-                                                onClick={() => handlePopularThemeOpen(theme?._id)}>
+                                                onClick={() => handlePopularThemeOpen(theme?._id, theme?.packageName)}>
                                                 <div className='w-[200px] h-[200px]'>
                                                     <img
                                                         src={`${imageUrl}${theme?.packageThemeImage}`}

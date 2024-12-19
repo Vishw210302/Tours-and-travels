@@ -129,6 +129,13 @@ export const myApi = createApi({
             query: () => "get-flight-meals",
         }),
 
+        getDataByTheme: builder.mutation({
+            query: (id) => ({
+                url: `get-data-by-theme/${id}`,
+                method: 'GET',
+            }),
+        }),
+
         getMealById: builder.query({
             query: (id) => `get-particular-meal-listing/${id}`,
         }),
@@ -259,6 +266,7 @@ export const {
     useGetAboutUsContentQuery,
     useInqueriesPostMutation,
     useGetMealTypeQuery,
+    useGetDataByThemeMutation,
     useLazyGetMealByIdQuery,
     useLazyGetParticularFlightQuery,
     useGetFlightSeatQuery,

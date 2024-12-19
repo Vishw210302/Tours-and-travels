@@ -282,7 +282,9 @@ const Days = ({ days, inclusionExclusion }) => {
                 }
                 {exclusion && exclusion.length > 0 ?
                     <div className="card bg-white rounded-xl shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg my-2 p-3 h-fit">
-                        <p className="text-center text-[21px] text-red-500 font-bold">Exclusions</p>
+                        <div className='text-center'>
+                            <p className="text-[21px] text-red-500 font-bold border-b-2 border-red-300 inline-block ">Exclusions</p>
+                        </div>
                         <div className="mt-3">
                             {exclusion && exclusion.map((item, index) => {
                                 return (
@@ -291,16 +293,17 @@ const Days = ({ days, inclusionExclusion }) => {
                                             <span>
                                                 <svg
                                                     xmlns="http://www.w3.org/2000/svg"
-                                                    className="h-5 w-5 text-green-500"
+                                                    className="h-5 w-5 text-red-500"
                                                     viewBox="0 0 20 20"
                                                     fill="currentColor"
                                                 >
                                                     <path
                                                         fillRule="evenodd"
-                                                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                                        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
                                                         clipRule="evenodd"
                                                     />
                                                 </svg>
+
                                             </span>
                                         </div>
                                         <div>

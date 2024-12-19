@@ -3,7 +3,6 @@ import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAddMealDataMutation, useGetMealTypeQuery, useLazyGetMealByIdQuery, useLazyGetUpdatedMealOrderQuery } from '../../../Api/Api';
-import { useFlightTicketsDetailsContext } from '../../../Context/FlightTicketsDetailsContext';
 
 
 const MealAndSelect = () => {
@@ -15,7 +14,6 @@ const MealAndSelect = () => {
     const [mealTypes, setMealTypes] = useState();
     const [particularMeal, setParticularMeal] = useState([]);
     const [mealCounts, setMealCounts] = useState({});
-    // const { selectedMealData, setSelectedMealData } = useFlightTicketsDetailsContext();
     const { data, isLoading, isSuccess, isError, error } = useGetMealTypeQuery();
 
     const [fetchMealByParticularId, {
