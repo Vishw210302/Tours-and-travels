@@ -224,7 +224,7 @@ export const myApi = createApi({
                 method: "POST",
                 body: payload,
             }),
-        })
+        }),
 
     }),
 
@@ -271,5 +271,5 @@ export const {
     useGetSocialMediaLinkListingQuery,
     useGetParticularHotelListingQuery,
     useAddItenaryParsonDetailsMutation,
-    useProcessHotelPaymentMutation
+    useProcessHotelPaymentMutation,
 } = myApi;
