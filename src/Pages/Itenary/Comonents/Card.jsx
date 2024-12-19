@@ -24,6 +24,10 @@ const TravelPackageCard = ({ isLoading, data }) => {
         toggleFavorite(id, item);
     }
 
+    const handleClickOnHomePage = () => {
+        navigate("/")
+    }
+
     const EmptyState = useMemo(() => (
         <div className="w-full max-w-4xl mx-auto p-8">
             <div className="flex flex-col items-center justify-center h-80 bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl shadow-lg backdrop-blur-sm">
@@ -31,7 +35,11 @@ const TravelPackageCard = ({ isLoading, data }) => {
                 <h3 className="text-2xl font-bold text-gray-800 mb-2">No Packages Found</h3>
                 <p className="text-gray-600 text-lg">Try adjusting your search criteria</p>
                 <div className="mt-8">
-                    <button className="px-6 py-3 bg-red-500 text-white rounded-full hover:bg-red-600 transition-all duration-300 transform hover:scale-105">
+                    <button
+                        onClick={() => {
+                            handleClickOnHomePage()
+                        }}
+                        className="px-6 py-3 bg-red-500 text-white rounded-full hover:bg-red-600 transition-all duration-300 transform hover:scale-105">
                         Explore Other Destinations
                     </button>
                 </div>
