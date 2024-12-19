@@ -16,14 +16,21 @@ const Index = () => {
   const { isSuccess, isError, data, error } = useGetItenariesDetailsQuery(id);
   const [itenatyDataListing, setItenaryDataListing] = useState({});
   const [itenaryPriceData, setItenaryPriceData] = useState({});
+  const [itenaryId, setItenaryId] = useState(null)
   const imageUrl = `${import.meta.env.VITE_REACT_APP_IMAGE_URL}/itenary-package/`;
-
   useEffect(() => {
     if (isSuccess && data?.itenaryData) {
       setItenaryDataListing(data?.itenaryData);
       setItenaryPriceData(data?.itenaryData?.price)
     }
   }, [isSuccess, isError, data, error]);
+
+  useEffect(() => {
+   if(id){
+    setItenaryId(id)
+   }
+  }, [id])
+  
 
   return (
     <>
@@ -64,6 +71,7 @@ const Index = () => {
         </div>
 
         <InqueriesPage
+          itenaryId ={itenaryId}
           itenaryPriceData={itenaryPriceData}
           itenatyDataListing={itenatyDataListing}
         />

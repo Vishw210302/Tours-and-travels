@@ -6,8 +6,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import { useInqueriesPostMutation } from '../../Api/Api';
 import PlaneLoader from '../PlaneLoader';
 
-const InqueriesPage = ({ itenaryPriceData, itenatyDataListing }) => {
-
+const InqueriesPage = ({ itenaryPriceData, itenatyDataListing, itenaryId }) => {
+    
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [mobile, setMobile] = useState('');
@@ -49,18 +49,22 @@ const InqueriesPage = ({ itenaryPriceData, itenatyDataListing }) => {
     };
 
     const handleSubmit = async (e) => {
+
         e.preventDefault();
         calculatePriceDetails();
         const formData = {
+            itenaryId,
             customerName: name,
             mobileNumber: mobile,
             customerEmail: email,
-            packageName: itenatyDataListing?.packageTitle,
+            itenaryName: itenatyDataListing?.packageTitle,
             travelDate: [departureDate],
-            numberOfAdult: [numberOfAdults.toString()],
-            numberOfChildWithBed: [numberOfChildrenWithBed.toString()],
-            numberOfChildWithoutBed: [numberOfChildrenWithoutBed.toString()],
+            numberOfAdult: Number(numberOfAdults),
+            numberOfChildWithBed: numberOfChildrenWithBed,
+            numberOfChildWithoutBed: numberOfChildrenWithoutBed,
         };
+
+        
 
         try {
             await inqueriesPost(formData).unwrap();
@@ -69,7 +73,7 @@ const InqueriesPage = ({ itenaryPriceData, itenatyDataListing }) => {
                 setName('');
                 setEmail('');
                 setMobile('');
-                setNumberOfAdults(1);
+                setnumberOfAdults(1);
                 setNumberOfChildrenWithBed(0);
                 setNumberOfChildrenWithoutBed(0);
                 setDepartureDate('');
