@@ -117,33 +117,31 @@ const Destinations = () => {
                                     </div>
 
                                     <div className="relative p-6 h-[40%]">
-                                        <h3 className="text-2xl font-bold text-white mb-4 group-hover:text-teal-400 transition-colors">
+                                        <h3 className="text-2xl font-bold text-white mb-4 group-hover:text-red-500 transition-colors">
                                             {destination.packageName}
                                         </h3>
                                         <button
                                             onClick={() => handleParticularItenry(destination._id)}
-                                            className="absolute bottom-6 left-6 right-6 py-3 bg-gradient-to-r from-teal-400 to-blue-500 hover:from-teal-500 hover:to-blue-600 text-white rounded-xl font-medium transition-all duration-300 transform hover:translate-y-[-2px] hover:shadow-lg active:translate-y-0"
+                                            className="absolute bottom-6 left-6 right-6 py-3 bg-gradient-to-r bg-red-400 hover:bg-red-500 text-white rounded-xl font-medium transition-all duration-300 transform hover:translate-y-[-2px] hover:shadow-lg active:translate-y-0"
                                         >
-                                            Explore Now
+                                            Explore Destination
                                         </button>
                                     </div>
-
-                                    <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-teal-400 via-purple-400 to-pink-400"></div>
                                 </div>
                             </SwiperSlide>
                         ))}
                     </Swiper>
 
                     <button
-                        className="swiper-button-prevs absolute left-0 top-1/2 -translate-y-1/2 z-10 -translate-x-1/2 w-12 h-12 bg-[#16213e]/80 backdrop-blur rounded-full shadow-lg flex items-center justify-center group hover:bg-teal-400/20 transition-all duration-300"
+                        className="swiper-button-prevs absolute left-0 top-1/2 -translate-y-1/2 z-10 -translate-x-1/2 w-12 h-12 bg-red-400 rounded-full shadow-lg flex items-center justify-center group hover:bg-red-500 transition-all duration-300"
                     >
-                        <ChevronLeft className="w-6 h-6 text-white group-hover:text-teal-400" />
+                        <ChevronLeft className="w-6 h-6 text-white" />
                     </button>
 
                     <button
-                        className="swiper-button-nexts absolute right-0 top-1/2 -translate-y-1/2 z-10 translate-x-1/2 w-12 h-12 bg-[#16213e]/80 backdrop-blur rounded-full shadow-lg flex items-center justify-center group hover:bg-teal-400/20 transition-all duration-300"
+                        className="swiper-button-nexts absolute right-0 top-1/2 -translate-y-1/2 z-10 translate-x-1/2 w-12 h-12 bg-red-400 rounded-full shadow-lg flex items-center justify-center group hover:bg-red-500 transition-all duration-300"
                     >
-                        <ChevronRight className="w-6 h-6 text-white group-hover:text-teal-400" />
+                        <ChevronRight className="w-6 h-6 text-white" />
                     </button>
                 </div>
             </div>

@@ -67,7 +67,7 @@ const Destinations = () => {
         <div
             className="bg-[url('/src/assets/bg-image.png')] bg-cover bg-center"
         >
-            <div className="max-w-7xl mx-auto px-4">
+            <div className="max-w-7xl mx-auto px-4 p-4">
                 <div className="text-center mb-14">
                     <p className="font-bold text-red-500 text-[24px] sm:text-[16px] md:text-[18px] lg:text-[24px] xl:text-[30px]">
                         Domestic Destination
@@ -112,13 +112,13 @@ const Destinations = () => {
                                     <div className="absolute bottom-0 left-0 right-0 p-8 z-20 transform transition-transform duration-500">
                                         <div className="space-y-4">
 
-                                            <h3 className="text-2xl font-bold text-white">
+                                            <h3 className="text-2xl font-bold text-white group-hover:text-red-500">
                                                 {destination.packageName}
                                             </h3>
 
                                             <button
                                                 onClick={() => handleParticularItenry(destination._id)}
-                                                className="mt-6 w-full px-6 py-3 bg-gradient-to-r from-red-500 to-pink-600 text-white rounded-lg font-semibold transform transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-red-500/30 flex items-center justify-center gap-2"
+                                                className="mt-6 w-full px-6 py-3 bg-red-400 hover:bg-red-500 text-white rounded-lg font-semibold flex items-center justify-center gap-2"
                                             >
                                                 Explore Destination
                                                 <ChevronRight className="w-4 h-4" />
