@@ -81,18 +81,17 @@ const PackagesBookingModal = ({ bookingModalOpen, setBookingModalOpen, allData, 
 
     const prices = calculateTotalPrice();
     const handleBookItenry = () => {
-        const payPrice = prices.percentageSelection === '0' ? prices.final : Math.floor(prices.percentageAmount);
 
+        const payPrice = prices.percentageSelection === '0' ? prices.final : Math.floor(prices.percentageAmount);
+        
         const itenryData = {
             formData,
             payPrice,
             remainingBalance: Math.floor(prices.final - prices.percentageAmount) 
         }
-
-        openStraipeModel(itenryData)
-
+        handleClosePackageBookingModalClose();
+        openStraipeModel(itenryData)  
     }
-
 
     return (
         <Modal

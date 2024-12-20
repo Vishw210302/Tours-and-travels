@@ -138,7 +138,7 @@ const About = ({ data, allData }) => {
 
     const openBookingConfirmPage = () => {
         setPaymentsucessModelOpen(false)
-        navigate(`/itenary-details/${allData?._id}`);
+        navigate(`/itenary-details/${allItenaryData?._id}`);
         toast.success("Itenary booked successfully! Your payment details have been recorded.");
     }
 

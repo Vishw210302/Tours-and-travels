@@ -27,6 +27,7 @@ export const AllApiProvider = ({ children }) => {
         totalGuests: '',
         numberOfRooms:'',
         cityName: '',
+        amenities: []
     });
     
     const [addToCart, setaddToCart] = useState(() => {

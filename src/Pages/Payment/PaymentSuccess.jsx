@@ -73,7 +73,7 @@ const PaymentSuccess = ({ openBookingConfirmPage, paymentId, payPrice, title }) 
                     </div>
 
                     <div className='text-white text-2xl font-semibold mt-6'>
-                        ₹{payPrice? parseFloat(payPrice.replace(/[^\d]/g, '')) : totalTicketPrice}
+                        ₹{payPrice? payPrice : totalTicketPrice}
                     </div>
                 </div>
             </div>

@@ -108,9 +108,8 @@ const MealAndSelect = () => {
             selecteMealData,
             id
         }
-
+        
         await addMealData(payload);
-
     };
 
     const handleSelectMeal = (id) => {

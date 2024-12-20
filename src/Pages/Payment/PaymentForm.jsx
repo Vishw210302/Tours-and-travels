@@ -45,7 +45,7 @@ const PaymentForm = ({ onPaymentSuccess, description, personDetails }) => {
 
             const cardholderName = event.target.name.value;
             const payload = {
-                amount: personDetails ? parseFloat(personDetails.payPrice.replace(/[^\d]/g, '')) * 100 : totalTicketPrice * 100,
+                amount: personDetails ? personDetails.payPrice * 100 : totalTicketPrice * 100,
                 currency: 'inr',
                 description: description,
                 billing_details: {
@@ -235,7 +235,7 @@ const PaymentForm = ({ onPaymentSuccess, description, personDetails }) => {
                         {loading ? (
                             <PlaneLoader />
                         ) : (
-                            `Pay ${personDetails ? personDetails.payPrice : '₹' + totalTicketPrice}`
+                            `Pay ₹${personDetails ? personDetails?.payPrice : '₹' + totalTicketPrice}`
                         )}
                     </button>
 
