@@ -67,7 +67,7 @@ const TourTheme = () => {
                         <div className='flex flex-row justify-center items-center p-5 w-full font-bold text-[30px] text-red-500'>
                             Popular Themes
                         </div>
-                        <p className='flex flex-row justify-center items-center text-center text-lg'>
+                        <p className='flex flex-row justify-center items-center text-center text-[15px] sm:text-[16px] md:text-[18px] lg:text-[18px] xl:text-[20px]'>
                             Planning your Family Vacations, Honeymoon, Beach Holidays or want to explore the wildlife? Just pick one of the Popular Themes and explore the recommended Deals.
                         </p>
                         <div className='my-3'>
