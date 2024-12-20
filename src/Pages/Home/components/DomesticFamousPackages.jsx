@@ -68,8 +68,10 @@ const Destinations = () => {
             className="bg-[url('/src/assets/bg-image.png')] bg-cover bg-center"
         >
             <div className="max-w-7xl mx-auto px-4">
-                <div className="text-center mb-8">
-                    <p className='font-bold text-[30px] text-red-500'>Domestic Destination</p>
+                <div className="text-center mb-14">
+                    <p className="font-bold text-red-500 text-[24px] sm:text-[16px] md:text-[18px] lg:text-[24px] xl:text-[30px]">
+                        Domestic Destination
+                    </p>
                 </div>
 
                 <div className="relative">
@@ -131,7 +133,7 @@ const Destinations = () => {
                     <button className="swiper-button-prev absolute right-10 bottom-[100%] -translate-y-1/2 -translate-x-4 z-30 w-9 h-9 bg-red-400 rounded-full flex items-center justify-center group hover:bg-red-500 transition-all duration-300">
                         <ChevronLeft className="w-6 h-6 text-white" />
                     </button>
-                    <button className="swiper-button-next absolute right-0 bottom-[100%] -translate-y-1/2 translate-x-4 z-30 w-9 h-9 bg-red-400 rounded-full flex items-center justify-center group hover:bg-red-500 transition-all duration-300">
+                    <button className="swiper-button-next absolute right-4 bottom-[100%] -translate-y-1/2 translate-x-4 z-30 w-9 h-9 bg-red-400 rounded-full flex items-center justify-center group hover:bg-red-500 transition-all duration-300">
                         <ChevronRight className="w-6 h-6 text-white" />
                     </button>
                 </div>

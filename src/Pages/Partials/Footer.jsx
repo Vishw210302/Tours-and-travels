@@ -85,7 +85,7 @@ const Footer = ({ settingData, settingIsSuccess, settingIsError, settingError })
                 if (items?.keyName == "Main_Logo") {
                   return (
                     <div key={index + "key"}>
-                      <img src={`${mainLogoImage}${items?.valueContent}`} alt={items?.keyName} className='h-[78px]' />
+                      <img src={`${mainLogoImage}${items?.valueContent}`} alt={items?.keyName} className='w-[266px]' />
                     </div>
                   )
                 }

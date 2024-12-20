@@ -74,7 +74,7 @@ const NavBar = ({ settingData, settingIsSuccess, settingIsError, settingError })
                       key={index + 'key'}
                       src={`${mainLogoImage}${item?.valueContent}`}
                       alt={item?.keyName}
-                      className="h-12"
+                      className='w-[296px]'
                     />
                   );
                 }

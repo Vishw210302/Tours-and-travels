@@ -5,7 +5,7 @@ import LocalDiningIcon from '@mui/icons-material/LocalDining';
 import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
 import PaidIcon from '@mui/icons-material/Paid';
 import PersonIcon from '@mui/icons-material/Person';
-import { Plane } from 'lucide-react';
+import { ArrowRight, Calendar, Car, FileDown, Hotel, MapPin, Plane } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { BsCalendar2Date } from "react-icons/bs";
 import { FaHotel } from "react-icons/fa";
@@ -19,6 +19,7 @@ import StripePayment from '../../../Payment/PaymentForm';
 import PaymentSuccess from '../../../Payment/PaymentSuccess';
 
 const ReadMoreText = ({ text }) => {
+
     const [isExpanded, setIsExpanded] = useState(false);
     const words = text?.split(' ');
     const shortText = words?.slice(0, 100).join(' ');
@@ -53,15 +54,14 @@ const About = ({ data, allData }) => {
     const [handlePersonDetailsApi] = useAddItenaryParsonDetailsMutation()
     const [paymentId, setPaymentId] = useState('')
     const [showDatesContent, setShowDatesContent] = useState(false);
+    const [showHotelContent, setShowHotelContent] = useState(false);
     const [showFlightsContent, setShowFlightsContent] = useState(false);
     const [selectedMonth, setSelectedMonth] = useState(null);
     const [activeDatesIcon, setActiveDatesIcon] = useState(false);
+    const [activeHotelIcon, setActiveHotelIcon] = useState(false);
     const [activeFlightsIcon, setActiveFlightsIcon] = useState(false);
     const navigate = useNavigate()
     const longText = data;
-    const handlePackageBookingModal = () => {
-        setBookingModalOpen(true)
-    }
 
     const groupedDates = departureDates.reduce((acc, date) => {
         const dateObj = new Date(date);
@@ -75,14 +75,6 @@ const About = ({ data, allData }) => {
         acc[monthYear].push(date);
         return acc;
     }, {});
-
-    const handleBrochureDownload = (urlOfFiles) => {
-        const brochureUrl = urlOfFiles
-        const a = document.createElement('a');
-        a.href = brochureUrl;
-        a.download = 'Brochure.pdf';
-        a.click();
-    }
 
     useEffect(() => {
         if (Array.isArray(allData?.itenaryData?.departureDates)) {
@@ -103,9 +95,22 @@ const About = ({ data, allData }) => {
         setActiveDatesIcon(!activeDatesIcon);
     }
 
+    const handleHotelClick = () => {
+        setShowHotelContent(!showHotelContent);
+        setActiveHotelIcon(!activeHotelIcon);
+    }
+
     const handleFlightsClick = () => {
         setShowFlightsContent(!showFlightsContent);
         setActiveFlightsIcon(!activeFlightsIcon);
+    }
+
+    const handleDownloadClick = () => {
+        console.log("on click working")
+    }
+
+    const handlePackageBookingModal = () => {
+        setBookingModalOpen(true)
     }
 
     const handlePaymentSuccess = async (details) => {
@@ -157,17 +162,17 @@ const About = ({ data, allData }) => {
                                     ${activeFlightsIcon ? 'bg-red-500' : ''}`}>
                                     <div className="flex justify-center items-center h-full">
                                         <LuPlane
-                                            size={30}
+                                            size={25}
                                             className={`${activeFlightsIcon ? 'text-white' : 'text-red-500'} 
                                         group-hover:text-white transition-colors duration-300`}
                                         />
                                     </div>
-                                    <p className={`text-[15px] ${activeFlightsIcon ? 'text-white' : 'text-red-500'} 
-                                group-hover:text-white transition-colors duration-300`}>
+                                    <p className={`text-[15px] ${activeFlightsIcon ? 'text-white' : 'text-red-500'}group-hover:text-white transition-colors duration-300`}>
                                         Flight
                                     </p>
                                 </div>
-                                : <></>
+                                :
+                                <></>
                             }
 
                             <div
@@ -177,32 +182,52 @@ const About = ({ data, allData }) => {
                                  ${activeDatesIcon ? 'bg-red-500' : ''}`}>
                                 <div className="flex justify-center items-center h-full">
                                     <BsCalendar2Date
-                                        size={30}
+                                        size={25}
                                         className={`${activeDatesIcon ? 'text-white' : 'text-red-500'} 
                                         group-hover:text-white transition-colors duration-300`}
                                     />
                                 </div>
-                                <p className={`text-[15px] ${activeDatesIcon ? 'text-white' : 'text-red-500'} 
-                                group-hover:text-white transition-colors duration-300`}>
+                                <p className={`text-[15px] ${activeDatesIcon ? 'text-white' : 'text-red-500'}group-hover:text-white transition-colors duration-300`}>
                                     Dates
                                 </p>
                             </div>
 
-
                             <div
-                                className='group border border-red-400 rounded-lg p-2 transition-all duration-300 ease-in-out 
-                                 hover:bg-red-500 hover:shadow-lg cursor-pointer hover:scale-105 active:scale-95'
+                                onClick={handleHotelClick}
+                                className={`group border border-red-400 rounded-lg p-2 transition-all duration-300 ease-in-out 
+                                    hover:bg-red-500 hover:shadow-lg cursor-pointer hover:scale-105 active:scale-95 
+                                    ${activeHotelIcon ? 'bg-red-500' : ''}`}
                             >
                                 <div className="flex justify-center items-center h-full">
                                     <FaHotel
-                                        size={30}
-                                        className="text-red-500 group-hover:text-white transition-colors duration-300"
+                                        size={25}
+                                        className={`${activeHotelIcon ? 'text-white' : 'text-red-500'} 
+                                            group-hover:text-white transition-colors duration-300`}
                                     />
                                 </div>
-                                <p className='text-[15px] text-red-500 group-hover:text-white transition-colors duration-300'>
+                                <p className={`text-[15px] ${activeHotelIcon ? 'text-white' : 'text-red-500'} 
+                                group-hover:text-white transition-colors duration-300`}>
                                     Hotels
                                 </p>
                             </div>
+
+                            <div
+                                onClick={handleDownloadClick}
+                                className="group border border-red-400 rounded-lg p-1 transition-all duration-300 ease-in-out 
+                                hover:bg-red-500 hover:shadow-lg cursor-pointer hover:scale-105 active:scale-95 text-red-500"
+                            >
+                                <div className="flex justify-center items-center h-full">
+                                    <FileDown
+                                        size={25}
+                                        className="group-hover:text-white transition-colors duration-300 text-red-500"
+                                    />
+                                </div>
+                                <p className="group-hover:text-white transition-colors duration-300 text-red-500 text-base"
+                                >
+                                    Brochure
+                                </p>
+                            </div>
+
                         </div>
                     </div>
                     {showDatesContent && (
@@ -271,9 +296,6 @@ const About = ({ data, allData }) => {
                                                         Flight {index + 1}
                                                     </span>
                                                 </div>
-                                                <span className="text-sm text-gray-500">
-                                                    {new Date(flight.createdAt).toLocaleDateString()}
-                                                </span>
                                             </div>
 
                                             <div className="flex justify-between items-center">
@@ -306,6 +328,98 @@ const About = ({ data, allData }) => {
                         </div>
                     )}
 
+                    {showHotelContent && (
+                        <div className="w-full max-w-4xl mx-auto p-4">
+                            <h2 className="text-2xl font-bold mb-6 text-primary">Stay & Transfer Details</h2>
+
+                            <div className="w-full bg-gray-50">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-7xl mx-auto">
+                                    {allItenaryData.days.map((day, index) => (
+                                        <div
+                                            key={index + "key"}
+                                            className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300"
+                                        >
+                                            <div className="bg-primary/5 p-4 border-b">
+                                                <div className="flex items-center justify-between">
+                                                    <div className="flex items-center gap-3">
+                                                        <div className="bg-primary text-white p-2 rounded-lg">
+                                                            <Calendar className="h-5 w-5" />
+                                                        </div>
+                                                        <h3 className="text-lg font-bold text-gray-800">Day {index + 1}</h3>
+                                                    </div>
+                                                    <span className="text-sm text-primary font-medium px-3 py-1 bg-primary/10 rounded-full">
+                                                        {day?.mealPlan}
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <div className="p-5 space-y-6">
+                                                <div className="space-y-4">
+                                                    <div className="flex items-center gap-3">
+                                                        <div className="p-2 bg-primary/10 rounded-lg">
+                                                            <Hotel className="h-5 w-5 text-primary" />
+                                                        </div>
+                                                        <h4 className="font-semibold text-gray-800">Stay Details</h4>
+                                                    </div>
+
+                                                    <div className="pl-12 space-y-3">
+                                                        <div className="flex items-start gap-8">
+                                                            <div className="w-1/3">
+                                                                <span className="text-sm text-gray-500">Property</span>
+                                                                <p className="font-medium text-gray-800">{day?.hotelName}</p>
+                                                            </div>
+                                                            <div>
+                                                                <span className="text-sm text-gray-500">Room</span>
+                                                                <p className="font-medium text-gray-800">{day?.hotelRoomType}</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div className="space-y-4">
+                                                    <div className="flex items-center gap-3">
+                                                        <div className="p-2 bg-primary/10 rounded-lg">
+                                                            <Car className="h-5 w-5 text-primary" />
+                                                        </div>
+                                                        <h4 className="font-semibold text-gray-800">Transfer Details</h4>
+                                                    </div>
+
+                                                    <div className="pl-12 space-y-4">
+                                                        <div className="flex items-center gap-2">
+                                                            <MapPin className="h-4 w-4 text-gray-400" />
+                                                            <div className="flex items-center gap-2">
+                                                                <span className="text-gray-500">Arrival:</span>
+                                                                <span className="font-medium text-gray-800">
+                                                                    {day?.arrivalTransfer || 'Not Included'}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+
+                                                        <div className="flex items-center gap-2">
+                                                            <ArrowRight className="h-4 w-4 text-gray-400" />
+                                                            <div className="flex items-center gap-2">
+                                                                <span className="text-gray-500">Pickup:</span>
+                                                                <span className="font-medium text-gray-800">
+                                                                    {day?.pickupTransfer || 'Not Included'}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+
+                                                        <div className="mt-2 flex items-center gap-2">
+                                                            <span className="px-3 py-1 bg-gray-100 text-gray-600 text-sm rounded-full">
+                                                                {day?.roadType}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
                     <div className='card bg-white rounded-xl shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg p-3 my-2'>
                         {longText && longText.length > 0 ?
                             <>
@@ -314,16 +428,6 @@ const About = ({ data, allData }) => {
                             </>
                             : <></>
                         }
-                        <div>
-                            <button
-                                onClick={() => {
-                                    handleBrochureDownload(allItenaryData?.fileUpload)
-                                }}
-                                className='bg-red-400 hover:bg-red-500 text-white font-bold py-2 px-4 rounded-md shadow-lg transition-all duration-300 mt-2'
-                            >
-                                Brochure <i className="fa-solid fa-download"></i>
-                            </button>
-                        </div>
                     </div>
                 </div>
 
@@ -355,7 +459,7 @@ const About = ({ data, allData }) => {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div >
 
             <PackagesBookingModal
                 bookingModalOpen={bookingModalOpen}

@@ -107,24 +107,13 @@ const Modal = ({ isOpen, onClose, siteDetails }) => {
     );
 };
 
-const Days = ({ days, inclusionExclusion }) => {
+const Days = ({ days }) => {
 
     const [allDaysViseItenary, setAllDaysViseItenary] = useState([]);
-    const [inclusion, setInclusion] = useState([]);
-    const [exclusion, setExclusion] = useState([]);
     const [isModalOpen, setModalOpen] = useState(false);
     const [selectedSiteSeen, setSelectedSiteSeen] = useState(null);
-
     const siteSeenImage = `${import.meta.env.VITE_REACT_APP_IMAGE_URL}/siteseen-image/`
     const defultImage = `${import.meta.env.VITE_REACT_APP_IMAGE_URL}/packages-Image/`;
-
-    useEffect(() => {
-        if (days) {
-            setAllDaysViseItenary(days)
-            setInclusion(inclusionExclusion?.inclusion)
-            setExclusion(inclusionExclusion?.exclusion)
-        }
-    }, [days, inclusionExclusion])
 
     const handleSiteseenModel = (siteSeen) => {
         setSelectedSiteSeen(siteSeen);
@@ -135,6 +124,12 @@ const Days = ({ days, inclusionExclusion }) => {
         setModalOpen(false);
         setSelectedSiteSeen(null);
     };
+
+    useEffect(() => {
+        if (days) {
+            setAllDaysViseItenary(days)
+        }
+    }, [days])
 
     return (
         <div className='w-[60%] h-[100%]'>
@@ -243,79 +238,6 @@ const Days = ({ days, inclusionExclusion }) => {
                 )
             })}
 
-            <div className="grid grid-cols-2 gap-4 w-[100%]">
-                {inclusion && inclusion.length > 0 ?
-                    <div className="card bg-white rounded-xl shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg my-2 p-3 h-fit">
-
-                        <div className="text-center">
-                            <p className="text-[21px] text-red-500 font-bold border-b-2 border-red-300 inline-block">Inclusions</p>
-                        </div>
-
-                        <div className="mt-3 px-3">
-                            {inclusion && inclusion.map((item, index) => {
-                                return (
-                                    <div key={index + "inclusions"} className="flex items-center gap-2 mb-1">
-                                        <div>
-                                            <span>
-                                                <svg
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    className="h-5 w-5 text-green-500"
-                                                    viewBox="0 0 20 20"
-                                                    fill="currentColor"
-                                                >
-                                                    <path
-                                                        fillRule="evenodd"
-                                                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                                        clipRule="evenodd"
-                                                    />
-                                                </svg>
-                                            </span>
-                                        </div>
-                                        <div>
-                                            <p className="text-gray-800">{item}</p>
-                                        </div>
-                                    </div>
-                                )
-                            })}
-                        </div>
-                    </div> : <></>
-                }
-                {exclusion && exclusion.length > 0 ?
-                    <div className="card bg-white rounded-xl shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg my-2 p-3 h-fit">
-                        <div className='text-center'>
-                            <p className="text-[21px] text-red-500 font-bold border-b-2 border-red-300 inline-block ">Exclusions</p>
-                        </div>
-                        <div className="mt-3">
-                            {exclusion && exclusion.map((item, index) => {
-                                return (
-                                    <div key={index + "exclusions"} className="flex items-center gap-2 mb-1">
-                                        <div>
-                                            <span>
-                                                <svg
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    className="h-5 w-5 text-red-500"
-                                                    viewBox="0 0 20 20"
-                                                    fill="currentColor"
-                                                >
-                                                    <path
-                                                        fillRule="evenodd"
-                                                        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                                                        clipRule="evenodd"
-                                                    />
-                                                </svg>
-
-                                            </span>
-                                        </div>
-                                        <div>
-                                            <p className="text-gray-800">{item}</p>
-                                        </div>
-                                    </div>
-                                )
-                            })}
-                        </div>
-                    </div> : <></>
-                }
-            </div>
             <Modal
                 isOpen={isModalOpen}
                 onClose={closeModal}
