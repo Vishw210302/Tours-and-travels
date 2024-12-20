@@ -76,7 +76,7 @@ const FourthStepsBookingHotel = ({finalHotelPrice}) => {
                 ...formData,
                 name: `${formData.firstName} ${formData.lastName}` 
             },
-            payPrice:` ₹${finalHotelPrice}`
+            payPrice:finalHotelPrice
         })
 
         setPaymentModal(true)
@@ -245,7 +245,7 @@ const FourthStepsBookingHotel = ({finalHotelPrice}) => {
                                 type="submit"
                                 className="bg-red-400 text-white font-semibold px-4 py-2 rounded-md hover:bg-red-500 transition duration-200"
                             >
-                                Confirm Booking ( ₹ {finalHotelPrice})
+                                Confirm Booking ( ₹{finalHotelPrice})
                             </button>
                         </div>
 

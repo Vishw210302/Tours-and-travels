@@ -33,15 +33,26 @@ const FirstStepsBookingHotel = ({ setIsHotelSelected, onSelectHotel }) => {
         setSelectedHotel(index);
         setIsHotelSelected(true);
         onSelectHotel(particularHotelListing[index]);
+        const amenities = particularHotelListing[index].amenities;
+        const trueAmenities = Object.keys(amenities).filter(key => amenities[key] == true);
+
         setHotelBookingDetails((prevDetails) => ({
             ...prevDetails, 
-            hotelName: particularHotelListing[index].hotelName, 
+            hotelName: particularHotelListing[index].hotelName,
+            amenities : trueAmenities  
         }));
     };
 
     const loadMoreHotels = () => {
         setItemsToShow(prev => prev + 5);
     };
+
+    // useEffect(() => {
+    // if(particularHotelListing){
+    //     console.log(particularHotelListing, 'particularHotelListingparticularHotelListing')
+    // }
+    // }, [particularHotelListing])
+    
 
     return (
         <>
