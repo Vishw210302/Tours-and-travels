@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
 import CopyAllIcon from '@mui/icons-material/CopyAll';
+import React, { useEffect, useState } from 'react';
 import { useFlightTicketsDetailsContext } from '../../Context/FlightTicketsDetailsContext';
 
 const PaymentSuccess = ({ openBookingConfirmPage, paymentId, payPrice, title }) => {
@@ -7,17 +7,18 @@ const PaymentSuccess = ({ openBookingConfirmPage, paymentId, payPrice, title }) 
     const [countdown, setCountdown] = useState(5);
     const [showContent, setShowContent] = useState(false);
     const [animationClass, setAnimationClass] = useState('translate-y-full opacity-0');
-    const {totalTicketPrice} = useFlightTicketsDetailsContext();
+    const { totalTicketPrice } = useFlightTicketsDetailsContext();
 
     const formatDate = (date) => {
+
         const options = { month: 'short', day: '2-digit', year: 'numeric' };
         const formattedDate = date.toLocaleDateString('en-US', options);
         const hours = date.getHours();
         const minutes = date.getMinutes();
         const ampm = hours >= 12 ? 'PM' : 'AM';
         const formattedTime = `${String(hours % 12 || 12).padStart(2, '0')}:${String(minutes).padStart(2, '0')} ${ampm}`;
-
         return `${formattedDate} | ${formattedTime}`;
+
     };
 
     const now = new Date();
@@ -73,11 +74,11 @@ const PaymentSuccess = ({ openBookingConfirmPage, paymentId, payPrice, title }) 
                     </div>
 
                     <div className='text-white text-2xl font-semibold mt-6'>
-                        ₹{payPrice? payPrice : totalTicketPrice}
+                        ₹{payPrice ? payPrice : totalTicketPrice}
                     </div>
                 </div>
             </div>
-            {showContent && ( // Conditionally render content after animation
+            {showContent && (
                 <div className='mt-3 ml-3'>
                     <div>
                         <div className='text-lg font-semibold'>

@@ -5,7 +5,7 @@ import LocalDiningIcon from '@mui/icons-material/LocalDining';
 import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
 import PaidIcon from '@mui/icons-material/Paid';
 import PersonIcon from '@mui/icons-material/Person';
-import { ArrowRight, Calendar, Car, FileDown, Hotel, MapPin, Plane } from 'lucide-react';
+import { ArrowRight, Calendar, Car, Clock, FileDown, Hotel, MapPin, Plane } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { BsCalendar2Date } from "react-icons/bs";
 import { FaHotel } from "react-icons/fa";
@@ -117,10 +117,10 @@ const About = ({ data, allData }) => {
         try {
             const payload = {
                 paymentId: details?.id,
-                personDetail: personDetails.formData,
-                payPrice: personDetails.payPrice,
-                itenaryId: allItenaryData._id,
-                remainingBalance: personDetails.remainingBalance
+                personDetail: personDetails?.formData,
+                payPrice: personDetails?.payPrice,
+                itenaryId: allItenaryData?._id,
+                remainingBalance: personDetails?.remainingBalance
             }
             const response = await handlePersonDetailsApi(payload).unwrap();
 
@@ -154,7 +154,7 @@ const About = ({ data, allData }) => {
                             </h3>
                         </div>
                         <div className='flex items-center gap-3 border-b-2 p-2'>
-                            {itenaryFlightsDetails && itenaryFlightsDetails.length > 0 ?
+                            {itenaryFlightsDetails && itenaryFlightsDetails?.length > 0 ?
                                 <div
                                     onClick={handleFlightsClick}
                                     className={`group border border-red-400 rounded-lg p-2 transition-all duration-300 ease-in-out 
@@ -237,10 +237,13 @@ const About = ({ data, allData }) => {
                                 {Object.keys(groupedDates).map((monthYear, index) => (
                                     <button
                                         key={index + "month"}
-                                        className={`px-4 py-2 rounded-md text-white transition-colors ${selectedMonth === monthYear
-                                            ? "bg-red-500"
-                                            : "bg-red-400 hover:bg-red-500"
-                                            }`}
+                                        className=
+                                        {`px-4 py-2 rounded-md text-white transition-colors 
+                                            ${selectedMonth === monthYear
+                                                ? "bg-red-500"
+                                                : "bg-red-400 hover:bg-red-500"
+                                            }`
+                                        }
                                         onClick={() => setSelectedMonth(monthYear)}
                                     >
                                         {monthYear}
@@ -282,48 +285,91 @@ const About = ({ data, allData }) => {
 
                     {showFlightsContent && (
                         <div className="container mx-auto px-4 py-8">
-                            <div className="grid gap-6">
-                                {itenaryFlightsDetails && itenaryFlightsDetails.map((flight, index) => {
-                                    return (
-                                        <div
-                                            key={flight._id}
-                                            className="bg-white shadow-md rounded-lg p-6 border border-gray-100 hover:shadow-xl transition-shadow duration-300"
-                                        >
-                                            <div className="flex items-center justify-between mb-4">
-                                                <div className="flex items-center">
-                                                    <Plane className="mr-3 text-blue-600" size={24} />
-                                                    <span className="font-semibold text-lg text-gray-800">
-                                                        Flight {index + 1}
-                                                    </span>
+                            <div className="grid gap-8">
+                                {itenaryFlightsDetails && itenaryFlightsDetails?.map((flight, index) => (
+                                    <div
+                                        key={flight?._id}
+                                        className="relative overflow-hidden bg-gradient-to-br from-white to-blue-50 rounded-2xl p-1"
+                                    >
+                                        <div className="absolute top-0 right-0 w-64 h-64 bg-blue-100 rounded-full blur-3xl opacity-20 -mr-32 -mt-32" />
+                                        <div className="absolute bottom-0 left-0 w-64 h-64 bg-indigo-100 rounded-full blur-3xl opacity-20 -ml-32 -mb-32" />
+
+                                        <div className="bg-white/80 rounded-xl p-6 relative">
+                                            <div className="flex items-center justify-between mb-5">
+                                                <div className="flex items-center space-x-4">
+                                                    <div className="bg-gradient-to-r from-blue-500 to-indigo-500 p-3 rounded-xl rotate-12 transition-transform duration-300">
+                                                        <Plane className="text-white" size={24} />
+                                                    </div>
+                                                    <div>
+                                                        <h3 className="font-bold text-xl bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                                                            Flight {index + 1}
+                                                        </h3>
+                                                        <span className="text-sm text-gray-500">Direct Flight</span>
+                                                    </div>
                                                 </div>
                                             </div>
 
-                                            <div className="flex justify-between items-center">
-                                                <div className="text-left">
-                                                    <h3 className="text-sm text-gray-600 mb-1">Departure</h3>
-                                                    <p className="font-medium text-gray-800">
-                                                        {flight.departure.location} ({flight.departure.airportCode})
-                                                    </p>
-                                                    <p className="text-sm text-gray-600">{flight.departure.time}</p>
+                                            <div className="grid grid-cols-7 items-center">
+                                                <div className="col-span-3 space-y-4">
+                                                    <div className="flex items-start space-x-3">
+                                                        <div className="mt-1">
+                                                            <div className="w-3 h-3 bg-blue-500 rounded-full animate-pulse" />
+                                                        </div>
+                                                        <div>
+                                                            <p className="text-sm font-medium text-gray-500">DEPARTURE</p>
+                                                            <h4 className="text-xl font-bold text-gray-800 mt-1">
+                                                                {flight?.departure?.location}
+                                                            </h4>
+                                                            <div className="flex items-center mt-1 text-gray-500">
+                                                                <MapPin size={14} className="mr-1" />
+                                                                <span className="text-sm">{flight?.departure?.airportCode}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div className="flex items-center space-x-2 bg-gray-50 p-2 rounded-lg w-fit">
+                                                        <Clock size={16} className="text-blue-500" />
+                                                        <span className="text-sm font-medium">{flight?.departure?.time}</span>
+                                                    </div>
                                                 </div>
 
-                                                <div className="flex items-center mx-4">
-                                                    <div className="w-8 h-px bg-gray-300 mr-2"></div>
-                                                    <Plane className="text-gray-400" size={16} />
-                                                    <div className="w-8 h-px bg-gray-300 ml-2"></div>
+                                                <div className="col-span-1 flex justify-center items-center px-4">
+                                                    <div className="w-full relative">
+                                                        <div className="absolute w-full h-[2px] bg-gradient-to-r from-blue-200 via-blue-400 to-indigo-400 top-1/2 -translate-y-1/2" />
+                                                        <div className="absolute w-2 h-2 bg-blue-500 rounded-full left-0 top-1/2 -translate-y-1/2" />
+                                                        <div className="absolute w-2 h-2 bg-indigo-500 rounded-full right-0 top-1/2 -translate-y-1/2" />
+                                                        <ArrowRight
+                                                            size={20}
+                                                            className="text-blue-600 relative mx-auto animate-pulse"
+                                                        />
+                                                    </div>
                                                 </div>
 
-                                                <div className="text-right">
-                                                    <h3 className="text-sm text-gray-600 mb-1">Arrival</h3>
-                                                    <p className="font-medium text-gray-800">
-                                                        {flight.arrival.location} ({flight.arrival.airportCode})
-                                                    </p>
-                                                    <p className="text-sm text-gray-600">{flight.arrival.time}</p>
+                                                {/* Arrival */}
+                                                <div className="col-span-3 space-y-4">
+                                                    <div className="flex items-start space-x-3">
+                                                        <div className="mt-1">
+                                                            <div className="w-3 h-3 bg-indigo-500 rounded-full animate-pulse" />
+                                                        </div>
+                                                        <div>
+                                                            <p className="text-sm font-medium text-gray-500">ARRIVAL</p>
+                                                            <h4 className="text-xl font-bold text-gray-800 mt-1">
+                                                                {flight?.arrival?.location}
+                                                            </h4>
+                                                            <div className="flex items-center mt-1 text-gray-500">
+                                                                <MapPin size={14} className="mr-1" />
+                                                                <span className="text-sm">{flight?.arrival?.airportCode}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div className="flex items-center space-x-2 bg-gray-50 p-2 rounded-lg w-fit ml-auto">
+                                                        <Clock size={16} className="text-indigo-500" />
+                                                        <span className="text-sm font-medium">{flight?.arrival?.time}</span>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    )
-                                })}
+                                    </div>
+                                ))}
                             </div>
                         </div>
                     )}
@@ -334,10 +380,10 @@ const About = ({ data, allData }) => {
 
                             <div className="w-full bg-gray-50">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-7xl mx-auto">
-                                    {allItenaryData.days.map((day, index) => (
+                                    {allItenaryData && allItenaryData?.days.map((day, index) => (
                                         <div
                                             key={index + "key"}
-                                            className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300"
+                                            className="bg-white rounded-xl overflow-hidden shadow-md"
                                         >
                                             <div className="bg-primary/5 p-4 border-b">
                                                 <div className="flex items-center justify-between">
@@ -421,7 +467,7 @@ const About = ({ data, allData }) => {
                     )}
 
                     <div className='card bg-white rounded-xl shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg p-3 my-2'>
-                        {longText && longText.length > 0 ?
+                        {longText && longText?.length > 0 ?
                             <>
                                 <p className='text-[18px] text-red-500 font-medium'>About</p>
                                 <ReadMoreText text={longText} />
