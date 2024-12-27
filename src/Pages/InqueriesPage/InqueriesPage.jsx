@@ -7,7 +7,7 @@ import { useInqueriesPostMutation } from '../../Api/Api';
 import PlaneLoader from '../PlaneLoader';
 
 const InqueriesPage = ({ itenaryPriceData, itenatyDataListing, itenaryId }) => {
-    
+
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [mobile, setMobile] = useState('');
@@ -64,7 +64,7 @@ const InqueriesPage = ({ itenaryPriceData, itenatyDataListing, itenaryId }) => {
             numberOfChildWithoutBed: numberOfChildrenWithoutBed,
         };
 
-        
+
 
         try {
             await inqueriesPost(formData).unwrap();
@@ -280,14 +280,12 @@ const InqueriesPage = ({ itenaryPriceData, itenatyDataListing, itenaryId }) => {
                                     )}
 
                                     <button
-                                        type='submit'
-                                        className='bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-md shadow-lg transition-all duration-300'
+                                        type="submit"
+                                        className={`bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-md shadow-lg transition-all duration-300 ${isLoading ? 'cursor-not-allowed opacity-75' : ''
+                                            }`}
                                         disabled={isLoading}
                                     >
-                                        {isLoading ?
-                                            <PlaneLoader />
-                                            : 'Submit Inquiry'
-                                        }
+                                        {isLoading ? <PlaneLoader /> : 'Submit Inquiry'}
                                     </button>
 
                                 </form>

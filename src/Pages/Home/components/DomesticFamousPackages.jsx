@@ -1,4 +1,4 @@
-import { Calendar, ChevronLeft, ChevronRight, Clock, MapPin, Star } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
@@ -121,7 +121,6 @@ const Destinations = () => {
                                                 className="mt-6 w-full px-6 py-3 bg-red-400 hover:bg-red-500 text-white rounded-lg font-semibold flex items-center justify-center gap-2"
                                             >
                                                 Explore Destination
-                                                <ChevronRight className="w-4 h-4" />
                                             </button>
                                         </div>
                                     </div>
