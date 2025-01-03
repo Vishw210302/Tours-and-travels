@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useGetParticularHotelListingQuery, useLazyGetCitiesListingQuery } from '../../Api/Api';
-import { useAllApiContext } from '../../Context/allApiContext';
 
 const HotelBookingSearch = ({ onSearch }) => {
 
@@ -30,7 +29,7 @@ const HotelBookingSearch = ({ onSearch }) => {
 
     useEffect(() => {
         const totalGuests = parseInt(formData.adults) + parseInt(formData.children);
-        const recommendedRooms = Math.ceil(totalGuests / 2); // Assuming 2 guests per room
+        const recommendedRooms = Math.ceil(totalGuests / 2);
         setFormData((prev) => ({ ...prev, rooms: recommendedRooms }));
     }, [formData.adults, formData.children]);
 
@@ -60,7 +59,7 @@ const HotelBookingSearch = ({ onSearch }) => {
             });
             return;
         }
-        
+
         onSearch();
         refetchHotelData();
         navigate('/booking-results', { state: { formData, hotelCityData } });

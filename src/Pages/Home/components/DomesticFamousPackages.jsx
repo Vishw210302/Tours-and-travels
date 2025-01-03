@@ -28,7 +28,7 @@ const Destinations = () => {
 
     const [domesticPackage, setDomesticPackage] = useState([]);
     const navigate = useNavigate();
-
+    const interNationalImageUrl = `${import.meta.env.VITE_REACT_APP_IMAGE_URL}/packages-Image/`;
     const {
         data,
         isSuccess,
@@ -36,8 +36,6 @@ const Destinations = () => {
         error,
         isLoading
     } = useGetPackagesQuery();
-
-    const interNationalImageUrl = `${import.meta.env.VITE_REACT_APP_IMAGE_URL}/packages-Image/`;
 
     useEffect(() => {
         if (isSuccess) {

@@ -191,7 +191,7 @@ const FlightsPageListing = () => {
 
     return (
         <>
-            <div className="w-full h-[500px] flex justify-center items-center bg-[url('https://www.ramco.com/hubfs/Iraqi%20Airways%20Go%20Live%20PR%20Banner%20Image.png')] bg-cover bg-center bg-[#f7f7f7]">
+            <div className="w-full h-[300px] md:h-[400px] lg:h-[500px] flex flex-col justify-center items-center bg-[url('https://www.ramco.com/hubfs/Iraqi%20Airways%20Go%20Live%20PR%20Banner%20Image.png')] bg-cover bg-center relative">
                 <div className="w-[60%]">
                     <div className="bg-[#1f2746] p-6 rounded-lg shadow-lg w-auto">
                         <h1 className="text-2xl text-white mb-4 font-semibold text-center">Search Flights</h1>
@@ -392,15 +392,17 @@ const FlightsPageListing = () => {
                         </form>
                     </div>
                 </div>
-            </div>
+            </div >
 
             <Airlinesname flightsData={flightsData} />
 
-            {isLoading ? (
-                <div>Loading...</div>
-            ) : (
-                <TopSearchFlights flightsData={flightsData} error={searchErr} classDetail={classMatch} />
-            )}
+            {
+                isLoading ? (
+                    <div>Loading...</div>
+                ) : (
+                    <TopSearchFlights flightsData={flightsData} error={searchErr} classDetail={classMatch} />
+                )
+            }
         </>
     );
 };

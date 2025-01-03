@@ -28,7 +28,7 @@ const Details = () => {
     }, [settingData])
 
     return (
-        <div className='card bg-white rounded-xl shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg p-10 my-2 w-[95%] h-fit'>
+        <div className='card bg-white rounded-xl shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg p-8 my-2 w-[95%] h-fit'>
 
             {mainBranchAddress && mainBranchAddress.map((items, index) => {
                 if (items?.keyName == "Main_Branch") {

@@ -43,8 +43,7 @@ const Itenary = () => {
           />
         </div>
         <div className='p-4'>
-          <div className='w-[100%] grid grid-cols-[25%_75%] gap-3'>
-            <Filter />
+          <div className='w-[100%]'>
             {response &&
               <Card isLoading={isLoading} data={response[0]} />
             }

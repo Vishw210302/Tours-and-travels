@@ -3,7 +3,6 @@ import { useGetSliderQuery } from '../../../Api/Api';
 import Loader from '../../Partials/Loader';
 
 const Herosection = () => {
-
   const { isError, isLoading, isSuccess, data, error } = useGetSliderQuery();
   const [sliderListing, setSliderListing] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -28,15 +27,14 @@ const Herosection = () => {
     }
   }, [sliderListing?.length]);
 
-
   return (
     <>
       {isLoading ? (
-        <div className="flex w-full h-[600px] justify-center items-center">
+        <div className="flex w-full h-[300px] md:h-[500px] lg:h-[600px] justify-center items-center">
           <Loader />
         </div>
       ) : (
-        <div className="relative w-full h-[600px] overflow-hidden">
+        <div className="relative w-full h-[300px] md:h-[500px] lg:h-[600px] overflow-hidden">
           {err ? (
             <div className="flex w-full h-full justify-center items-center">
               <Loader />
@@ -50,13 +48,13 @@ const Herosection = () => {
                       key={index}
                       src={`${imageUrl}${item.slider}`}
                       alt={`Slide ${index}`}
-                      className={`absolute w-full h-full transition-opacity duration-1000 ease-in-out ${currentIndex === index ? 'opacity-100' : 'opacity-0'
+                      className={`absolute w-full h-full object-cover transition-opacity duration-1000 ease-in-out ${currentIndex === index ? 'opacity-100' : 'opacity-0'
                         }`}
                     />
                   )
                 })
               ) : (
-                <p>No slider images available</p>
+                <p className="text-center text-gray-500">No slider images available</p>
               )}
             </>
           )}

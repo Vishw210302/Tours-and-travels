@@ -50,7 +50,7 @@ const HotelTestimonial = () => {
             {testimonialHotelListing && testimonialHotelListing.length > 0 ?
                 <div>
                     <div className='flex flex-row justify-center p-5'>
-                        <p className='text-4xl font-extrabold text-gray-800 p-0'>Our Clients' Feedback</p>
+                        <p className='lg:text-2xl text-xl font-extrabold text-red-400 p-0'>Our Clients' Feedback</p>
                     </div>
                 </div>
                 :

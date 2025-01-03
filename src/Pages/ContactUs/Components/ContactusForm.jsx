@@ -49,9 +49,9 @@ const ContactusForm = () => {
 
     return (
         <>
-            <div className='card bg-white rounded-xl shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg p-3 my-2 w-[95%] h-fit'>
+            <div className='card bg-white rounded-xl shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg my-2 w-[95%] h-fit'>
                 <div className="2xl:container 2xl:mx-auto p-5">
-                    <p className="text-xl font-bold text-center text-red-400 mb-6">
+                    <p className="text-base md:text-lg lg:text-xl font-bold text-center text-red-400 mb-4">
                         Love to hear from you, Get in touch
                     </p>
                     <form onSubmit={handleSubmit}>

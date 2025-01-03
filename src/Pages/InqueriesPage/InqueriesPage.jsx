@@ -4,7 +4,26 @@ import { Box } from '@mui/system';
 import React, { useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import { useInqueriesPostMutation } from '../../Api/Api';
-import PlaneLoader from '../PlaneLoader';
+
+const PlaneLoader = ({ text }) => {
+    return (
+        <div className="flex items-center gap-2">
+            <svg
+                className="animate-spin h-5 w-5 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+            >
+                <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                />
+            </svg>
+            <span>{text}</span>
+        </div>
+    );
+};
 
 const InqueriesPage = ({ itenaryPriceData, itenatyDataListing, itenaryId }) => {
 
@@ -49,7 +68,6 @@ const InqueriesPage = ({ itenaryPriceData, itenatyDataListing, itenaryId }) => {
     };
 
     const handleSubmit = async (e) => {
-
         e.preventDefault();
         calculatePriceDetails();
         const formData = {
@@ -64,8 +82,6 @@ const InqueriesPage = ({ itenaryPriceData, itenatyDataListing, itenaryId }) => {
             numberOfChildWithoutBed: numberOfChildrenWithoutBed,
         };
 
-
-
         try {
             await inqueriesPost(formData).unwrap();
             toast.success("Inquery sent successfully");
@@ -73,11 +89,12 @@ const InqueriesPage = ({ itenaryPriceData, itenatyDataListing, itenaryId }) => {
                 setName('');
                 setEmail('');
                 setMobile('');
-                setnumberOfAdults(1);
+                setNumberOfAdults(1);
                 setNumberOfChildrenWithBed(0);
                 setNumberOfChildrenWithoutBed(0);
                 setDepartureDate('');
             }
+            setOpenInqueryModal(false);
         } catch (error) {
             toast.error("Please fill all required field")
         }
@@ -98,7 +115,6 @@ const InqueriesPage = ({ itenaryPriceData, itenatyDataListing, itenaryId }) => {
     return (
         <>
             <div className='card bg-[#f1f1f1] shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg sticky z-10 bottom-0 p-3'>
-
                 <div className='flex justify-between items-center 2xl:container 2xl:mx-auto'>
                     <div>
                         <p className='text-[18px] font-semibold'>From {itenaryPriceData?.perPersonPrice} ₹ / person</p>
@@ -110,7 +126,6 @@ const InqueriesPage = ({ itenaryPriceData, itenatyDataListing, itenaryId }) => {
                         Send Inquiry
                     </button>
                 </div>
-
             </div>
             <Modal
                 open={openInqueryModal}
@@ -150,7 +165,6 @@ const InqueriesPage = ({ itenaryPriceData, itenatyDataListing, itenaryId }) => {
                             </div>
                             <div className='p-4'>
                                 <form onSubmit={handleSubmit}>
-
                                     <div className='mb-4'>
                                         <label className='block text-sm font-medium text-gray-700' htmlFor='name'>
                                             Full Name
@@ -281,13 +295,11 @@ const InqueriesPage = ({ itenaryPriceData, itenatyDataListing, itenaryId }) => {
 
                                     <button
                                         type="submit"
-                                        className={`bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-md shadow-lg transition-all duration-300 ${isLoading ? 'cursor-not-allowed opacity-75' : ''
-                                            }`}
+                                        className={`bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-md shadow-lg transition-all duration-300 ${isLoading ? 'cursor-not-allowed opacity-75' : ''}`}
                                         disabled={isLoading}
                                     >
-                                        {isLoading ? <PlaneLoader /> : 'Submit Inquiry'}
+                                        {isLoading ? <PlaneLoader text="Loading..." /> : "Submit Inquery"}
                                     </button>
-
                                 </form>
                             </div>
                         </div>

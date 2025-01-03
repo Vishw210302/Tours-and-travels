@@ -1,7 +1,7 @@
 import { Plane } from 'lucide-react'
 import React from 'react'
 
-const PlaneLoader = () => {
+const PlaneLoader = ({ text }) => {
 
     return (
         <div className="relative w-full h-6 overflow-hidden">
@@ -36,7 +36,10 @@ const PlaneLoader = () => {
             </div>
 
             <div className="absolute inset-0 flex items-center justify-center">
-                <span className="text-white text-sm animate-pulse">Processing</span>
+                {text && text ? <span className="text-white text-sm animate-pulse">{text}</span>
+                    :
+                    <span className="text-white text-sm animate-pulse">Processing</span>
+                }
             </div>
 
         </div>

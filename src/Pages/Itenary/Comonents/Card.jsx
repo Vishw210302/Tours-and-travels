@@ -29,7 +29,7 @@ const TravelPackageCard = ({ isLoading, data }) => {
         <NoDataFound message="No Package found" />
     ), []);
 
-    if (!isLoading && (!data?.itenaries || data.itenaries.length === 0)) {
+    if (!isLoading && (!data?.itenaries || data?.itenaries.length === 0)) {
         return EmptyState;
     }
 
@@ -125,17 +125,27 @@ const TravelPackageCard = ({ isLoading, data }) => {
     };
 
     return (
-        <div className="w-full mx-auto bg-gradient-to-br from-gray-50 to-white min-h-screen rounded-xl">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                {data?.itenaries?.map((item, index) => {
-                    return (
-                        <PackageCard
-                            key={item?._id}
-                            item={item}
-                            index={index}
-                        />
-                    )
-                })}
+        <div className="w-full mx-auto bg-gradient-to-br from-gray-50 to-white rounded-xl">
+            <div className='px-4 p-4'>
+                <div className="text-center mb-5 px-4">
+                    <div className="text-center inline-block p-2 mb-2 relative">
+                        <p className="font-semibold text-[30px] text-red-500 inline-block relative z-10 bg-white px-2">
+                            All {data?.packageName} Packages
+                        </p>
+                        <span className="block w-full h-[2px] bg-red-400 absolute bottom-0 left-0"></span>
+                    </div>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                    {data?.itenaries?.map((item, index) => {
+                        return (
+                            <PackageCard
+                                key={item?._id}
+                                item={item}
+                                index={index}
+                            />
+                        )
+                    })}
+                </div>
             </div>
         </div>
     );
