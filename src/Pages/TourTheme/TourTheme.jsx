@@ -64,7 +64,7 @@ const TourTheme = () => {
             <div>
                 {packageListing && packageListing?.length > 0 ? (
                     <div className='2xl:container 2xl:mx-auto'>
-                        <div className='flex flex-row justify-center items-center p-5 w-full font-bold text-[30px] text-red-500'>
+                        <div className='flex flex-row justify-center items-center p-5 w-full font-bold text-[18px] sm:text-[26px] text-red-500'>
                             Popular Themes
                         </div>
                         <p className='flex flex-row justify-center items-center text-center text-[15px] sm:text-[16px] md:text-[18px] lg:text-[18px] xl:text-[20px]'>

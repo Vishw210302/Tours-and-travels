@@ -144,96 +144,97 @@ const About = ({ data, allData }) => {
 
     return (
         <>
-            <div className='flex justify-around w-[100%]'>
-                <div className='w-[60%]'>
-                    <div className='card bg-white rounded-xl shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg p-3 my-2'>
+            <div className='grid sm:grid-cols-2 grid-cols-1 items-center gap-3'>
+                <div>
+                    <div className='card bg-white rounded-xl shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg p-3'>
                         <h1 className='text-[20px] font-semibold text-red-500'>{allItenaryData?.packageTitle}</h1>
                         <div>
                             <h3 className='text-[15px] font-medium text-red-500 mt-2'>
                                 Package Includes
                             </h3>
                         </div>
-                        <div className='flex items-center gap-3 border-b-2 p-2'>
-                            {itenaryFlightsDetails && itenaryFlightsDetails?.length > 0 ?
+                        <div className="grid grid-cols-3 md:grid-cols-4 gap-4 border-b-2 p-4">
+                            {itenaryFlightsDetails && itenaryFlightsDetails?.length > 0 ? (
                                 <div
                                     onClick={handleFlightsClick}
                                     className={`group border border-red-400 rounded-lg p-2 transition-all duration-300 ease-in-out 
-                                    hover:bg-red-500 hover:shadow-lg cursor-pointer hover:scale-105 active:scale-95 
-                                    ${activeFlightsIcon ? 'bg-red-500' : ''}`}>
-                                    <div className="flex justify-center items-center h-full">
+                hover:bg-red-500 hover:shadow-lg cursor-pointer hover:scale-105 active:scale-95 
+                ${activeFlightsIcon ? 'bg-red-500' : ''}`}
+                                >
+                                    <div className="flex flex-col justify-center items-center h-full">
                                         <LuPlane
                                             size={25}
                                             className={`${activeFlightsIcon ? 'text-white' : 'text-red-500'} 
-                                        group-hover:text-white transition-colors duration-300`}
+                        group-hover:text-white transition-colors duration-300`}
                                         />
+                                        <p className={`text-[15px] mt-2 ${activeFlightsIcon ? 'text-white' : 'text-red-500'} 
+                    group-hover:text-white transition-colors duration-300`}>
+                                            Flight
+                                        </p>
                                     </div>
-                                    <p className={`text-[15px] ${activeFlightsIcon ? 'text-white' : 'text-red-500'}group-hover:text-white transition-colors duration-300`}>
-                                        Flight
-                                    </p>
                                 </div>
-                                :
-                                <></>
-                            }
+                            ) : null}
 
                             <div
                                 onClick={handleDatesClick}
                                 className={`group border border-red-400 rounded-lg p-2 transition-all duration-300 ease-in-out 
-                                 hover:bg-red-500 hover:shadow-lg cursor-pointer hover:scale-105 active:scale-95 
-                                 ${activeDatesIcon ? 'bg-red-500' : ''}`}>
-                                <div className="flex justify-center items-center h-full">
+            hover:bg-red-500 hover:shadow-lg cursor-pointer hover:scale-105 active:scale-95 
+            ${activeDatesIcon ? 'bg-red-500' : ''}`}
+                            >
+                                <div className="flex flex-col justify-center items-center h-full">
                                     <BsCalendar2Date
                                         size={25}
                                         className={`${activeDatesIcon ? 'text-white' : 'text-red-500'} 
-                                        group-hover:text-white transition-colors duration-300`}
+                    group-hover:text-white transition-colors duration-300`}
                                     />
+                                    <p className={`text-[15px] mt-2 ${activeDatesIcon ? 'text-white' : 'text-red-500'} 
+                group-hover:text-white transition-colors duration-300`}>
+                                        Dates
+                                    </p>
                                 </div>
-                                <p className={`text-[15px] ${activeDatesIcon ? 'text-white' : 'text-red-500'}group-hover:text-white transition-colors duration-300`}>
-                                    Dates
-                                </p>
                             </div>
 
                             <div
                                 onClick={handleHotelClick}
                                 className={`group border border-red-400 rounded-lg p-2 transition-all duration-300 ease-in-out 
-                                    hover:bg-red-500 hover:shadow-lg cursor-pointer hover:scale-105 active:scale-95 
-                                    ${activeHotelIcon ? 'bg-red-500' : ''}`}
+            hover:bg-red-500 hover:shadow-lg cursor-pointer hover:scale-105 active:scale-95 
+            ${activeHotelIcon ? 'bg-red-500' : ''}`}
                             >
-                                <div className="flex justify-center items-center h-full">
+                                <div className="flex flex-col justify-center items-center h-full">
                                     <FaHotel
                                         size={25}
                                         className={`${activeHotelIcon ? 'text-white' : 'text-red-500'} 
-                                            group-hover:text-white transition-colors duration-300`}
+                    group-hover:text-white transition-colors duration-300`}
                                     />
+                                    <p className={`text-[15px] mt-2 ${activeHotelIcon ? 'text-white' : 'text-red-500'} 
+                group-hover:text-white transition-colors duration-300`}>
+                                        Hotels
+                                    </p>
                                 </div>
-                                <p className={`text-[15px] ${activeHotelIcon ? 'text-white' : 'text-red-500'} 
-                                group-hover:text-white transition-colors duration-300`}>
-                                    Hotels
-                                </p>
                             </div>
 
                             <div
                                 onClick={handleDownloadClick}
-                                className="group border border-red-400 rounded-lg p-1 transition-all duration-300 ease-in-out 
-                                hover:bg-red-500 hover:shadow-lg cursor-pointer hover:scale-105 active:scale-95 text-red-500"
+                                className="group border border-red-400 rounded-lg p-2 transition-all duration-300 ease-in-out 
+            hover:bg-red-500 hover:shadow-lg cursor-pointer hover:scale-105 active:scale-95 text-red-500"
                             >
-                                <div className="flex justify-center items-center h-full">
+                                <div className="flex flex-col justify-center items-center h-full">
                                     <FileDown
                                         size={25}
                                         className="group-hover:text-white transition-colors duration-300 text-red-500"
                                     />
+                                    <p className="group-hover:text-white transition-colors duration-300 text-red-500 text-[15px] mt-2">
+                                        Brochure
+                                    </p>
                                 </div>
-                                <p className="group-hover:text-white transition-colors duration-300 text-red-500 text-base"
-                                >
-                                    Brochure
-                                </p>
                             </div>
-
                         </div>
+
                     </div>
                     {showDatesContent && (
                         <div className="bg-white rounded-lg shadow-lg p-4 mt-2">
                             <h3 className="text-lg font-medium mb-2">Departure Dates:</h3>
-                            <div className="grid grid-cols-6 gap-3">
+                            <div className="grid sm:grid-cols-6 grid-cols-3 gap-3">
                                 {Object.keys(groupedDates).map((monthYear, index) => (
                                     <button
                                         key={index + "month"}
@@ -256,7 +257,7 @@ const About = ({ data, allData }) => {
                                     <h4 className="text-md font-semibold mb-2 text-gray-800">
                                         {selectedMonth}
                                     </h4>
-                                    <div className="grid grid-cols-6 gap-3">
+                                    <div className="grid sm:grid-cols-6 grid-cols-3 gap-3">
                                         {groupedDates[selectedMonth].map((departureDate, idx) => {
                                             const randomColor = `hsl(${Math.random() * 360}, 70%, 80%)`;
                                             return (
@@ -477,7 +478,7 @@ const About = ({ data, allData }) => {
                     </div>
                 </div>
 
-                <div className='w-[25%] h-[100%]'>
+                <div className='h-[100%]'>
                     <div className='card bg-white rounded-xl shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] p-3 transition-all duration-300 hover:shadow-lg'>
                         <div>
                             <span className='text-[20px] font-bold text-red-500'>₹{allItenaryData?.perPersonCost}</span>

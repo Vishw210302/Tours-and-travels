@@ -60,7 +60,7 @@ const Braches = () => {
                             )
                         })}
                     </div>
-                    <div className='grid sm:grid-cols-4 md:grid-cols-3 grid-cols-1 gap-4'>
+                    <div className='grid sm:grid-cols-3 md:grid-cols-3 grid-cols-1 gap-4'>
                         {subBranch && subBranch.map((location, index) => {
                             return (
                                 <div key={index + "location"}>

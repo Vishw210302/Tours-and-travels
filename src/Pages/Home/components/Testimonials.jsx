@@ -49,7 +49,7 @@ const Testimonials = () => {
     return (
         <div className='testimonial-container'>
             {testimonialListing && testimonialListing?.length > 0 ? (
-                <div className='testimonial-heading'>
+                <div className='testimonial-heading font-bold text-[18px] sm:text-[26px] text-red-500'>
                     Our Testimonial
                 </div>
             ) : null}

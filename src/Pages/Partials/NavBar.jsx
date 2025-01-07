@@ -86,7 +86,7 @@ const NavBar = ({ settingData, settingIsSuccess, settingIsError, settingError })
                       key={index + 'key'}
                       src={`${mainLogoImage}${item?.valueContent}`}
                       alt={item?.keyName}
-                      className="h-8"
+                      className="sm:h-[48px] h-[44px]"
                     />
                   );
                 }
@@ -168,7 +168,7 @@ const NavBar = ({ settingData, settingIsSuccess, settingIsError, settingError })
                 className="relative p-2 rounded-full text-gray-300 hover:text-white hover:bg-gray-800 transition-colors duration-200"
                 onClick={toggleDrawer}
               >
-                <ShoppingCart size={20} />
+                <ShoppingCart size={25} />
                 {addToCart?.length > 0 && (
                   <span className="absolute -top-1 -right-1 bg-yellow-400 text-gray-900 text-xs w-5 h-5 flex items-center justify-center rounded-full font-medium">
                     {addToCart?.length}
@@ -180,7 +180,7 @@ const NavBar = ({ settingData, settingIsSuccess, settingIsError, settingError })
                 className="lg:hidden p-2 rounded-md text-gray-300 hover:text-white hover:bg-gray-800 transition-colors duration-200"
                 onClick={toggleMenu}
               >
-                {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
+                {isMenuOpen ? <X size={20} /> : <Menu size={25} />}
               </button>
             </div>
           </div>

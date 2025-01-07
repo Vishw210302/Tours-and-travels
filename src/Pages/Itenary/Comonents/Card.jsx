@@ -125,11 +125,11 @@ const TravelPackageCard = ({ isLoading, data }) => {
     };
 
     return (
-        <div className="w-full mx-auto bg-gradient-to-br from-gray-50 to-white rounded-xl">
-            <div className='px-4 p-4'>
+        <div className="w-full mx-auto">
+            <div>
                 <div className="text-center mb-5 px-4">
                     <div className="text-center inline-block p-2 mb-2 relative">
-                        <p className="font-semibold text-[30px] text-red-500 inline-block relative z-10 bg-white px-2">
+                        <p className="font-semibold sm:text-[24px] text-[18px] text-red-500 inline-block relative z-10 px-2">
                             All {data?.packageName} Packages
                         </p>
                         <span className="block w-full h-[2px] bg-red-400 absolute bottom-0 left-0"></span>
@@ -149,7 +149,6 @@ const TravelPackageCard = ({ isLoading, data }) => {
             </div>
         </div>
     );
-
 };
 
 export default TravelPackageCard;

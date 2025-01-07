@@ -112,7 +112,7 @@ const Destinations = () => {
             <div className="relative py-5 bg-[url('/src/assets/bg-image2.png')] bg-cover bg-center">
                 <div className="text-center mb-5 px-4">
                     <div className="text-center mb-2">
-                        <p className="font-bold text-[30px] text-red-500 animate-title">International Destination</p>
+                        <p className="w-full font-bold text-[18px] sm:text-[26px] text-red-500">International Destination</p>
                     </div>
                 </div>
 
@@ -173,7 +173,7 @@ const Destinations = () => {
                         </button>
                     </div>
 
-                    <div className="flex justify-center mt-6 gap-2">
+                    <div className="flex justify-center gap-2">
                         {internationalPackage.map((_, index) => (
                             <button
                                 key={index}

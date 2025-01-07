@@ -36,7 +36,7 @@ const AddToCartDrawer = ({ toggleDrawer, isOpen }) => {
 
     return (
         <div
-            className={`fixed inset-y-0 right-0 z-50 w-96 bg-white dark:bg-gray-900 shadow-xl transform transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
+            className={`fixed inset-y-0 right-0 z-50 sm:w-96 w-72 bg-white dark:bg-gray-900 shadow-xl transform transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
         >
             <div className="p-4 border-b dark:border-gray-700">
                 <div className="flex items-center justify-between">
@@ -84,9 +84,9 @@ const AddToCartDrawer = ({ toggleDrawer, isOpen }) => {
                                     key={item?._id || index + "Saprate_Key"}
                                     className="p-4 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors"
                                 >
-                                    <div className="flex space-x-4">
-
-                                        <div className="flex-shrink-0 w-24 h-24 rounded-lg overflow-hidden">
+                                    <div className="flex flex-col sm:flex-row sm:space-x-4">
+                                        {/* Image Section */}
+                                        <div className="flex-shrink-0 w-full sm:w-24 h-24 rounded-lg overflow-hidden mb-4 sm:mb-0">
                                             <img
                                                 src={`${imageUrl}${item?.bannerImage}`}
                                                 alt={item?.packageTitle}
@@ -94,16 +94,15 @@ const AddToCartDrawer = ({ toggleDrawer, isOpen }) => {
                                             />
                                         </div>
 
+                                        {/* Content Section */}
                                         <div className="flex-1">
-
-                                            <div className="flex justify-between">
+                                            {/* Title and Remove Button */}
+                                            <div className="flex justify-between items-start">
                                                 <h3 className="text-base font-medium text-gray-900 dark:text-white">
                                                     {item?.packageTitle}
                                                 </h3>
                                                 <button
-                                                    onClick={() =>
-                                                        handleRemoveItem(item?._id)
-                                                    }
+                                                    onClick={() => handleRemoveItem(item?._id)}
                                                     className="p-1 hover:bg-red-100 dark:hover:bg-red-900/20 rounded-full transition-colors"
                                                     disabled={isProcessing(item?._id)}
                                                 >
@@ -111,14 +110,13 @@ const AddToCartDrawer = ({ toggleDrawer, isOpen }) => {
                                                 </button>
                                             </div>
 
+                                            {/* Details Section */}
                                             <div className="mt-1 space-y-2">
-
                                                 <p className="text-sm text-gray-500 dark:text-gray-400">
                                                     Duration: {item?.days?.length} Days
                                                 </p>
 
-                                                <div className="flex items-center justify-between">
-
+                                                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0">
                                                     <p className="text-lg font-semibold text-gray-900 dark:text-white">
                                                         ₹{item?.perPersonCost.toLocaleString()}
                                                     </p>
@@ -127,7 +125,7 @@ const AddToCartDrawer = ({ toggleDrawer, isOpen }) => {
                                                         onClick={() => handleCheckout(item)}
                                                         disabled={isProcessing(item?._id)}
                                                         className={`flex items-center justify-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors min-w-[140px]
-                                                        ${isProcessing(item?._id)
+                                                    ${isProcessing(item?._id)
                                                                 ? 'bg-blue-600 text-white cursor-not-allowed'
                                                                 : 'bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700'
                                                             }`}
@@ -141,12 +139,12 @@ const AddToCartDrawer = ({ toggleDrawer, isOpen }) => {
                                                             </div>
                                                         )}
                                                     </button>
-
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+
                             );
                         })}
                     </div>

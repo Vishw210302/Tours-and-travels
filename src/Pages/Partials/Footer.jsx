@@ -221,7 +221,7 @@ const Footer = ({ settingData, settingIsSuccess, settingIsError, settingError })
                   <img src={recentTours} alt="Famous_tours" className='h-24 w-24 rounded-lg' />
                 </div>
                 <div>
-                  <div className='flex flex-row gap-3'>
+                  <div className='grid sm:grid-cols-2 grid-cols-1 gap-3'>
                     <p className='text-sm'>vishw prajapati</p>
                     <p className='text-sm'>Feb 05 2024</p>
                   </div>
@@ -237,7 +237,7 @@ const Footer = ({ settingData, settingIsSuccess, settingIsError, settingError })
                   <img src={recentTours} alt="Famous_tours" className='h-24 w-24 rounded-lg' />
                 </div>
                 <div>
-                  <div className='flex flex-row gap-3'>
+                  <div className='grid sm:grid-cols-2 grid-cols-1 gap-3'>
                     <p className='text-sm'>vishw prajapati</p>
                     <p className='text-sm'>Feb 05 2024</p>
                   </div>
@@ -253,7 +253,7 @@ const Footer = ({ settingData, settingIsSuccess, settingIsError, settingError })
 
 
         <div className="2xl:container 2xl:mx-auto p-5 border-t border-white/20 mt-16">
-          <div className='flex flex-row items-center justify-between h-fit'>
+          <div className='sm:flex flex-row items-center justify-between h-fit'>
             <div>
               <p className='text-sm font-semibold'>© 2024 Travel Wonders. All rights reserved.</p>
             </div>

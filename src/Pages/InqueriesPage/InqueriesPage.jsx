@@ -117,10 +117,10 @@ const InqueriesPage = ({ itenaryPriceData, itenatyDataListing, itenaryId }) => {
             <div className='card bg-[#f1f1f1] shadow-[0_.5rem_1rem_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-lg sticky z-10 bottom-0 p-3'>
                 <div className='flex justify-between items-center 2xl:container 2xl:mx-auto'>
                     <div>
-                        <p className='text-[18px] font-semibold'>From {itenaryPriceData?.perPersonPrice} ₹ / person</p>
+                        <p className='sm:text-[18px] text-[15px] font-semibold'>From {itenaryPriceData?.perPersonPrice} ₹ / Person</p>
                     </div>
                     <button
-                        className='bg-red-400 hover:bg-red-500 text-white font-bold py-2 px-4 rounded-md shadow-lg transition-all duration-300'
+                        className='bg-red-400 hover:bg-red-500 text-white sm:text-[15px] text-[12px] font-bold py-2 px-4 rounded-md shadow-lg transition-all duration-300'
                         onClick={handleInqueryModalOpen}
                     >
                         Send Inquiry

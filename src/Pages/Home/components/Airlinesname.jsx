@@ -95,7 +95,7 @@ const Airlinesname = () => {
 
   return (
     <>
-      <div className="w-full h-[200px] bg-[url('/src/assets/bg-image.png')] bg-cover bg-center px-10 pl-12 py-6 overflow-hidden">
+      <div className="w-full h-[200px] bg-[url('/src/assets/bg-image.png')] bg-cover bg-center px-10 py-6 overflow-hidden">
         {isLoading ? (
           <div className='flex flex-row gap-16 justify-between'>
             {skeletonItems}

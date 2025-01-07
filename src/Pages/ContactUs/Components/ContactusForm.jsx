@@ -55,9 +55,9 @@ const ContactusForm = () => {
                         Love to hear from you, Get in touch
                     </p>
                     <form onSubmit={handleSubmit}>
-                        {renderInputField('name', 'Name')}
-                        {renderInputField('email', 'Email', 'email', 'Your Email')}
-                        {renderInputField('mobileNumber', 'Mobile Number', 'tel', 'Your Mobile Number')}
+                        {renderInputField('name', 'Name', "text", "Enter Name")}
+                        {renderInputField('email', 'Email', 'email', 'Enter Email')}
+                        {renderInputField('mobileNumber', 'Mobile Number', 'tel', 'Enter Mobile Number')}
                         <div className="mb-4">
                             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="message">
                                 Message
@@ -68,7 +68,7 @@ const ContactusForm = () => {
                                 onChange={handleChange}
                                 rows="4"
                                 className="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline focus:border-red-400"
-                                placeholder="Your Message"
+                                placeholder="Enter Message"
                             ></textarea>
                         </div>
                         <div className="text-center">

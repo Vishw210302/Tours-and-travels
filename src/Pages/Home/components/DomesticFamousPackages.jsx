@@ -67,7 +67,7 @@ const Destinations = () => {
         >
             <div className="max-w-7xl mx-auto px-4 p-4">
                 <div className="text-center mb-14">
-                    <p className="font-bold text-red-500 text-[24px] sm:text-[16px] md:text-[18px] lg:text-[24px] xl:text-[30px]">
+                    <p className="w-full font-bold text-[18px] sm:text-[26px] text-red-500 mb-2">
                         Domestic Destination
                     </p>
                 </div>
@@ -94,7 +94,6 @@ const Destinations = () => {
                             disableOnInteraction: false,
                         }}
                         loop={true}
-                        className="pb-12"
                     >
                         {domesticPackage.map((destination, index) => (
                             <SwiperSlide key={`${destination._id}-${index}`}>
